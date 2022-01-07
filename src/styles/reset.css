@@ -122,3 +122,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+.sr-only {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  top: auto;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+}

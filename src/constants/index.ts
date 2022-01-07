@@ -1,1 +1,3 @@
-export const API_ENDPOINT = "";
+export const COLOR = {
+  orange: "#F2B705",
+};
