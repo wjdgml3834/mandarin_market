@@ -1,21 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { MyProfileInfo } from "../components/myProfile/Info";
-import { useState } from "react";
-import styled from "@emotion/styled";
-
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { MyProfileHeader } from "../components/myProfile/Header";
 
 const MyProfile: NextPage = () => {
-  const [myProfileModal, setMyProfileModal] = useState(false);
-  const openMyProfileModal = () => {
-    setMyProfileModal(true);
-  };
-  const closeMyProfileModal = () => {
-    setMyProfileModal(false);
-  };
-
   return (
     <section>
       <Head>
@@ -24,77 +11,9 @@ const MyProfile: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">마이 프로필과 대시보드</h1>
-      <Nav>
-        <button>
-          <ArrowBackIcon />
-        </button>
-        <button onClick={openMyProfileModal}>
-          <MoreVertIcon />
-        </button>
-        {myProfileModal && <ModalBackground onClick={closeMyProfileModal} />}
-        {myProfileModal && (
-          <MyProfileModal>
-            <li>
-              <button>설정 및 개인정보</button>{" "}
-            </li>
-            <li>
-              <button>로그아웃</button>
-            </li>
-          </MyProfileModal>
-        )}
-      </Nav>
-      <MyProfileInfo />
-      <MyProfileInfo />
-      <MyProfileInfo />
-      <MyProfileInfo />
-      <MyProfileInfo />
-      <MyProfileInfo />
+      <MyProfileHeader />
     </section>
   );
 };
 
 export default MyProfile;
-
-const Nav = styled.nav`
-  position: fixed;
-  width: 100%;
-  height: 48px;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 0.5px solid #dbdbdb;
-  background-color: #fff;
-`;
-const MyProfileModal = styled.ul`
-  position: absolute;
-  bottom: -94vh;
-  left: 0;
-  background-color: #fff;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  border: 1px solid #000;
-  &::before {
-    display: block;
-    content: "";
-    width: 50px;
-    height: 4px;
-    border-radius: 5px;
-    background-color: #dbdbdb;
-    margin: 16px auto;
-  }
-  button {
-    width: 99vw;
-    height: 46px;
-    font-size: 14px;
-    padding: 20px;
-    text-align: start;
-  }
-`;
-const ModalBackground = styled.div`
-  position: absolute;
-  top: 48px;
-  left: 0;
-  width: 100%;
-  height: 80vh;
-  background-color: #999;
-  opacity: 0.3;
-`;

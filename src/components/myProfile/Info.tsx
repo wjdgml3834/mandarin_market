@@ -17,7 +17,7 @@ export const MyProfileInfo = () => {
   return (
     <Container>
       <ProfileContainer>
-        <h2 className="sr-only">마이 프로필</h2>
+        <h3 className="sr-only">마이 프로필</h3>
         <ImgContainer>
           <div>
             <Followers>{userData.followers}</Followers>
