@@ -3,7 +3,6 @@ import { COLOR } from "../../constants";
 
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
-import { MyProfileHeader } from "./Header";
 
 export const MyProfileInfo = () => {
   const userData = {
@@ -17,7 +16,6 @@ export const MyProfileInfo = () => {
 
   return (
     <Container>
-      <MyProfileHeader />
       <ProfileContainer>
         <h2 className="sr-only">마이 프로필</h2>
         <ImgContainer>
@@ -50,6 +48,7 @@ export const MyProfileInfo = () => {
 
 const Container = styled.div`
   border: 0.5px solid #dbdbdb;
+  padding-top: 50px;
 `;
 const ProfileContainer = styled.article`
   text-align: center;
