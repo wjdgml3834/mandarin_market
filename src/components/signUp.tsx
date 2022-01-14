@@ -1,20 +1,76 @@
 import styled from "@emotion/styled";
+import { useCallback, useState } from "react";
 import { COLOR } from "../constants";
 
 export const SignUpPage = () => {
+  const [email, setEmail] = useState("")
+  const [isEmail, setIsEmail] = useState(false)
+  const [emailMessage, setEmailMessage] = useState("")
+  const [password, setPassword]= useState("")
+  const [isPassword, setIsPassword] = useState(false)
+  const [passwordMessage, setPasswordMessage] = useState("")
+
+  const onChange = useCallback((e) => {
+    const {target: {name, value}} = e
+  
+    if(name === "email"){
+      setEmail(value)
+      const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+      if(!emailRegex.test(value)) {
+        setEmailMessage('올바르지 않은 이메일 형식입니다.')
+        setIsEmail(false)
+      } else {
+        setIsEmail(true)
+      }
+    } else if(name === "password") {
+      setPassword(value)
+      const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,}$/
+      if(!passwordRegex.test(value)) {
+        setPasswordMessage('비밀번호는 8자 이상 영문과 숫자의 조합이어야 합니다.')
+        setIsPassword(false)
+      } else {
+        setIsPassword(true)
+      }
+    }
+  }, [])
+
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()
+    console.log(email, password)
+  }, [email, password])
+
+  
   return (
     <Container>
       <Title>이메일로 회원가입</Title>
-      <Form>
+      <Form onSubmit={onSubmit}>
         <Label>
           <SubText>이메일</SubText>
-           <Input type="email" id="email" placeholder="이메일을 주소를 입력해 주세요."></Input>
+           <Input
+            name="email"
+            type="email"
+            id="email"
+            placeholder="이메일을 주소를 입력해 주세요."
+            value={email}
+            onChange={onChange}
+          ></Input>
+        {email.length > 0 && <Error className={`${isEmail ? '': 'error'}`}>*{emailMessage}</Error>}
         </Label>
         <Label>
           <SubText>비밀번호</SubText>
-          <Input type="password" id="password" placeholder="비밀번호를 설정해 주세요."></Input>
+          <Input
+            name="password"
+            type="password"
+            id="password"
+            placeholder="비밀번호를 설정해 주세요."
+            value={password}
+            onChange={onChange}
+          ></Input>
+          {password.length > 0 && <Error className={`${isPassword ? 'success': 'error'}`}>*{passwordMessage}</Error>}
         </Label>
-        <Button>다음</Button>
+        <Button
+          disabled={!(isEmail && isPassword)}
+        >다음</Button>
       </Form>
     </Container>
   );
@@ -71,5 +127,15 @@ const Button = styled.button`
   border-radius: 44px;
   color: #fff;
   background-color: ${COLOR.orange};
-  opacity: 0.5;
+  &:disabled {
+    opacity: 0.5;
+  }
+`;
+
+const Error = styled.span`
+  display: none;
+  &.error {
+    color: ${COLOR.orange};
+    display: block;
+  }
 `;
