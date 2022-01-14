@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { MyProfileInfo } from "../components/myProfile/Info";
+import { MyProfileHeader } from "../components/myProfile/Header";
 
 const MyProfile: NextPage = () => {
   return (
@@ -11,7 +11,7 @@ const MyProfile: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">마이 프로필과 대시보드</h1>
-      <MyProfileInfo />
+      <MyProfileHeader />
     </section>
   );
 };

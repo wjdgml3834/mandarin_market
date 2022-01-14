@@ -17,7 +17,7 @@ export const MyProfileInfo = () => {
   return (
     <Container>
       <ProfileContainer>
-        <h2 className="sr-only">마이 프로필</h2>
+        <h3 className="sr-only">마이 프로필</h3>
         <ImgContainer>
           <div>
             <Followers>{userData.followers}</Followers>
@@ -48,6 +48,7 @@ export const MyProfileInfo = () => {
 
 const Container = styled.div`
   border: 0.5px solid #dbdbdb;
+  padding-top: 50px;
 `;
 const ProfileContainer = styled.article`
   text-align: center;
