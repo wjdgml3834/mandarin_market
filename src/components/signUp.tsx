@@ -1,4 +1,6 @@
 import styled from "@emotion/styled";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { COLOR } from "../constants";
 
@@ -6,9 +8,14 @@ export const SignUpPage = () => {
   const [email, setEmail] = useState("")
   const [isEmail, setIsEmail] = useState(false)
   const [emailMessage, setEmailMessage] = useState("")
+
   const [password, setPassword]= useState("")
   const [isPassword, setIsPassword] = useState(false)
   const [passwordMessage, setPasswordMessage] = useState("")
+
+  const [signUpError, setSignUpError] = useState("")
+
+  const router = useRouter()
 
   const onChange = useCallback((e) => {
     const {target: {name, value}} = e
@@ -36,8 +43,23 @@ export const SignUpPage = () => {
 
   const onSubmit = useCallback((e) => {
     e.preventDefault()
-    console.log(email, password)
-  }, [email, password])
+    if(isEmail && isPassword) {
+      console.log('회원가입')
+      axios.post('/api/hello', {
+        email: email,
+        password: password
+      })
+      .then((res) => {
+        if(res.status === 200) {
+          router.replace("/signup/profile")
+        }
+      })
+      .catch((err) => {
+        setSignUpError(err.res.data)
+        console.log(err.res)
+      })
+    }
+  }, [email, password, router])
 
   
   return (
@@ -54,7 +76,8 @@ export const SignUpPage = () => {
             value={email}
             onChange={onChange}
           ></Input>
-        {email.length > 0 && <Error className={`${isEmail ? '': 'error'}`}>*{emailMessage}</Error>}
+        {email.length > 0 && <Error className={`${isEmail ? 'success': 'error'}`}>*{emailMessage}</Error>}
+        {signUpError && <Error className="error">*{signUpError}</Error>}
         </Label>
         <Label>
           <SubText>비밀번호</SubText>
@@ -132,10 +155,12 @@ const Button = styled.button`
   }
 `;
 
-const Error = styled.span`
-  display: none;
+const Error = styled.span`  
+  &.success {
+    display: none;
+  }
   &.error {
-    color: ${COLOR.orange};
     display: block;
+    color: ${COLOR.orange};
   }
 `;
