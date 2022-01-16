@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
+import { Carousel } from "../yourProfile/Carousel";
 import { MyProfileInfo } from "./Info";
 import { LogOutModal } from "./LogOutModal";
 import { MyProfileModal } from "./MyProfileModal";
@@ -9,6 +10,7 @@ import { MyProfileModal } from "./MyProfileModal";
 export const MyProfileHeader = () => {
   const [myProfileModal, setMyProfileModal] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
+
   const openMyProfileModal = () => {
     setMyProfileModal(true);
   };
@@ -32,20 +34,22 @@ export const MyProfileHeader = () => {
         <button onClick={openMyProfileModal}>
           <MoreVertIcon className="more" />
         </button>
-        <MyProfileModal
-          myProfileModal={myProfileModal}
-          openLogoutModal={openLogoutModal}
-          closeMyProfileModal={closeMyProfileModal}
-        />
-
-        {logoutModal && <LogOutModal closeLogoutModal={closeLogoutModal} />}
       </Nav>
       <MyProfileInfo />
+      <Carousel />
       <MyProfileInfo />
       <MyProfileInfo />
       <MyProfileInfo />
       <MyProfileInfo />
-      <MyProfileInfo />
+      <Background
+        className={`${myProfileModal}`}
+        onClick={closeMyProfileModal}
+      ></Background>
+      <MyProfileModal
+        myProfileModal={myProfileModal}
+        openLogoutModal={openLogoutModal}
+      />
+      {logoutModal && <LogOutModal closeLogoutModal={closeLogoutModal} />}
     </section>
   );
 };
@@ -65,5 +69,16 @@ const Nav = styled.nav`
     position: absolute;
     top: 10px;
     right: 10px;
+  }
+`;
+const Background = styled.div`
+  &.true {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #777;
+    opacity: 0.4;
   }
 `;

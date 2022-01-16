@@ -1,18 +1,15 @@
 import styled from "@emotion/styled";
 interface ModalData {
   myProfileModal: boolean;
-  closeMyProfileModal: () => void;
   openLogoutModal: () => void;
 }
 
 export const MyProfileModal = ({
   myProfileModal,
-  closeMyProfileModal,
   openLogoutModal,
 }: ModalData) => {
   return (
     <div>
-      {myProfileModal && <ModalBackground onClick={closeMyProfileModal} />}
       {myProfileModal && (
         <Container>
           <li>
@@ -28,8 +25,8 @@ export const MyProfileModal = ({
 };
 
 const Container = styled.ul`
-  position: absolute;
-  bottom: -94.3vh;
+  position: fixed;
+  bottom: 0;
   left: 0;
   background-color: #fff;
   border-top-right-radius: 10px;
@@ -50,13 +47,4 @@ const Container = styled.ul`
     padding: 20px;
     text-align: start;
   }
-`;
-const ModalBackground = styled.div`
-  position: absolute;
-  top: 48px;
-  left: 0;
-  width: 100%;
-  height: 90vh;
-  background-color: #777;
-  opacity: 0.3;
 `;

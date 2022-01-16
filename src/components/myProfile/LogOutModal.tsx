@@ -23,7 +23,7 @@ export const LogOutModal = ({ closeLogoutModal }: CloseLogoutModal) => {
 };
 
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
 `;
