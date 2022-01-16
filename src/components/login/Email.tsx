@@ -1,21 +1,89 @@
 import styled from "@emotion/styled";
 import { COLOR } from "../../constants";
+import axios from "axios";
+import { useCallback, useState } from "react";
+import { useRouter } from "next/router";
 import Link from 'next/link'
 
 export const LoginPage = () => {
+  const [email, setEmail] = useState("")
+  const [isEmail, setIsEmail] = useState(false)
+
+  const [password, setPassword]= useState("")
+  const [isPassword, setIsPassword] = useState(false)
+
+  const [loginError, setLoginError] = useState("")
+
+  const router = useRouter()
+
+  const onChange = useCallback((e) => {
+    const {target: {name, value}} = e
+    if(name === "email"){
+      setEmail(value)
+      if(value.length > 0) {
+        setIsEmail(true)
+      } else {
+        setIsEmail(false)
+      }
+    } else if(name === "password") {
+      setPassword(value)
+      if(value.length > 0) {
+        setIsPassword(true)
+      } else {
+        setIsPassword(false)
+      }
+    }
+  }, [])
+
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()
+    if(isEmail && isPassword) {
+      console.log('로그인')
+      axios.post('/api/hello', {
+        email: email,
+        password: password
+      })
+      .then((res) => {
+        if(res.status === 200) {
+          router.replace("/")
+        }
+      })
+      .catch((err) => {
+        setLoginError("이메일 또는 비밀번호가 일치하지 않습니다.")
+        console.log(err.res)
+      })
+    }
+  }, [email, password, router])
+
+  
   return (
     <Container>
       <Title>로그인</Title>
-      <Form>
+      <Form onSubmit={onSubmit}>
         <Label>
           <SubText>이메일</SubText>
-           <Input name="email" type="email" id="email"></Input>
+           <Input
+            name="email"
+            type="email"
+            id="email"
+            value={email}
+            onChange={onChange}
+          ></Input>
         </Label>
         <Label>
           <SubText>비밀번호</SubText>
-          <Input name="password" type="password" id="password"></Input>
+          <Input
+            name="password"
+            type="password"
+            id="password"
+            value={password}
+            onChange={onChange}
+          ></Input>
+          {loginError && <Error className="error">*{loginError}</Error>}
         </Label>
-        <Button>로그인</Button>
+        <Button
+          disabled={!(isEmail && isPassword)}
+        >로그인</Button>
       </Form>
       <Link href="/signup">
         <a className="signup">이메일로 회원가입</a>
@@ -24,7 +92,7 @@ export const LoginPage = () => {
   );
 };
 
-const Container = styled.section`
+const Container = styled.main`
   max-width: 370px;
   margin: 0 auto;
   .signup {
@@ -83,5 +151,17 @@ const Button = styled.button`
   border-radius: 44px;
   color: #fff;
   background-color: ${COLOR.orange};
-  opacity: 0.5;
+  &:disabled {
+    opacity: 0.5;
+  }
+`;
+
+const Error = styled.span`  
+  &.success {
+    display: none;
+  }
+  &.error {
+    display: block;
+    color: ${COLOR.orange};
+  }
 `;
