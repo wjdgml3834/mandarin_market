@@ -1,0 +1,87 @@
+import styled from "@emotion/styled";
+import { COLOR } from "../../constants";
+import Link from 'next/link'
+
+export const LoginPage = () => {
+  return (
+    <Container>
+      <Title>로그인</Title>
+      <Form>
+        <Label>
+          <SubText>이메일</SubText>
+           <Input name="email" type="email" id="email"></Input>
+        </Label>
+        <Label>
+          <SubText>비밀번호</SubText>
+          <Input name="password" type="password" id="password"></Input>
+        </Label>
+        <Button>로그인</Button>
+      </Form>
+      <Link href="/signup">
+        <a className="signup">이메일로 회원가입</a>
+      </Link>
+    </Container>
+  );
+};
+
+const Container = styled.section`
+  max-width: 370px;
+  margin: 0 auto;
+  .signup {
+    display: block;
+    font-size: 12px;
+    line-height: 15px;
+    text-align: center;
+    margin-top: 20px;
+    color: #767676;
+  }
+`;
+
+const Title = styled.h2`
+  font-size: 24px;
+  line-height: 30px;
+  margin: 30px 0 40px;
+  text-align: center;
+`;
+
+const Form = styled.form`
+  padding: 0 24px;
+`;
+
+const Label = styled.label`
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  color: #767676;
+  font-size: 12px;
+  line-height: 15px;
+`;
+
+const SubText = styled.span`
+  margin-bottom: 10px;
+`;
+
+const Input = styled.input`
+  margin-bottom: 10px;
+  font-size: 14px;
+  padding-bottom: 8px;
+  border: none;
+  border-bottom: 1px solid #dbdbdb;
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid ${COLOR.orange};
+  }
+  &::placeholder {
+    color: #dbdbdb;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  border: none;
+  height: 44px;
+  border-radius: 44px;
+  color: #fff;
+  background-color: ${COLOR.orange};
+  opacity: 0.5;
+`;
