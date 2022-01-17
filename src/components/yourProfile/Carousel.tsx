@@ -49,7 +49,7 @@ export const Carousel = () => {
   };
 
   return (
-    <Border>
+    <Div>
       <Container>
         <H3>판매 중인 상품</H3>
         <CarouselContainer>
@@ -79,11 +79,11 @@ export const Carousel = () => {
           </Btn>
         </BtnContainer>
       </Container>
-    </Border>
+    </Div>
   );
 };
 
-const Border = styled.div`
+const Div = styled.div`
   border: 0.5px solid #dbdbdb;
 `;
 const Container = styled.section`

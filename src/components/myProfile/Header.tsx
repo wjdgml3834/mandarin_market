@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
+import { Border } from "../Border";
 import { Carousel } from "../yourProfile/Carousel";
 import { MyProfileInfo } from "./Info";
 import { LogOutModal } from "./LogOutModal";
@@ -36,9 +37,9 @@ export const MyProfileHeader = () => {
         </button>
       </Nav>
       <MyProfileInfo />
+      <Border />
       <Carousel />
-      <MyProfileInfo />
-      <MyProfileInfo />
+      <Border />
       <MyProfileInfo />
       <MyProfileInfo />
       <Background
