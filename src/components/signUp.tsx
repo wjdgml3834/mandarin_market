@@ -4,7 +4,13 @@ import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
 import { COLOR } from "../constants";
 
-export const SignUpPage = () => {
+interface propTypes {
+  signUp: boolean,
+  setSignUp: (signUp: boolean) => void
+}
+
+export const SignUpPage = (props: propTypes) => {
+
   const [email, setEmail] = useState("")
   const [isEmail, setIsEmail] = useState(false)
   const [emailMessage, setEmailMessage] = useState("")
@@ -51,7 +57,8 @@ export const SignUpPage = () => {
       })
       .then((res) => {
         if(res.status === 200) {
-          router.replace("/signup/profile")
+          props.setSignUp(!props.signUp)
+          // router.replace("/")
         }
       })
       .catch((err) => {
@@ -61,7 +68,6 @@ export const SignUpPage = () => {
     }
   }, [email, password, router])
 
-  
   return (
     <Container>
       <Title>이메일로 회원가입</Title>
@@ -99,7 +105,7 @@ export const SignUpPage = () => {
   );
 };
 
-const Container = styled.main`
+const Container = styled.section`
   max-width: 370px;
   margin: 0 auto;
 `;
