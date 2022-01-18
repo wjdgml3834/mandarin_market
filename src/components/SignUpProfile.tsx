@@ -3,12 +3,52 @@ import { useCallback, useState } from "react";
 import { COLOR } from "../constants";
 
 export const SignUpProfile = () => {
+  
+  const [name, setName] = useState("")
+  const [myId, setMyId] = useState("")
+  const [intro, setIntro ] = useState("")
+
+  const [isName, setIsName] = useState(false)
+  const [isMyId, setIsMyId] = useState(false)
+  const [isIntro, setIsIntro ] = useState(false)
+
+  const [nameMessage, setNameMessage] = useState("")
+  const [myIdMessage, setMyIdMessage] = useState("")
+
+  const onChange = useCallback((e) => {
+    const {target: {name, value}} = e
+    if(name === "name") {
+      setName(value)
+      if(value.length < 2 || value.length > 10) {
+        setNameMessage('2자~10자 이내여야 합니다.')
+        setIsName(false)
+      } else {
+        setIsName(true)
+      }
+    } else if(name ==="id") {
+      setMyId(value)
+      const idRegex = /^[a-z0-9_,]{1,10}$/
+       if(!idRegex.test(value)) {
+        setMyIdMessage('영문, 숫자, 밑줄 및 마침표만 사용할 수 있습니다.')
+        setIsMyId(false)
+      } else {
+        setIsMyId(true)
+      }
+    } else if(name === "intro") {
+      setIntro(value)
+      setIsIntro(true)
+    }
+  }, [])
+
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()
+  }, [])
 
   return (
     <Container>
       <Title>프로필 설정</Title> 
       <InfoText>나중에 언제든지 변경할 수 있습니다.</InfoText>
-      <Form>
+      <Form onSubmit={onSubmit}>
         <ImgLabel>
           <ImgInput
             type="file"
@@ -23,7 +63,10 @@ export const SignUpProfile = () => {
             id="name"
             name="name"
             placeholder="2~10자 이내여야 합니다."
+            value={name}
+            onChange={onChange}
           ></Input>
+          {name.length > 0 && <Error className={`${isName ? '' : 'error' }`}>*{nameMessage}</Error>}
         </Label>
         <Label>
           <SubText>계정 ID</SubText>
@@ -32,7 +75,10 @@ export const SignUpProfile = () => {
             id="id"
             name="id"
             placeholder="영문, 숫자, 특수문자(,), (_)만 사용 가능합니다."
+            value={myId}
+            onChange={onChange}
           ></Input>
+          {myId.length > 0 && <Error className={`${isMyId ? '' : 'error' }`}>*{myIdMessage}</Error>}
         </Label>
         <Label>
           <SubText>소개</SubText>
@@ -41,9 +87,13 @@ export const SignUpProfile = () => {
             id="intro"
             name="intro"
             placeholder="자신과 판매할 상품에 대해 소개해 주세요."
+            value={intro}
+            onChange={onChange}
           ></Input>
         </Label>
-        <Button>감귤마켓 시작하기</Button>
+        <Button
+          disabled={!(isName && isMyId && isIntro)}
+        >감귤마켓 시작하기</Button>
       </Form>
     </Container>
   );
@@ -139,3 +189,10 @@ const Button = styled.button`
   }
 `; 
 
+const Error = styled.span`
+  display: none;
+  &.error {
+    color: ${COLOR.orange};
+    display: block;
+  }
+`;
