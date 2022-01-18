@@ -101,11 +101,12 @@ const CarouselContainer = styled.article`
 `;
 const caroucelIndex = (props: IndexTypeProps) => css`
   transform: translateX(-${150 * props.index}px);
+  z-index: -100;
 `;
 const CarouselItem = styled.div`
   display: flex;
   ${caroucelIndex}
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 `;
 const Img = styled.img`
   width: 140px;
