@@ -92,9 +92,10 @@ export const ProfileForm = ({ btnLabel }: BtnLabel) => {
           onChange={onChange}
         ></Input>
       </Label>
-      {btnLabel.length > 2 && (
+      {btnLabel === "감귤마켓 시작하기" && (
         <Button disabled={!(isName && isMyId && isIntro)}>{btnLabel}</Button>
       )}
+      {btnLabel === "저장" && <SaveBtn>저장</SaveBtn>}
     </Form>
   );
 };
@@ -175,4 +176,16 @@ const Error = styled.span`
     color: ${COLOR.orange};
     display: block;
   }
+`;
+const SaveBtn = styled.button`
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  width: 90px;
+  height: 32px;
+  border-radius: 32px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background-color: ${COLOR.orange};
 `;

@@ -11,7 +11,6 @@ export const ProfileUpate = () => {
         <button>
           <ArrowBackIcon className="arrow" />
         </button>
-        <SaveBtn className="more">저장</SaveBtn>
       </Nav>
       <ProfileFormContainer>
         <ProfileForm btnLabel="저장" />
@@ -36,16 +35,4 @@ const Nav = styled.nav`
 `;
 const ProfileFormContainer = styled.div`
   margin-top: 80px;
-`;
-const SaveBtn = styled.button`
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  width: 90px;
-  height: 32px;
-  border-radius: 32px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  background-color: ${COLOR.orange};
 `;
