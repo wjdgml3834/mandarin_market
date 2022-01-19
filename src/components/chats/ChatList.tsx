@@ -235,6 +235,7 @@ const Nav = styled.nav`
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
   background-color: #fff;
+  z-index: 100;
   .arrow {
     position: absolute;
     top: 10px;
