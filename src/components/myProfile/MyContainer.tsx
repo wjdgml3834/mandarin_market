@@ -8,7 +8,7 @@ import { MyProfileInfo } from "./Info";
 import { LogOutModal } from "./LogOutModal";
 import { MyProfileModal } from "./MyProfileModal";
 
-export const MyProfileHeader = () => {
+export const MyContainer = () => {
   const [myProfileModal, setMyProfileModal] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
 
@@ -54,7 +54,6 @@ export const MyProfileHeader = () => {
     </section>
   );
 };
-
 const Nav = styled.nav`
   position: fixed;
   width: 100%;
@@ -72,6 +71,7 @@ const Nav = styled.nav`
     right: 10px;
   }
 `;
+
 const Background = styled.div`
   &.true {
     position: fixed;
