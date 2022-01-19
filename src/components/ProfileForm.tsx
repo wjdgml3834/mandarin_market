@@ -95,7 +95,9 @@ export const ProfileForm = ({ btnLabel }: BtnLabel) => {
       {btnLabel === "감귤마켓 시작하기" && (
         <Button disabled={!(isName && isMyId && isIntro)}>{btnLabel}</Button>
       )}
-      {btnLabel === "저장" && <SaveBtn>저장</SaveBtn>}
+      {btnLabel === "저장" && (
+        <SaveBtn disabled={!(isName && isMyId && isIntro)}>저장</SaveBtn>
+      )}
     </Form>
   );
 };
@@ -188,4 +190,7 @@ const SaveBtn = styled.button`
   font-weight: 500;
   color: #fff;
   background-color: ${COLOR.orange};
+  &:disabled {
+    opacity: 0.5;
+  }
 `;
