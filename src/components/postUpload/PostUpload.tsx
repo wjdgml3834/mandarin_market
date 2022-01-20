@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import React, { useCallback, useRef, useState } from "react";
 import { COLOR } from "../../constants";
 
 interface BtnLabel {
@@ -7,15 +8,48 @@ interface BtnLabel {
 
 export const PostUpload = ({ btnLabel }: BtnLabel) => {
 
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+  const resizeHeight = useCallback(() => {
+    if (textAreaRef === null || textAreaRef.current === null) {
+      return
+    }
+    textAreaRef.current.style.height = '18px'
+    textAreaRef.current.style.height = textAreaRef.current.scrollHeight + 'px'
+  }, [])
+  
+  const [text, setText] = useState("")
+  const [isText, setIsText] = useState(false)
+
+  const onChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value)
+    if(e.target.value.length > 0) {
+      setIsText(true)
+    } else {
+      setIsText(false)
+    }
+  }, [])
+
+  const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  }, [])
+
   return (
     <Container>
       <h2 className="sr-only">게시글 작성 페이지</h2>
       <ProfileImg src="/images/ellipse-profile.svg"/>
       <FillContainer>
         <h3 className="sr-only">게시글 작성</h3>
-        <Form >
+        <Form onSubmit={onSubmit}>
           <label>
-            <Textarea placeholder="게시글 입력하기..."></Textarea>
+            <Textarea
+              name="text"
+              value={text}
+              onChange={onChange}
+              ref={textAreaRef}
+              onInput={resizeHeight}
+              placeholder="게시글 입력하기..."
+            ></Textarea>
           </label>
           <ImgLabel>
             <ImgInput
@@ -25,7 +59,7 @@ export const PostUpload = ({ btnLabel }: BtnLabel) => {
             ></ImgInput>
           </ImgLabel>
           {btnLabel === "저장" && (
-            <SaveBtn disabled>업로드</SaveBtn>
+            <SaveBtn disabled={!(isText)}>업로드</SaveBtn>
             )}
         </Form>
         <section>
