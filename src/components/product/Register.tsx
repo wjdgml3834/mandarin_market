@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useCallback, useState } from "react";
 import { COLOR } from "../../constants";
 
 interface BtnLabel {
@@ -6,11 +7,52 @@ interface BtnLabel {
 }
 
 export const ProductRegister = ({ btnLabel }: BtnLabel) => {
+  const [product, setProduct] = useState("")
+  const [price, setPrice] = useState("")
+  const [url, setUrl] = useState("")
+
+  const [isProduct, setIsProduct] = useState(false)
+  const [isPrice, setIsPrice] = useState(false)
+  const [isUrl, setIsUrl] = useState(false)
+
+  const onChange = useCallback((e) => {
+    const {target: {name, value}} = e
+    if(name === "product") {
+      setProduct(value)
+      if(value.length < 2 || value.length > 15) {
+        setIsProduct(false)
+      
+      } else {
+        setIsProduct(true)
+      }
+    } else if(name ==="price") {
+      const priceRegex = /^[0-9]*$/
+      if(!priceRegex.test(value)) {
+        setIsPrice(false)
+      } else {
+        setPrice(value)
+        setIsPrice(true)
+      }
+    } else if(name === "url") {
+      setUrl(value)
+      const urlRegex = /^(((http(s?))\:\/\/)?)([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]+)?(\/\S*)?/
+       if(!urlRegex.test(value)) {
+        setIsUrl(false)
+      } else {
+        setIsUrl(true)
+      }
+    }
+  }, [])
+
   
+  const onSubmit = useCallback((e) => {
+    e.preventDefault()
+  }, [])
+
   return (
     <Container>
       <h2 className="sr-only">상품 정보 입력창</h2>
-      <Form>
+      <Form onSubmit={onSubmit}>
         <SubText>이미지 등록</SubText>
         <ImgLabel>
           <ImgInput
@@ -26,6 +68,8 @@ export const ProductRegister = ({ btnLabel }: BtnLabel) => {
             type="text"
             id="product"
             placeholder="2~15자 이내여야 합니다."
+            value={product}
+            onChange={onChange}
           ></Input>
         </Label>
         <Label>
@@ -35,6 +79,8 @@ export const ProductRegister = ({ btnLabel }: BtnLabel) => {
             type="text"
             id="price"
             placeholder="숫자만 입력 가능합니다."
+            value={price}
+            onChange={onChange}
           ></Input>
         </Label>
         <Label>
@@ -44,10 +90,12 @@ export const ProductRegister = ({ btnLabel }: BtnLabel) => {
             type="text"
             id="url"
             placeholder="URL을 입력해 주세요."
+            value={url}
+            onChange={onChange}
           ></Input>
         </Label>
         {btnLabel === "저장" && (
-          <SaveBtn disabled>저장</SaveBtn>
+          <SaveBtn disabled={!(isProduct && isPrice && isUrl)}>저장</SaveBtn>
           )}
       </Form>
     </Container>
