@@ -1,12 +1,19 @@
 import styled from "@emotion/styled";
 import { useCallback, useState } from "react";
 import { COLOR } from "../../constants";
+import { FileUpload } from "./FileUpload";
 
 interface BtnLabel {
   btnLabel: string;
 }
 
 export const ProductRegister = ({ btnLabel }: BtnLabel) => {
+  const [isImage, setIsImage] = useState(false)
+
+  const getImage = (img: boolean) => {
+    setIsImage(img)
+  }
+
   const [product, setProduct] = useState("")
   const [price, setPrice] = useState("")
   const [url, setUrl] = useState("")
@@ -21,7 +28,6 @@ export const ProductRegister = ({ btnLabel }: BtnLabel) => {
       setProduct(value)
       if(value.length < 2 || value.length > 15) {
         setIsProduct(false)
-      
       } else {
         setIsProduct(true)
       }
@@ -54,13 +60,7 @@ export const ProductRegister = ({ btnLabel }: BtnLabel) => {
       <h2 className="sr-only">상품 정보 입력창</h2>
       <Form onSubmit={onSubmit}>
         <SubText>이미지 등록</SubText>
-        <ImgLabel>
-          <ImgInput
-            type="file"
-            id="img"
-            accept="image/*"
-          ></ImgInput>
-        </ImgLabel>
+        <FileUpload getImage={getImage}/>
         <Label>
           <SubText>상품명</SubText>
           <Input
@@ -95,7 +95,7 @@ export const ProductRegister = ({ btnLabel }: BtnLabel) => {
           ></Input>
         </Label>
         {btnLabel === "저장" && (
-          <SaveBtn disabled={!(isProduct && isPrice && isUrl)}>저장</SaveBtn>
+          <SaveBtn disabled={!(isImage && isProduct && isPrice && isUrl)}>저장</SaveBtn>
           )}
       </Form>
     </Container>
@@ -117,33 +117,6 @@ const SubText = styled.span`
   font-size: 12px;
   line-height: 15px;
 `;
-
-const ImgLabel = styled.label`
-  margin: 18px auto 30px;
-  position: relative;
-  width: 100%;
-  height: 204px;
-  background: #f2f2f2;
-  border: 0ch.5 solid #767676;
-  display: block;
-  border-radius: 10px;
-  cursor: pointer;
-  &::after {
-    content: '';
-    width: 36px;
-    height: 36px;
-    display: inline-block;
-    background: #C4C4C4 url('/images/upload-file.svg') no-repeat center;
-    border-radius: 25px;
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-  }
-`;
-
-const ImgInput = styled.input`
-  display: none;
-`
 
 const Label = styled.label`
   margin-bottom: 16px;
