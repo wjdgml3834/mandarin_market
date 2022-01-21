@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { COLOR } from "../../constants";
+import { API_ENDPOINT, COLOR } from "../../constants";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
@@ -39,14 +39,13 @@ export const LoginPage = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
-    const url = "http://146.56.183.55:5050/";
     const loginDate = {
       user: {
         email: email,
         password: password,
       },
     };
-    const res = await axios.post(url + "user/login/", loginDate);
+    const res = await axios.post(API_ENDPOINT + "user/login/", loginDate);
     console.log(res);
 
     // if (isEmail && isPassword) {
