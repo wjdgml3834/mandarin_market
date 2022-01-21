@@ -3,6 +3,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { COLOR } from "../../constants";
 import Link from "next/link";
+// import { useData } from "../../hooks/useMandarinData";
 
 const chatData = [
   {
@@ -40,6 +41,9 @@ const chatData = [
 ];
 
 export const ChatList = () => {
+  // const { data, error } = useData("post", "");
+  // if (data) console.log(data);
+
   return (
     <section>
       <h2 className="sr-only">채팅 목록 페이지</h2>
