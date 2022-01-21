@@ -1,68 +1,80 @@
 import styled from "@emotion/styled";
-import { COLOR } from "../../constants";
+import { API_ENDPOINT, COLOR } from "../../constants";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
-import Link from 'next/link'
+import Link from "next/link";
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState("")
-  const [isEmail, setIsEmail] = useState(false)
+  const [email, setEmail] = useState("");
+  const [isEmail, setIsEmail] = useState(false);
 
-  const [password, setPassword]= useState("")
-  const [isPassword, setIsPassword] = useState(false)
+  const [password, setPassword] = useState("");
+  const [isPassword, setIsPassword] = useState(false);
 
-  const [loginError, setLoginError] = useState("")
+  const [loginError, setLoginError] = useState("");
 
-  const router = useRouter()
+  // const router = useRouter();
 
   const onChange = useCallback((e) => {
-    const {target: {name, value}} = e
-    if(name === "email"){
-      setEmail(value)
-      if(value.length > 0) {
-        setIsEmail(true)
+    const {
+      target: { name, value },
+    } = e;
+    if (name === "email") {
+      setEmail(value);
+      if (value.length > 0) {
+        setIsEmail(true);
       } else {
-        setIsEmail(false)
+        setIsEmail(false);
       }
-    } else if(name === "password") {
-      setPassword(value)
-      if(value.length > 0) {
-        setIsPassword(true)
+    } else if (name === "password") {
+      setPassword(value);
+      if (value.length > 0) {
+        setIsPassword(true);
       } else {
-        setIsPassword(false)
+        setIsPassword(false);
       }
     }
-  }, [])
+  }, []);
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault()
-    if(isEmail && isPassword) {
-      console.log('로그인')
-      axios.post('/api/hello', {
+  const onSubmit = async (e: any) => {
+    e.preventDefault();
+    const loginDate = {
+      user: {
         email: email,
-        password: password
-      })
-      .then((res) => {
-        if(res.status === 200) {
-          router.replace("/")
-        }
-      })
-      .catch((err) => {
-        setLoginError("이메일 또는 비밀번호가 일치하지 않습니다.")
-        console.log(err.res)
-      })
-    }
-  }, [email, password, router])
+        password: password,
+      },
+    };
+    const res = await axios.post(API_ENDPOINT + "user/login/", loginDate);
+    console.log(res);
 
-  
+    // if (isEmail && isPassword) {
+    //   console.log("로그인");
+    //   axios
+    //     .post("/api/hello", {
+    //       email: email,
+    //       password: password,
+    //     })
+    //     .then((res) => {
+    //       if (res.status === 200) {
+    //         router.replace("/");
+    //         console.log("로그인 성공");
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       setLoginError("이메일 또는 비밀번호가 일치하지 않습니다.");
+    //       console.log(err.res);
+    //     });
+    // }
+  };
+
   return (
     <Container>
       <Title>로그인</Title>
       <Form onSubmit={onSubmit}>
         <Label>
           <SubText>이메일</SubText>
-           <Input
+          <Input
             name="email"
             type="email"
             id="email"
@@ -81,9 +93,7 @@ export const LoginPage = () => {
           ></Input>
           {loginError && <Error className="error">*{loginError}</Error>}
         </Label>
-        <Button
-          disabled={!(isEmail && isPassword)}
-        >로그인</Button>
+        <Button disabled={!(isEmail && isPassword)}>로그인</Button>
       </Form>
       <Link href="/signup">
         <a className="signup">이메일로 회원가입</a>
@@ -156,7 +166,7 @@ const Button = styled.button`
   }
 `;
 
-const Error = styled.span`  
+const Error = styled.span`
   &.success {
     display: none;
   }

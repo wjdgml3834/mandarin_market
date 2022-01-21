@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { ChatList } from "../../components/chats/chatList";
+import { ChatList } from "../../components/chats/ChatList";
 
 const HomePage: NextPage = () => {
   return (
