@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
+import CloseIcon from '@mui/icons-material/Close';
 import React, { useCallback, useRef, useState } from "react";
 import { COLOR } from "../../constants";
+import { FileUpload } from "./FileUpload";
 
 interface BtnLabel {
   btnLabel: string;
@@ -30,6 +32,27 @@ export const PostUpload = ({ btnLabel }: BtnLabel) => {
     }
   }, [])
 
+  const [images, setImages] = useState([] as string[])
+  const [isImage, setIsImage] = useState(false)
+
+  const getImage = (src: string[]) => {
+    setImages(src)
+  }
+
+  const getIsImage = (img: boolean) => {
+    setIsImage(img)
+  }
+
+  const deleteImg = (image: string) => {
+    const currentIndex: number = images.indexOf(image)
+    let newImgList = [...images]
+    newImgList.splice(currentIndex, 1)
+    setImages(newImgList)
+    if(currentIndex < 1) {
+      setIsImage(false)
+    }
+  }
+
   const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }, [])
@@ -51,20 +74,21 @@ export const PostUpload = ({ btnLabel }: BtnLabel) => {
               placeholder="게시글 입력하기..."
             ></Textarea>
           </label>
-          <ImgLabel>
-            <ImgInput
-              type="file"
-              id="img"
-              accept="image/*"
-            ></ImgInput>
-          </ImgLabel>
+          <FileUpload images={images} getImage={getImage} getIsImage={getIsImage}/>
           {btnLabel === "저장" && (
-            <SaveBtn disabled={!(isText)}>업로드</SaveBtn>
+            <SaveBtn disabled={!(isText || isImage)}>업로드</SaveBtn>
             )}
         </Form>
         <section>
           <h4 className="sr-only">업로드된 사진</h4>
-          <UploadedImg></UploadedImg>
+          <ImgListContainer>
+            {images.map((image, index) => (
+              <ImgList key={index}>
+                <UploadedImg src={`${image}`} alt={`${index}번째 이미지`}/>
+                <CloseIcon className="close" onClick={() => deleteImg(image)}></CloseIcon>
+              </ImgList>
+            ))}
+          </ImgListContainer>
         </section>
       </FillContainer>
     </Container>
@@ -89,7 +113,6 @@ const FillContainer = styled.article`
   min-width: 300px;
   width: 100%;
   padding-right: 16px;
-  overflow-y: scroll;
 `
 
 const Form = styled.form`
@@ -104,40 +127,41 @@ const Textarea = styled.textarea`
   outline: none;
   border: none;
   padding: 0;
-    resize: none;
+  resize: none;
   &::placeholder {
     color: #dbdbdb;
   }
 `;
 
-const ImgLabel = styled.label`
-  width: 50px;
-  height: 50px;
-  display: inline-block;
-  background: ${COLOR.orange} url("/images/upload-file.svg") no-repeat center/60%;
-  border-radius: 25px;
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  cursor: pointer;
-`;
+const ImgListContainer = styled.ul`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+`
 
-const UploadedImg = styled.img `
+const ImgList = styled.li`
   width: 300px;
-  height: 200px;
-  overflow: hidden;
-  background: #dbdbdb;
-  object-fit: cover;
-  display: block;
+  height: 220px;
   border: 0.5px solid #dbdbdb;
+  overflow: hidden;
   border-radius: 10px;
-  &.upload {
-    display: block
+  position: relative;
+  .close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    height: 22px;
+    width: 22px;
+    color:#727272;
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
   }
 `
 
-const ImgInput = styled.input`
-  display: none;
+const UploadedImg = styled.img `
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 `
 
 const SaveBtn = styled.button`
@@ -151,6 +175,8 @@ const SaveBtn = styled.button`
   font-weight: 500;
   color: #fff;
   background-color: ${COLOR.orange};
+  z-index: 10;
+  cursor: pointer;
   &:disabled {
     opacity: 0.5;
   }
