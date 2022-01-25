@@ -1,12 +1,23 @@
 import styled from "@emotion/styled";
+
 import { COLOR } from "../../constants";
 
+import { PostCommentList } from "./CommentList";
 
 export const PostComment = () => {
+  const userData = {
+    src: "https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_960_720.jpg",
+    nickname: "영등포 빵주먹 이현호",
+    postdate: "방금",
+    comment : "리액트는 좀 하시나요?"
+  }
+
   return (
     <Container>
       <h2 className="sr-only">댓글 목록</h2>
-      <Comment></Comment>
+      <Comment>
+        <PostCommentList userData={userData}/>
+      </Comment>
       <CommentWrite>
         <Form>
           <Img src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/cnoC/image/bA15rm1zOffsle8EVMPD_ZHtxYU.JPG" />
@@ -18,9 +29,7 @@ export const PostComment = () => {
               placeholder="댓글 입력하기"
             ></Input>
           </Label>
-          <Btn
-            disabled
-          >게시</Btn>
+          <Btn disabled>게시</Btn>
         </Form>
       </CommentWrite>
     </Container>
@@ -28,10 +37,23 @@ export const PostComment = () => {
 };
 
 const Container = styled.section`
-  min-width: 390px;
-  margin: 0 auto;
   border-top: 1px solid #dbdbdb;
 `;
+
+const Comment = styled.ul`
+  display: flex;
+  flex-direction: column;
+  max-width: 390px;
+  margin: 0 auto;
+  padding: 20px 16px 0;
+`
+
+const CommentWrite = styled.section`
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  border-top: 1px solid #dbdbdb;
+`
 
 const Form = styled.form`
   height: 60px;
@@ -41,9 +63,15 @@ const Form = styled.form`
   background-color: #fff;
 `;
 
+const Img = styled.img`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 0.5px solid #dbdbdb;
+`
+
 const Label = styled.label`
   width: calc(100% - 112px);
-  
   color: #767676;
   margin: 0 18px;
 `;
@@ -60,51 +88,6 @@ const Input = styled.input`
     color: #dbdbdb;
   }
 `;
-
-const Img = styled.img`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 0.5px solid #dbdbdb;
-`
-
-const CommentWrite = styled.section`
-  position: fixed;
-  width: 100%;
-  bottom: 0;
-  border-top: 1px solid #dbdbdb;
-`
-
-const Comment = styled.ul`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-`
-
-const CommentList = styled.li`
-  width: 300px;
-  height: 220px;
-  border: 0.5px solid #dbdbdb;
-  overflow: hidden;
-  border-radius: 10px;
-  position: relative;
-  .close {
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    height: 22px;
-    width: 22px;
-    color:#727272;
-    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.25));
-  }
-`
-
-const UploadedImg = styled.img `
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`
 
 const Btn = styled.button`
   font-size: 14px;
