@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { COLOR } from "../../constants/index";
-import HomeIcon from "@mui/icons-material/Home";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import PersonIcon from "@mui/icons-material/Person";
@@ -14,7 +14,7 @@ export const Footer = () => {
           <li>
             <Link href="/home">
               <MenuLink>
-                <HomeIcon className="icon " />
+                <HomeOutlinedIcon className="icon " />
                 <Text>홈</Text>
               </MenuLink>
             </Link>
