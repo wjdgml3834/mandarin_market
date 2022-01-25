@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
-
+import { useCallback, useState } from "react";
 import { COLOR } from "../../constants";
-
 import { PostCommentList } from "./CommentList";
 
 export const PostComment = () => {
@@ -12,6 +11,22 @@ export const PostComment = () => {
     comment : "리액트는 좀 하시나요?"
   }
 
+  const [comment, setComment] = useState("")
+  const [isComment, setIsComment] = useState(false)
+
+  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(e.target.value)
+    if(e.target.value.length > 0) {
+      setIsComment(true)
+    } else {
+      setIsComment(false)
+    }
+  }, [])
+
+  const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  }, [])
+
   return (
     <Container>
       <h2 className="sr-only">댓글 목록</h2>
@@ -19,7 +34,7 @@ export const PostComment = () => {
         <PostCommentList userData={userData}/>
       </Comment>
       <CommentWrite>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <Img src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/cnoC/image/bA15rm1zOffsle8EVMPD_ZHtxYU.JPG" />
           <Label>
             <Input
@@ -27,9 +42,13 @@ export const PostComment = () => {
               type="text"
               id="text"
               placeholder="댓글 입력하기"
+              value={comment}
+              onChange={onChange}
             ></Input>
           </Label>
-          <Btn disabled>게시</Btn>
+          <Btn
+            disabled={!isComment}
+          >게시</Btn>
         </Form>
       </CommentWrite>
     </Container>
@@ -77,6 +96,7 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
+  width: 100%;
   font-size: 14px;
   line-height: 18px;
   font-weight: 400;
