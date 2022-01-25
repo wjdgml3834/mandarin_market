@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Post } from "../../types/Post";
+import { useRouter } from "next/router";
 
 interface PostProps {
   postData: Post;
@@ -58,7 +59,17 @@ export const Card = ({ postData }: PostProps) => {
               <FavoriteBorderIcon className={heartColor} />
               <span>{likeNum}</span>
             </Like>
-            <Link href="/postdetail">
+            <Link
+              key={postData.id}
+              href={{
+                pathname: `/postdetail/${postData.id}`,
+                query: {
+                  title: postData.txt,
+                  nickname: postData.nickname
+                }
+              }}
+              as={`/postdetail/${postData.id}`}
+            >
               <Comment>
                 <ChatBubbleOutlineIcon className="icon" />
                 <span className="sr-only">댓글 보기, 남기기</span>
