@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { COLOR } from "../../constants";
+import Link from "next/link";
 
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
@@ -20,8 +21,12 @@ export const MyProfileInfo = () => {
         <h3 className="sr-only">마이 프로필</h3>
         <ImgContainer>
           <div>
-            <Followers>{userData.followers}</Followers>
-            <Text>followers</Text>
+            <Link href="/follower">
+              <a>
+                <Followers>{userData.followers}</Followers>
+                <Text>followers</Text>
+              </a>
+            </Link>
           </div>
           <Img src={userData.src} alt="유저 사진" />
           <div>
