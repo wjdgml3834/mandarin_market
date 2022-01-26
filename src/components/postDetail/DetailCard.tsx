@@ -86,7 +86,7 @@ const Cont = styled.article`
   width: 100%;
   margin: 0px auto;
   margin-bottom: 20px;
-  padding-top: 80px;
+  padding-top: 20px;
 `;
 
 const AuthorCont = styled.section`
@@ -220,7 +220,7 @@ const MoreBtn = styled.button`
   height: 18px;
   color: #c4c4c4;
   background-color: white;
-  padding-top: 80px;
+  padding-top: 20px;
   .More-btn-icon {
     width: 20px;
     height: 20px;

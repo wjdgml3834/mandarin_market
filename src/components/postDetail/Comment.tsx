@@ -4,12 +4,20 @@ import { COLOR } from "../../constants";
 import { PostCommentList } from "./CommentList";
 
 export const PostComment = () => {
-  const userData = {
-    src: "https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_960_720.jpg",
-    nickname: "영등포 빵주먹 이현호",
+  const userData = [
+    {
+      src: "https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_960_720.jpg",
+      nickname: "영등포 빵주먹 이현호",
+      postdate: "12분 전",
+      comment : "리액트는 좀 하시나요?"
+    },
+    {
+    src: "http://webimage.10x10.co.kr/image/basic600/262/B002626948.jpg",
+    nickname: "여신 성이",
     postdate: "방금",
-    comment : "리액트는 좀 하시나요?"
-  }
+    comment : "사진 너무 귀엽네요~"
+   },
+  ]
 
   const [comment, setComment] = useState("")
   const [isComment, setIsComment] = useState(false)
@@ -31,7 +39,9 @@ export const PostComment = () => {
     <Container>
       <h2 className="sr-only">댓글 목록</h2>
       <Comment>
-        <PostCommentList userData={userData}/>
+        {userData.map((userData, index) => (
+          <PostCommentList key={index} userData={userData}/>)
+        )}
       </Comment>
       <CommentWrite>
         <Form onSubmit={onSubmit}>

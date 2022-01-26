@@ -1,6 +1,9 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { useState } from "react";
+import { CommentModal } from "./CommentModal";
+import { CommentDelModal } from "./CommentDelModal";
 
 interface userData {
   userData: {
@@ -12,13 +15,29 @@ interface userData {
 }
 
 export const PostCommentList = ({userData}: userData) => {
+  const [IsModal, setIsModal] = useState(false);
+  const [isDelModal, setIsDelModal] = useState(false);
+
+  const openModal = () => {
+    setIsModal(true);
+  };
+  const closeModal = () => {
+    setIsModal(false);
+  };
+  const delModal = () => {
+    setIsDelModal(true);
+  };
+  const closeDelModal = () => {
+    setIsDelModal(false);
+    setIsModal(false);
+  };
 
   return (
     <CommentList>
       <CommentInfo>
         <Link href="/myprofile">
           <a>
-            <AuthorImg src={userData.src} alt="빵주먹님의 프로필사진" />
+            <AuthorImg src={userData.src} alt="누구님의 프로필사진" />
           </a>
         </Link>
         <Link href="/myprofile">
@@ -29,8 +48,15 @@ export const PostCommentList = ({userData}: userData) => {
         <CommentDate>{userData.postdate}</CommentDate>
       </CommentInfo>
       <CommentText>{userData.comment}</CommentText>
-      <MoreVertIcon className="more"></MoreVertIcon>
+      <button onClick={openModal}>
+        <MoreVertIcon className="more" />
+      </button>
+      <Background className={`${IsModal}`} onClick={closeModal} />
+      <CommentModal Modal={IsModal} delModal={delModal}/>
+      {isDelModal && <CommentDelModal closeDelModal={closeDelModal} />}
     </CommentList>
+    
+  
   );
 };
 
@@ -88,3 +114,17 @@ const CommentText = styled.p`
   line-height: 18px;
   color: #333333;
 `;
+
+const Background = styled.div`
+  &.true {
+    position: fixed;
+    top: 72px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #777;
+    opacity: 0.4;
+    z-index: 10;
+  }
+`;
+

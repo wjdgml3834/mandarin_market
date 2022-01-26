@@ -24,9 +24,10 @@ export const PostDetailContainer = () => {
     setLogoutModal(false);
     setMyProfileModal(false);
   };
+  
   return (
     <section>
-      <h2 className="sr-only">마이 페이지</h2>
+      <h2 className="sr-only">상세 페이지</h2>
       <Nav>
         <button>
           <ArrowBackIcon className="arrow" />
@@ -50,7 +51,8 @@ export const PostDetailContainer = () => {
   );
 };
 const Nav = styled.nav`
-  position: fixed;
+  position: sticky;
+  top: 24px;
   width: 100%;
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
