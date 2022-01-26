@@ -5,7 +5,12 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Post } from "../../types/Post";
+
 import { useRouter } from "next/router";
+
+import { PostModal } from "./PostModal";
+import { DeleteModal } from "./DeleteModal";
+
 
 interface PostProps {
   postData: Post;
@@ -15,6 +20,23 @@ export const Card = ({ postData }: PostProps) => {
   const [likeNum, setLikeNum] = useState(0);
   const [checkClick, setCheckClick] = useState(true);
   const [heartColor, setHeartColor] = useState("icon");
+
+  const [postModal, setPostModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const openPostModal = () => {
+    setPostModal(true);
+  };
+  const closePostModal = () => {
+    setPostModal(false);
+  };
+  const openDeleteModal = () => {
+    setDeleteModal(true);
+  };
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+    setPostModal(false);
+  };
 
   const onClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
@@ -79,11 +101,17 @@ export const Card = ({ postData }: PostProps) => {
           </LikeCommentCont>
           <PostDate>{postData.postdate}</PostDate>
         </PostCont>
-        <MoreBtn>
+        <MoreBtn onClick={openPostModal}>
           <span className="sr-only">더보기 버튼</span>
           <MoreVertIcon className="More-btn-icon" />
         </MoreBtn>
       </article>
+      <Background
+        className={`${postModal}`}
+        onClick={closePostModal}
+      ></Background>
+      <PostModal postModal={postModal} openDeleteModal={openDeleteModal} />
+      {deleteModal && <DeleteModal closeDeleteModal={closeDeleteModal} />}
     </Cont>
   );
 };
@@ -230,5 +258,18 @@ const MoreBtn = styled.button`
   .More-btn-icon {
     width: 20px;
     height: 20px;
+  }
+`;
+
+const Background = styled.div`
+  &.true {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #777;
+    opacity: 0.4;
+    z-index: 10;
   }
 `;
