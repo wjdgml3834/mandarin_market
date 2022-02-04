@@ -5,6 +5,7 @@ import AppsIcon from "@mui/icons-material/Apps";
 import { CardContainer } from "../home/CardContainer";
 import { useState } from "react";
 import { Select } from "@mui/material";
+import { ProfileAppPost } from "./ProfileAppPost";
 
 export const ProfilePost = () => {
   const [select, setSelect] = useState(true);
@@ -25,7 +26,7 @@ export const ProfilePost = () => {
           <AppsIcon className={`${!select}`} />
         </button>
       </IconContainer>
-      <CardContainer />
+      {select === true ? <CardContainer /> : <ProfileAppPost />}
     </div>
   );
 };
