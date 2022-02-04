@@ -7,6 +7,7 @@ import { Carousel } from "../yourProfile/Carousel";
 import { MyProfileInfo } from "./Info";
 import { LogOutModal } from "./LogOutModal";
 import { MyProfileModal } from "./MyProfileModal";
+import { ProfilePost } from "./ProfilePost";
 
 export const MyContainer = () => {
   const [myProfileModal, setMyProfileModal] = useState(false);
@@ -40,8 +41,7 @@ export const MyContainer = () => {
       <Border />
       <Carousel />
       <Border />
-      <MyProfileInfo />
-      <MyProfileInfo />
+      <ProfilePost />
       <Background
         className={`${myProfileModal}`}
         onClick={closeMyProfileModal}
