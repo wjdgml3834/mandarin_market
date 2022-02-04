@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
+import { useEffect } from "react";
 import { API_ENDPOINT, COLOR } from "../../constants";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { Router } from "@mui/icons-material";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +16,7 @@ export const LoginPage = () => {
 
   const [loginError, setLoginError] = useState("");
 
-  // const router = useRouter();
+  const router = useRouter();
 
   const onChange = useCallback((e) => {
     const {
@@ -45,8 +47,16 @@ export const LoginPage = () => {
         password: password,
       },
     };
+
     const res = await axios.post(API_ENDPOINT + "user/login/", loginDate);
     console.log(res);
+    localStorage.setItem("login_data", JSON.stringify(res));
+
+    let tokenData: string = localStorage.getItem("login_data");
+    console.log(typeof tokenData);
+    console.log(tokenData);
+    const a = JSON.parse(tokenData);
+    console.log(a);
 
     // if (isEmail && isPassword) {
     //   console.log("로그인");
