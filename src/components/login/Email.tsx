@@ -1,11 +1,13 @@
 import styled from "@emotion/styled";
-import { useEffect } from "react";
 import { API_ENDPOINT, COLOR } from "../../constants";
 import axios from "axios";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Router } from "@mui/icons-material";
+import Router from "next/router";
+import { useData } from "../../hooks/useMandarinData";
+import useSWR, { mutate } from "swr";
+import { fetcher } from "../../utils/fetcher";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +17,13 @@ export const LoginPage = () => {
   const [isPassword, setIsPassword] = useState(false);
 
   const [loginError, setLoginError] = useState("");
+
+  const [user, setUser] = useState({
+    accountname: "",
+    token: "",
+  });
+
+  const isUser = useRef(false);
 
   const router = useRouter();
 
@@ -49,34 +58,28 @@ export const LoginPage = () => {
     };
 
     const res = await axios.post(API_ENDPOINT + "user/login/", loginDate);
-    console.log(res);
-    localStorage.setItem("login_data", JSON.stringify(res));
 
-    let tokenData: string = localStorage.getItem("login_data");
-    console.log(typeof tokenData);
-    console.log(tokenData);
-    const a = JSON.parse(tokenData);
-    console.log(a);
-
-    // if (isEmail && isPassword) {
-    //   console.log("로그인");
-    //   axios
-    //     .post("/api/hello", {
-    //       email: email,
-    //       password: password,
-    //     })
-    //     .then((res) => {
-    //       if (res.status === 200) {
-    //         router.replace("/");
-    //         console.log("로그인 성공");
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       setLoginError("이메일 또는 비밀번호가 일치하지 않습니다.");
-    //       console.log(err.res);
-    //     });
-    // }
+    if (res.data.user) {
+      setUser({
+        accountname: res.data.user.accountname,
+        token: res.data.user.token,
+      });
+    } else {
+      alert("아이디 또는 비밀번호를 확인해주세요.");
+    }
   };
+
+  useEffect(() => {
+    if (!isUser.current) {
+      isUser.current = true;
+    } else {
+      if (user.accountname !== "") {
+        console.log(user);
+        console.log("로그인 성공");
+        Router.push("/home");
+      }
+    }
+  }, [user]);
 
   return (
     <Container>

@@ -1,10 +1,16 @@
 import styled from "@emotion/styled";
+import Router from "next/router";
 
 interface CloseLogoutModal {
   closeLogoutModal: () => void;
 }
 
 export const LogOutModal = ({ closeLogoutModal }: CloseLogoutModal) => {
+  const onClickLogout = () => {
+    // localStorage.removeItem("login_data");
+    // Router.push("/");
+  };
+
   return (
     <Container>
       <LogOutModalContainer>
@@ -13,7 +19,7 @@ export const LogOutModal = ({ closeLogoutModal }: CloseLogoutModal) => {
           <div onClick={closeLogoutModal}>
             <LogoutCancel>취소</LogoutCancel>
           </div>
-          <div>
+          <div onClick={onClickLogout}>
             <Logout>로그아웃</Logout>
           </div>
         </LogOutBtnContainer>
