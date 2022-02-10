@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
-import { API_ENDPOINT, COLOR } from "../../constants";
-import axios from "axios";
-import { createContext, useCallback, useEffect, useRef, useState } from "react";
+import { COLOR } from "../../constants";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +14,8 @@ export const LoginPage = () => {
   const [isPassword, setIsPassword] = useState(false);
 
   const [loginError, setLoginError] = useState("");
+
+  const router = useRouter();
 
   const onChange = useCallback((e) => {
     const {
@@ -37,24 +38,21 @@ export const LoginPage = () => {
     }
   }, []);
 
-  const router = useRouter();
-
   const login = async (e: any) => {
-    // 원래 실행되는 이벤트 취소
     e.preventDefault();
-    // Form 안에서 이메일, 패스워드 가져오기
 
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    const res = await signIn("email-password-credential", {
+    const res: any = await signIn("email-password-credential", {
       email,
       password,
       redirect: false,
-      callbackUrl: "http://localhost:3000/user",
+      callbackUrl: "http://localhost:3000/home",
     });
-    console.log(res);
-    // await router.push(response.url)
+
+    const data = await getSession();
+    if (data) await router.push(res.url);
   };
 
   return (

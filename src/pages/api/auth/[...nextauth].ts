@@ -15,7 +15,6 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any, req: any) {
-        // console.log(credentials);
         const email = credentials.email;
         const password = credentials.password;
         const loginDate = {
@@ -26,13 +25,11 @@ export default NextAuth({
         };
         const res = await axios.post(API_ENDPOINT + "user/login/", loginDate);
         if (res.data.user) {
-          // console.log(res.data.user);
           const user = {
-            name: res.data.user.accountname,
+            name: res.data.user.token,
             email: res.data.user.email,
             image: res.data.user.image,
           };
-          // console.log(credentials);
           return user;
         }
         throw new Error("아이디 혹은 패스워드가 틀립니다.");
@@ -45,17 +42,12 @@ export default NextAuth({
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
-        token.accessToken = account.access_token;
-        // token.res = account.res;
-        // console.log(token);
-        // console.log(account);
+        // token.accessToken = account.access_token;
       }
       return token;
     },
     async session({ session, token, user }) {
-      session.accessToken = token.accessToken;
-      // session.res = token.res;
-      console.log(session);
+      // session.accessToken = token.accessToken;
       return session;
     },
   },
