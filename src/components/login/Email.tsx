@@ -1,13 +1,11 @@
 import styled from "@emotion/styled";
 import { API_ENDPOINT, COLOR } from "../../constants";
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Router from "next/router";
-import { useData } from "../../hooks/useMandarinData";
-import useSWR, { mutate } from "swr";
-import { fetcher } from "../../utils/fetcher";
+
+import { signIn } from "next-auth/react";
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -17,15 +15,6 @@ export const LoginPage = () => {
   const [isPassword, setIsPassword] = useState(false);
 
   const [loginError, setLoginError] = useState("");
-
-  const [user, setUser] = useState({
-    accountname: "",
-    token: "",
-  });
-
-  const isUser = useRef(false);
-
-  const router = useRouter();
 
   const onChange = useCallback((e) => {
     const {
@@ -48,43 +37,30 @@ export const LoginPage = () => {
     }
   }, []);
 
-  const onSubmit = async (e: any) => {
+  const router = useRouter();
+
+  const login = async (e: any) => {
+    // 원래 실행되는 이벤트 취소
     e.preventDefault();
-    const loginDate = {
-      user: {
-        email: email,
-        password: password,
-      },
-    };
+    // Form 안에서 이메일, 패스워드 가져오기
 
-    const res = await axios.post(API_ENDPOINT + "user/login/", loginDate);
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-    if (res.data.user) {
-      setUser({
-        accountname: res.data.user.accountname,
-        token: res.data.user.token,
-      });
-    } else {
-      alert("아이디 또는 비밀번호를 확인해주세요.");
-    }
+    const res = await signIn("email-password-credential", {
+      email,
+      password,
+      redirect: false,
+      callbackUrl: "http://localhost:3000/user",
+    });
+    console.log(res);
+    // await router.push(response.url)
   };
-
-  useEffect(() => {
-    if (!isUser.current) {
-      isUser.current = true;
-    } else {
-      if (user.accountname !== "") {
-        console.log(user);
-        console.log("로그인 성공");
-        Router.push("/home");
-      }
-    }
-  }, [user]);
 
   return (
     <Container>
       <Title>로그인</Title>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={login}>
         <Label>
           <SubText>이메일</SubText>
           <Input

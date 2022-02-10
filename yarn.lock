@@ -407,6 +407,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     "fastq" "^1.6.0"
 
+"@panva/hkdf@^1.0.1":
+  "integrity" "sha512-mMyQ9vjpuFqePkfe5bZVIf/H3Dmk6wA8Kjxff9RcO4kqzJo+Ek9pGKwZHpeMr7Eku0QhLXMCd7fNCSnEnRMubg=="
+  "resolved" "https://registry.npmjs.org/@panva/hkdf/-/hkdf-1.0.1.tgz"
+  "version" "1.0.1"
+
 "@popperjs/core@^2.4.4":
   "integrity" "sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA=="
   "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.11.2.tgz"
@@ -455,6 +460,13 @@
   "integrity" "sha1-7ihweulOEdK4J7y+UnC86n8+ce4="
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
+
+"@types/next-auth@^3.15.0":
+  "integrity" "sha512-ZVfejlu81YiIRX1m0iKAfvZ3nK7K9EyZWhNARNKsFop8kNAgEvMnlKpTpwN59xkK2OhyWLagPuiDAVBYSO9jSA=="
+  "resolved" "https://registry.npmjs.org/@types/next-auth/-/next-auth-3.15.0.tgz"
+  "version" "3.15.0"
+  dependencies:
+    "next-auth" "*"
 
 "@types/node@*", "@types/node@17.0.8":
   "integrity" "sha512-YofkM6fGv4gDJq78g4j0mMuGMkZVxZDgtU0JRdx6FgiJDG+0fY0GKVolOV8WqVmEhLCXkQRjwDdKyPxJp/uucg=="
@@ -1156,6 +1168,11 @@
   "version" "1.7.0"
   dependencies:
     "safe-buffer" "~5.1.1"
+
+"cookie@^0.4.1":
+  "integrity" "sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA=="
+  "resolved" "https://registry.npmjs.org/cookie/-/cookie-0.4.2.tgz"
+  "version" "0.4.2"
 
 "core-js-pure@^3.19.0":
   "integrity" "sha512-CmWHvSKn2vNL6p6StNp1EmMIfVY/pqn3JLAjfZQ8WZGPOlGoO92EkX9/Mk81i6GxvoPXjUqEQnpM3rJ5QxxIOg=="
@@ -2262,6 +2279,11 @@
     "merge-stream" "^2.0.0"
     "supports-color" "^8.0.0"
 
+"jose@^4.1.4", "jose@^4.3.7":
+  "integrity" "sha512-GFcVFQwYQKbQTUOo2JlpFGXTkgBw26uzDsRMD2q1WgSKNSnpKS9Ug7bdQ8dS+p4sZHNH6iRPu6WK2jLIjspaMA=="
+  "resolved" "https://registry.npmjs.org/jose/-/jose-4.5.0.tgz"
+  "version" "4.5.0"
+
 "js-tokens@^3.0.0 || ^4.0.0", "js-tokens@^4.0.0":
   "integrity" "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="
   "resolved" "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
@@ -2509,6 +2531,21 @@
   "resolved" "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   "version" "2.6.2"
 
+"next-auth@*", "next-auth@^4.2.1":
+  "integrity" "sha512-XDtt7nqevkNf4EJ2zKAKkI+MFsURf11kx11vPwxrBYA1MHeqWwaWbGOUOI2ekNTvfAg4nTEJJUH3LV2cLrH3Tg=="
+  "resolved" "https://registry.npmjs.org/next-auth/-/next-auth-4.2.1.tgz"
+  "version" "4.2.1"
+  dependencies:
+    "@babel/runtime" "^7.16.3"
+    "@panva/hkdf" "^1.0.1"
+    "cookie" "^0.4.1"
+    "jose" "^4.3.7"
+    "oauth" "^0.9.15"
+    "openid-client" "^5.1.0"
+    "preact" "^10.6.3"
+    "preact-render-to-string" "^5.1.19"
+    "uuid" "^8.3.2"
+
 "next-images@^1.8.4":
   "integrity" "sha512-E6JV+aMxeUCh8A+cwn1xgmlh/zINSW4JC/XLNbM+PWQd5LBdfB+m1IDCAfNnGOKMo96kzw+4LsKxnX/Kldw78Q=="
   "resolved" "https://registry.npmjs.org/next-images/-/next-images-1.8.4.tgz"
@@ -2606,10 +2643,20 @@
   "resolved" "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz"
   "version" "3.0.0"
 
+"oauth@^0.9.15":
+  "integrity" "sha1-vR/vr2hslrdUda7VGWQS/2DPucE="
+  "resolved" "https://registry.npmjs.org/oauth/-/oauth-0.9.15.tgz"
+  "version" "0.9.15"
+
 "object-assign@^4.1.1":
   "integrity" "sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM="
   "resolved" "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
   "version" "4.1.1"
+
+"object-hash@^2.0.1":
+  "integrity" "sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw=="
+  "resolved" "https://registry.npmjs.org/object-hash/-/object-hash-2.2.0.tgz"
+  "version" "2.2.0"
 
 "object-inspect@^1.11.0", "object-inspect@^1.9.0":
   "integrity" "sha512-Ho2z80bVIvJloH+YzRmpZVQe87+qASmBUKZDWgx9cu+KDrX2ZDH/3tMy+gXbZETVGs2M8YdxObOh7XAtim9Y0g=="
@@ -2674,12 +2721,27 @@
     "define-properties" "^1.1.3"
     "es-abstract" "^1.19.1"
 
+"oidc-token-hash@^5.0.1":
+  "integrity" "sha512-EvoOtz6FIEBzE+9q253HsLCVRiK/0doEJ2HCvvqMQb3dHZrP3WlJKYtJ55CRTw4jmYomzH4wkPuCj/I3ZvpKxQ=="
+  "resolved" "https://registry.npmjs.org/oidc-token-hash/-/oidc-token-hash-5.0.1.tgz"
+  "version" "5.0.1"
+
 "once@^1.3.0":
   "integrity" "sha1-WDsap3WWHUsROsF9nFC6753Xa9E="
   "resolved" "https://registry.npmjs.org/once/-/once-1.4.0.tgz"
   "version" "1.4.0"
   dependencies:
     "wrappy" "1"
+
+"openid-client@^5.1.0":
+  "integrity" "sha512-i5quCXurPkN50ndRLE2D3Q6khz6AieJ0gTKOmsl3G4ZIP/Udf5Qw5CMRdhMvbFvfKRrkcCWPFXmduFUFYTC0xw=="
+  "resolved" "https://registry.npmjs.org/openid-client/-/openid-client-5.1.3.tgz"
+  "version" "5.1.3"
+  dependencies:
+    "jose" "^4.1.4"
+    "lru-cache" "^6.0.0"
+    "object-hash" "^2.0.1"
+    "oidc-token-hash" "^5.0.1"
 
 "optionator@^0.9.1":
   "integrity" "sha512-74RlY5FCnhq4jRxVUPKDaRwrVNXMqsGsiW6AJw4XK8hmtm10wC0ypZBLw5IIp85NZMr91+qd1RvvENwg7jjRFw=="
@@ -2848,10 +2910,27 @@
     "nanoid" "^3.1.23"
     "source-map" "^0.6.1"
 
+"preact-render-to-string@^5.1.19":
+  "integrity" "sha512-bj8sn/oytIKO6RtOGSS/1+5CrQyRSC99eLUnEVbqUa6MzJX5dYh7wu9bmT0d6lm/Vea21k9KhCQwvr2sYN3rrQ=="
+  "resolved" "https://registry.npmjs.org/preact-render-to-string/-/preact-render-to-string-5.1.19.tgz"
+  "version" "5.1.19"
+  dependencies:
+    "pretty-format" "^3.8.0"
+
+"preact@^10.6.3", "preact@>=10":
+  "integrity" "sha512-i+LXM6JiVjQXSt2jG2vZZFapGpCuk1fl8o6ii3G84MA3xgj686FKjs4JFDkmUVhtxyq21+4ay74zqPykz9hU6w=="
+  "resolved" "https://registry.npmjs.org/preact/-/preact-10.6.5.tgz"
+  "version" "10.6.5"
+
 "prelude-ls@^1.2.1":
   "integrity" "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="
   "resolved" "https://registry.npmjs.org/prelude-ls/-/prelude-ls-1.2.1.tgz"
   "version" "1.2.1"
+
+"pretty-format@^3.8.0":
+  "integrity" "sha1-v77VbV6ad2ZF9LH/eqGjrE+jw4U="
+  "resolved" "https://registry.npmjs.org/pretty-format/-/pretty-format-3.8.0.tgz"
+  "version" "3.8.0"
 
 "process@0.11.10":
   "integrity" "sha1-czIwDoQBYb2j5podHZGn1LwW8YI="
@@ -3530,6 +3609,11 @@
     "is-typed-array" "^1.1.3"
     "safe-buffer" "^5.1.2"
     "which-typed-array" "^1.1.2"
+
+"uuid@^8.3.2":
+  "integrity" "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg=="
+  "resolved" "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
+  "version" "8.3.2"
 
 "v8-compile-cache@^2.0.3":
   "integrity" "sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA=="
