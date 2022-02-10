@@ -1,16 +1,12 @@
 import styled from "@emotion/styled";
 import Router from "next/router";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 interface CloseLogoutModal {
   closeLogoutModal: () => void;
 }
 
 export const LogOutModal = ({ closeLogoutModal }: CloseLogoutModal) => {
-  const onClickLogout = () => {
-    // localStorage.removeItem("login_data");
-    // Router.push("/");
-  };
-
   return (
     <Container>
       <LogOutModalContainer>
@@ -19,8 +15,14 @@ export const LogOutModal = ({ closeLogoutModal }: CloseLogoutModal) => {
           <div onClick={closeLogoutModal}>
             <LogoutCancel>취소</LogoutCancel>
           </div>
-          <div onClick={onClickLogout}>
-            <Logout>로그아웃</Logout>
+          <div>
+            <Logout
+              onClick={() =>
+                signOut({ callbackUrl: `${window.location.origin}` })
+              }
+            >
+              로그아웃
+            </Logout>
           </div>
         </LogOutBtnContainer>
       </LogOutModalContainer>
@@ -67,9 +69,8 @@ const LogoutCancel = styled.p`
   background-color: #fff;
 `;
 
-const Logout = styled.p`
+const Logout = styled.button`
   text-align: center;
-  padding-top: 13px;
   width: 100px;
   height: 40px;
   font-size: 10px;

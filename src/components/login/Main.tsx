@@ -1,22 +1,32 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { COLOR } from "../../constants";
+import { signIn } from "next-auth/react";
 
 export const LoginMain = () => {
-
   return (
     <Container>
-        <h2 className="sr-only">로그인 페이지</h2>
-        <Img src="/images/symbol-logo.svg" alt="logo" />
-        <LoginContainer>
-          <Button color="#f2c94c" name="/images/kakao.svg">카카오 계정으로 로그인</Button>
-          <Button color="#767676" name="/images/google.svg">구글 계정으로 로그인</Button>
-          <Button color="#2d9cdb" name="/images/facebook.svg">페이스북 계정으로 로그인</Button>
-          <LinkContainer>
-            <li className="login"><Link href="/login">이메일로 로그인</Link></li>
-            <li><Link href="/signup">회원가입</Link></li>
-          </LinkContainer>
-        </LoginContainer>
+      <h2 className="sr-only">로그인 페이지</h2>
+      <Img src="/images/symbol-logo.svg" alt="logo" />
+      <LoginContainer>
+        <Button color="#f2c94c" name="/images/kakao.svg">
+          카카오 계정으로 로그인
+        </Button>
+        <Button color="#767676" name="/images/google.svg">
+          구글 계정으로 로그인
+        </Button>
+        <Button color="#2d9cdb" name="/images/facebook.svg">
+          페이스북 계정으로 로그인
+        </Button>
+        <LinkContainer>
+          <li className="login">
+            <button onClick={() => signIn()}>이메일로 로그인</button>
+          </li>
+          <li>
+            <Link href="/signup">회원가입</Link>
+          </li>
+        </LinkContainer>
+      </LoginContainer>
     </Container>
   );
 };
@@ -40,7 +50,7 @@ const LoginContainer = styled.article`
   background-color: #fff;
   width: 100%;
   padding: 50px 0 82px;
-  border-radius: 20px 20px 0 0 ;
+  border-radius: 20px 20px 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -49,7 +59,7 @@ const LoginContainer = styled.article`
 
 const Button = styled.button`
   border-radius: 44px;
-  border: 1px solid ${props => props.color};
+  border: 1px solid ${(props) => props.color};
   background-color: #fff;
   color: #767676;
   margin-bottom: 10px;
@@ -58,16 +68,16 @@ const Button = styled.button`
   position: relative;
   cursor: pointer;
   &::before {
-    content: '';
+    content: "";
     position: absolute;
-    background: url('${props => props.name}');
+    background: url("${(props) => props.name}");
     top: 9px;
     left: 17px;
     width: 24px;
     height: 24px;
     background-size: 24px;
   }
-`
+`;
 
 const LinkContainer = styled.ul`
   background-color: #fff;
@@ -82,7 +92,7 @@ const LinkContainer = styled.ul`
     position: relative;
   }
   .login::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 8px;
     height: 12px;
