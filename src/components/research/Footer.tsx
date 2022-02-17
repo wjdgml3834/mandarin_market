@@ -20,7 +20,7 @@ export const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link href="/chat/list">
+            <Link href="/chats">
               <MenuLink>
                 <ChatBubbleOutlineIcon className="icon chat-icon" />
                 <Text>채팅</Text>
