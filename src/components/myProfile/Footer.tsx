@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { COLOR } from "../../constants/index";
-import HomeIcon from "@mui/icons-material/Home";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import PersonIcon from "@mui/icons-material/Person";
 
 export const Footer = () => {
   return (
@@ -14,7 +14,7 @@ export const Footer = () => {
           <li>
             <Link href="/home">
               <MenuLink>
-                <HomeIcon className="icon home-icon" />
+                <HomeOutlinedIcon className="icon" />
                 <Text>홈</Text>
               </MenuLink>
             </Link>
@@ -38,7 +38,7 @@ export const Footer = () => {
           <li>
             <Link href="/myprofile">
               <MenuLink>
-                <PermIdentityIcon className="icon" />
+                <PersonIcon className="icon profile-icon" />
                 <Text>프로필</Text>
               </MenuLink>
             </Link>
@@ -80,7 +80,7 @@ const MenuLink = styled.a`
     width: 28px;
     height: 28px;
   }
-  .home-icon {
+  .profile-icon {
     color: ${COLOR.orange};
   }
 `;
