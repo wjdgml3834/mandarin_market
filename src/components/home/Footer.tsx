@@ -52,18 +52,23 @@ export const Footer = () => {
 const FooterContainer = styled.footer`
   width: 100%;
   border-top: 1px solid #dbdbdb;
-  padding: 15px 39px;
+  padding: 5px 30px;
   position: fixed;
   left: 0;
   bottom: 0;
   min-width: 390px;
   background-color: #fff;
   z-index: 10;
+  box-sizing: border-box;
 `;
 
 const MenuList = styled.ul`
   display: flex;
   justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
 `;
 
 const MenuLink = styled.a`
@@ -73,12 +78,12 @@ const MenuLink = styled.a`
   align-items: center;
   color: #767676;
   .icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
   }
   .chat-icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
   }
   .home-icon {
     color: ${COLOR.orange};

@@ -52,7 +52,7 @@ export const Footer = () => {
 const FooterContainer = styled.footer`
   width: 100%;
   border-top: 1px solid #dbdbdb;
-  padding: 15px 39px;
+  padding: 5px 30px;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -73,12 +73,12 @@ const MenuLink = styled.a`
   align-items: center;
   color: #767676;
   .icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
   }
   .chat-icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     color: ${COLOR.orange};
   }
 `;
