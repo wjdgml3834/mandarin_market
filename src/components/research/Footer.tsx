@@ -53,6 +53,12 @@ const FooterContainer = styled.footer`
   width: 100%;
   border-top: 1px solid #dbdbdb;
   padding: 15px 39px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  min-width: 390px;
+  background-color: #fff;
+  z-index: 10;
 `;
 
 const MenuList = styled.ul`
