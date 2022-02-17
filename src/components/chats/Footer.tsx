@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { COLOR } from "../../constants/index";
-import HomeIcon from "@mui/icons-material/Home";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 
@@ -14,7 +14,7 @@ export const Footer = () => {
           <li>
             <Link href="/home">
               <MenuLink>
-                <HomeIcon className="icon home-icon" />
+                <HomeOutlinedIcon className="icon home-icon" />
                 <Text>홈</Text>
               </MenuLink>
             </Link>
@@ -22,7 +22,7 @@ export const Footer = () => {
           <li>
             <Link href="/chats">
               <MenuLink>
-                <ChatBubbleOutlineIcon className="icon chat-icon" />
+                <ChatBubbleIcon className="icon chat-icon" />
                 <Text>채팅</Text>
               </MenuLink>
             </Link>
@@ -59,16 +59,11 @@ const FooterContainer = styled.footer`
   min-width: 390px;
   background-color: #fff;
   z-index: 10;
-  box-sizing: border-box;
 `;
 
 const MenuList = styled.ul`
   display: flex;
   justify-content: space-between;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  vertical-align: baseline;
 `;
 
 const MenuLink = styled.a`
@@ -84,8 +79,6 @@ const MenuLink = styled.a`
   .chat-icon {
     width: 22px;
     height: 22px;
-  }
-  .home-icon {
     color: ${COLOR.orange};
   }
 `;

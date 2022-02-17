@@ -20,7 +20,7 @@ export const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link href="/chat/list">
+            <Link href="/chats">
               <MenuLink>
                 <ChatBubbleOutlineIcon className="icon chat-icon" />
                 <Text>채팅</Text>
@@ -52,7 +52,13 @@ export const Footer = () => {
 const FooterContainer = styled.footer`
   width: 100%;
   border-top: 1px solid #dbdbdb;
-  padding: 15px 39px;
+  padding: 5px 30px;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  min-width: 390px;
+  background-color: #fff;
+  z-index: 10;
 `;
 
 const MenuList = styled.ul`
@@ -67,12 +73,12 @@ const MenuLink = styled.a`
   align-items: center;
   color: #767676;
   .icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
   }
   .chat-icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
   }
   .home-icon {
     color: ${COLOR.orange};
