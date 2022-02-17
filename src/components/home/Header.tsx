@@ -1,15 +1,18 @@
 import styled from "@emotion/styled";
 import SearchIcon from "@mui/icons-material/Search";
+import Link from "next/link";
 
 export const Header = () => {
   return (
     <HeaderContainer>
       <Section>
         <Text>감귤마켓 피드</Text>
-        <a href="/search">
-          <span className="sr-only">계정 검색 페이지로 이동</span>
-          <SearchIcon className="icon" />
-        </a>
+        <Link href="/research">
+          <a>
+            <span className="sr-only">계정 검색 페이지로 이동</span>
+            <SearchIcon className="icon" />
+          </a>
+        </Link>
       </Section>
     </HeaderContainer>
   );
