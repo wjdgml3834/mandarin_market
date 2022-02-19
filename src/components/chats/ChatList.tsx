@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { COLOR } from "../../constants";
 import Link from "next/link";
+import { BackButton } from "../BackButton";
 // import { useData } from "../../hooks/useMandarinData";
 
 const chatData = [
@@ -48,9 +48,7 @@ export const ChatList = () => {
     <section>
       <h2 className="sr-only">채팅 목록 페이지</h2>
       <Nav>
-        <button>
-          <ArrowBackIcon className="arrow" />
-        </button>
+        <BackButton />
         <button>
           <MoreVertIcon className="more" />
         </button>
@@ -97,15 +95,15 @@ const Nav = styled.nav`
   border-bottom: 0.5px solid #dbdbdb;
   background-color: #fff;
   z-index: 100;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   .arrow {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    cursor: pointer;
   }
   .more {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    cursor: pointer;
   }
 `;
 

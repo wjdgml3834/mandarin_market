@@ -1,16 +1,13 @@
 import { ProfileForm } from "./ProfileForm";
 import styled from "@emotion/styled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { COLOR } from "../constants";
+import { BackButton } from "./BackButton";
 
 export const ProfileUpate = () => {
   return (
     <Container>
       <h2 className="sr-only"></h2>
       <Nav>
-        <button>
-          <ArrowBackIcon className="arrow" />
-        </button>
+        <BackButton />
       </Nav>
       <ProfileFormContainer>
         <ProfileForm btnLabel="저장" />
@@ -27,10 +24,11 @@ const Nav = styled.nav`
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
   background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
   .arrow {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    cursor: pointer;
   }
 `;
 const ProfileFormContainer = styled.div`

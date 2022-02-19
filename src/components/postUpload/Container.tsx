@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { BackButton } from "../BackButton";
 import { PostUpload } from "./PostUpload";
 
 export const UploadContainer = () => {
@@ -8,11 +8,9 @@ export const UploadContainer = () => {
     <Container>
       <h2 className="sr-only"></h2>
       <Nav>
-        <button>
-          <ArrowBackIcon className="arrow" />
-        </button>
+        <BackButton />
       </Nav>
-      <PostUpload btnLabel="저장" />
+      <PostUpload />
     </Container>
   );
 };
@@ -27,9 +25,9 @@ const Nav = styled.nav`
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
   background-color: #fff;
+  display: flex;
+  padding: 0 10px;
   .arrow {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    cursor: pointer;
   }
 `;

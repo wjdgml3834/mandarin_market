@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { BackButton } from "../BackButton";
 
 export const Header = () => {
   return (
     <HeaderCont>
       <Section>
         <h1 className="sr-only">계정검색 페이지</h1>
-        <BackBtn>
-          <ArrowBackIcon />
-        </BackBtn>
+        <BackButton />
         <SearchInp type="text" placeholder="계정검색" />
       </Section>
     </HeaderCont>
@@ -31,25 +30,18 @@ const Section = styled.section`
   align-items: center;
   max-width: 100%;
   height: 48px;
-  padding: 0 16px;
+  padding: 0 16px 0 10px;
   border-bottom: 0.5px solid #dbdbdb;
-`;
-
-const BackBtn = styled.button`
-  border: none;
-  cursor: pointer;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: white;
+  .arrow {
+    cursor: pointer;
+  }
 `;
 
 const SearchInp = styled.input`
   width: 100%;
   height: 32px;
   padding: 7px 16px;
-  margin-left: 20px;
+  margin-left: 14px;
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
@@ -60,5 +52,8 @@ const SearchInp = styled.input`
   border-radius: 32px;
   &:focus {
     outline: none;
+  }
+  &::placeholder {
+    color: #c4c4c4
   }
 `;
