@@ -3,11 +3,7 @@ import { useCallback, useState } from "react";
 import { COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
-interface BtnLabel {
-  btnLabel: string;
-}
-
-export const ProductRegister = ({ btnLabel }: BtnLabel) => {
+export const ProductRegister = () => {
   const [isImage, setIsImage] = useState(false)
 
   const getImage = (img: boolean) => {
@@ -94,9 +90,7 @@ export const ProductRegister = ({ btnLabel }: BtnLabel) => {
             onChange={onChange}
           ></Input>
         </Label>
-        {btnLabel === "저장" && (
-          <SaveBtn disabled={!(isImage && isProduct && isPrice && isUrl)}>저장</SaveBtn>
-          )}
+        <SaveBtn disabled={!(isImage && isProduct && isPrice && isUrl)}>저장</SaveBtn>
       </Form>
     </Container>
   );
@@ -141,8 +135,8 @@ const Input = styled.input`
 
 const SaveBtn = styled.button`
   position: absolute;
-  top: 30px;
-  right: 10px;
+  top: 31px;
+  right: 16px;
   width: 90px;
   height: 32px;
   border-radius: 32px;
@@ -150,6 +144,7 @@ const SaveBtn = styled.button`
   font-weight: 500;
   color: #fff;
   background-color: ${COLOR.orange};
+  cursor: pointer;
   &:disabled {
     opacity: 0.5;
   }
