@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
+import { BackButton } from "../BackButton";
 import { LogOutModal } from "../myProfile/LogOutModal";
 import { MyProfileModal } from "../myProfile/MyProfileModal";
 import { PostComment } from "./Comment";
@@ -29,15 +29,15 @@ export const PostDetailContainer = () => {
     <section>
       <h2 className="sr-only">상세 페이지</h2>
       <Nav>
-        <button>
-          <ArrowBackIcon className="arrow" />
-        </button>
+        <BackButton />
         <button onClick={openMyProfileModal}>
           <MoreVertIcon className="more" />
         </button>
       </Nav>
-      <PostDetailCard />
-      <PostComment />
+      <MainCountainer>
+        <PostDetailCard />
+        <PostComment />
+      </MainCountainer>
       <Background
         className={`${myProfileModal}`}
         onClick={closeMyProfileModal}
@@ -52,23 +52,26 @@ export const PostDetailContainer = () => {
 };
 const Nav = styled.nav`
   position: sticky;
-  top: 24px;
   width: 100%;
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
   background-color: #fff;
   z-index: 100;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
   .arrow {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    cursor: pointer;
   }
   .more {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    cursor: pointer;
   }
 `;
+
+const MainCountainer = styled.div`
+  height: calc(100vh - 108px);
+  overflow-y: scroll;
+`
 
 const Background = styled.div`
   &.true {

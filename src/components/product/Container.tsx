@@ -1,16 +1,14 @@
 import styled from "@emotion/styled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { BackButton } from "../BackButton";
 import { ProductRegister } from "./Register";
 
 export const ProductContainer = () => {
   return (
     <div>
       <Nav>
-        <button>
-          <ArrowBackIcon className="arrow" />
-        </button>
+        <BackButton />
       </Nav>
-      <ProductRegister btnLabel="저장"/>
+      <ProductRegister />
     </div>
   );
 };
@@ -21,11 +19,10 @@ const Nav = styled.nav`
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
   background-color: #fff;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   .arrow {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    cursor: pointer;
   }
 `;

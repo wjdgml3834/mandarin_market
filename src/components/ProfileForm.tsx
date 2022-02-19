@@ -181,8 +181,8 @@ const Error = styled.span`
 `;
 const SaveBtn = styled.button`
   position: absolute;
-  top: 30px;
-  right: 10px;
+  top: 31px;
+  right: 16px;
   width: 90px;
   height: 32px;
   border-radius: 32px;

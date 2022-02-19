@@ -20,16 +20,18 @@ export const Header = () => {
 
 const HeaderContainer = styled.header`
   width: 100%;
-  border-bottom: 1px solid #dbdbdb;
   position: sticky;
   top: 0;
 `;
 
 const Section = styled.section`
+  border-bottom: 0.5px solid #dbdbdb;
   padding: 13px 16px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin: 0 auto;
+  height: 48px;
   .icon {
     color: #767676;
     width: 28px;

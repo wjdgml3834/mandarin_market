@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
+import { BackButton } from "../BackButton";
 import { Border } from "../Border";
 import { Carousel } from "../yourProfile/Carousel";
 import { MyProfileInfo } from "./Info";
@@ -30,9 +30,7 @@ export const MyContainer = () => {
     <section>
       <h2 className="sr-only">마이 페이지</h2>
       <Nav>
-        <button>
-          <ArrowBackIcon className="arrow" />
-        </button>
+        <BackButton />
         <button onClick={openMyProfileModal}>
           <MoreVertIcon className="more" />
         </button>
@@ -61,15 +59,15 @@ const Nav = styled.nav`
   border-bottom: 0.5px solid #dbdbdb;
   background-color: #fff;
   z-index: 100;
+  display: flex;
+  padding: 0 10px;
+  justify-content: space-between;
+  align-items: center;
   .arrow {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    cursor: pointer;
   }
   .more {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    cursor: pointer;
   }
 `;
 

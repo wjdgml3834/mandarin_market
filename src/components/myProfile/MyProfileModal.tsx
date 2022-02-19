@@ -31,6 +31,7 @@ const Container = styled.ul`
   background-color: #fff;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
+  z-index: 100;
   &::before {
     display: block;
     content: "";

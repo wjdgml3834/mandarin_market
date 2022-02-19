@@ -88,6 +88,12 @@ const LinkContainer = styled.ul`
   font-size: 12px;
   line-height: 15px;
   margin-top: 20px;
+  button {
+    cursor: pointer;
+    color: #767676;
+    font-size: 12px;
+    line-height: 15px;
+  }
   .login {
     position: relative;
   }
@@ -99,6 +105,6 @@ const LinkContainer = styled.ul`
     border-right: 1px solid #c4c4c4;
     display: inline-block;
     top: 2px;
-    left: 89px;
+    left: 99px;
   }
 `;

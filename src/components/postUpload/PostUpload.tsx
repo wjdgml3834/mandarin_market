@@ -4,11 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import { COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
-interface BtnLabel {
-  btnLabel: string;
-}
-
-export const PostUpload = ({ btnLabel }: BtnLabel) => {
+export const PostUpload = () => {
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -75,9 +71,7 @@ export const PostUpload = ({ btnLabel }: BtnLabel) => {
             ></Textarea>
           </label>
           <FileUpload images={images} getImage={getImage} getIsImage={getIsImage}/>
-          {btnLabel === "저장" && (
-            <SaveBtn disabled={!(isText || isImage)}>업로드</SaveBtn>
-            )}
+          <SaveBtn disabled={!(isText || isImage)}>업로드</SaveBtn>
         </Form>
         <section>
           <h4 className="sr-only">업로드된 사진</h4>
@@ -166,8 +160,8 @@ const UploadedImg = styled.img `
 
 const SaveBtn = styled.button`
   position: absolute;
-  top: 30px;
-  right: 10px;
+  top: 31px;
+  right: 16px;
   width: 90px;
   height: 32px;
   border-radius: 32px;
@@ -175,7 +169,6 @@ const SaveBtn = styled.button`
   font-weight: 500;
   color: #fff;
   background-color: ${COLOR.orange};
-  z-index: 10;
   cursor: pointer;
   &:disabled {
     opacity: 0.5;

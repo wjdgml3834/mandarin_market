@@ -29,7 +29,7 @@ export const Main = () => {
 const MainContainer = styled.main`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 120px);
   margin: 0px auto;
   overflow-y: scroll;
   padding: 20px 16px 0;
