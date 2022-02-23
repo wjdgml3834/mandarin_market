@@ -5,7 +5,7 @@ import { SignUpPage } from "../components/SignUp";
 import { SignUpProfile } from "../components/SignUpProfile";
 
 const SingUp: NextPage = () => {
-  const [signUp, setSignUp] = useState(true);
+  const [signUp, setSignUp] = useState({ email: "", password: "" });
 
   return (
     <section>
@@ -15,10 +15,10 @@ const SingUp: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">회원가입</h1>
-      {signUp ? (
-        <SignUpPage signUp={signUp} setSignUp={setSignUp} />
+      {signUp.email === "" ? (
+        <SignUpPage setSignUp={setSignUp} />
       ) : (
-        <SignUpProfile />
+        <SignUpProfile signUp={signUp} />
       )}
     </section>
   );

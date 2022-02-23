@@ -5,11 +5,10 @@ import { useCallback, useState } from "react";
 import { API_ENDPOINT, COLOR } from "../constants";
 
 interface propTypes {
-  signUp: boolean;
-  setSignUp: (signUp: boolean) => void;
+  setSignUp: (signUp: { email: string; password: string }) => void;
 }
 
-export const SignUpPage = (props: propTypes) => {
+export const SignUpPage = ({ setSignUp }: propTypes) => {
   const [email, setEmail] = useState("");
   const [isEmail, setIsEmail] = useState(false);
   const [emailMessage, setEmailMessage] = useState("");
@@ -17,8 +16,6 @@ export const SignUpPage = (props: propTypes) => {
   const [password, setPassword] = useState("");
   const [isPassword, setIsPassword] = useState(false);
   const [passwordMessage, setPasswordMessage] = useState("");
-
-  const [signUpError, setSignUpError] = useState("");
 
   const router = useRouter();
 
@@ -59,6 +56,7 @@ export const SignUpPage = (props: propTypes) => {
           user: { email: email },
         });
         if (isSignUp.data.message === "사용 가능한 이메일 입니다.") {
+          setSignUp({ email: email, password: password });
         } else {
           alert(isSignUp.data.message);
         }
@@ -86,7 +84,7 @@ export const SignUpPage = (props: propTypes) => {
               *{emailMessage}
             </Error>
           )}
-          {signUpError && <Error className="error">*{signUpError}</Error>}
+          {/* {signUpError && <Error className="error">*{signUpError}</Error>} */}
         </Label>
         <Label>
           <SubText>비밀번호</SubText>
