@@ -1,12 +1,14 @@
 import styled from "@emotion/styled";
-import { useCallback, useState } from "react";
-import { COLOR } from "../constants";
+import axios from "axios";
+import React, { useCallback, useState } from "react";
+import { API_ENDPOINT, COLOR } from "../constants";
 
 interface BtnLabel {
   btnLabel: string;
+  signUp: { email: string; password: string };
 }
 
-export const ProfileForm = ({ btnLabel }: BtnLabel) => {
+export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
   const [name, setName] = useState("");
   const [myId, setMyId] = useState("");
   const [intro, setIntro] = useState("");
@@ -18,7 +20,7 @@ export const ProfileForm = ({ btnLabel }: BtnLabel) => {
   const [nameMessage, setNameMessage] = useState("");
   const [myIdMessage, setMyIdMessage] = useState("");
 
-  const onChange = useCallback((e) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value },
     } = e;
@@ -43,11 +45,29 @@ export const ProfileForm = ({ btnLabel }: BtnLabel) => {
       setIntro(value);
       setIsIntro(true);
     }
-  }, []);
+  };
 
-  const onSubmit = useCallback((e) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  }, []);
+    console.log(signUp.email, signUp.password, name, myId, intro);
+
+    const a = await axios.post(`${API_ENDPOINT}user`, {
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        user: {
+          username: name,
+          email: signUp.email,
+          password: signUp.password,
+          accountname: myId,
+          intro: intro,
+          image: `${API_ENDPOINT}Ellipse.png`,
+        },
+      }),
+    });
+    console.log(a);
+  };
   return (
     <Form onSubmit={onSubmit}>
       <ImgLabel>

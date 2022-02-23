@@ -2,71 +2,68 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
-import { COLOR } from "../constants";
+import { API_ENDPOINT, COLOR } from "../constants";
 
 interface propTypes {
-  signUp: boolean,
-  setSignUp: (signUp: boolean) => void
+  setSignUp: (signUp: { email: string; password: string }) => void;
 }
 
-export const SignUpPage = (props: propTypes) => {
+export const SignUpPage = ({ setSignUp }: propTypes) => {
+  const [email, setEmail] = useState("");
+  const [isEmail, setIsEmail] = useState(false);
+  const [emailMessage, setEmailMessage] = useState("");
 
-  const [email, setEmail] = useState("")
-  const [isEmail, setIsEmail] = useState(false)
-  const [emailMessage, setEmailMessage] = useState("")
+  const [password, setPassword] = useState("");
+  const [isPassword, setIsPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState("");
 
-  const [password, setPassword]= useState("")
-  const [isPassword, setIsPassword] = useState(false)
-  const [passwordMessage, setPasswordMessage] = useState("")
-
-  const [signUpError, setSignUpError] = useState("")
-
-  const router = useRouter()
+  const router = useRouter();
 
   const onChange = useCallback((e) => {
-    const {target: {name, value}} = e
-  
-    if(name === "email"){
-      setEmail(value)
-      const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
-      if(!emailRegex.test(value)) {
-        setEmailMessage('올바르지 않은 이메일 형식입니다.')
-        setIsEmail(false)
-      } else {
-        setIsEmail(true)
-      }
-    } else if(name === "password") {
-      setPassword(value)
-      const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,}$/
-      if(!passwordRegex.test(value)) {
-        setPasswordMessage('비밀번호는 8자 이상 영문과 숫자의 조합이어야 합니다.')
-        setIsPassword(false)
-      } else {
-        setIsPassword(true)
-      }
-    }
-  }, [])
+    const {
+      target: { name, value },
+    } = e;
 
-  const onSubmit = useCallback((e) => {
-    e.preventDefault()
-    if(isEmail && isPassword) {
-      console.log('회원가입')
-      axios.post('/api/hello', {
-        email: email,
-        password: password
-      })
-      .then((res) => {
-        if(res.status === 200) {
-          props.setSignUp(!props.signUp)
-          // router.replace("/")
-        }
-      })
-      .catch((err) => {
-        setSignUpError(err.res.data)
-        console.log(err.res)
-      })
+    if (name === "email") {
+      setEmail(value);
+      const emailRegex =
+        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+      if (!emailRegex.test(value)) {
+        setEmailMessage("올바르지 않은 이메일 형식입니다.");
+        setIsEmail(false);
+      } else {
+        setIsEmail(true);
+      }
+    } else if (name === "password") {
+      setPassword(value);
+      const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,}$/;
+      if (!passwordRegex.test(value)) {
+        setPasswordMessage(
+          "비밀번호는 8자 이상 영문과 숫자의 조합이어야 합니다."
+        );
+        setIsPassword(false);
+      } else {
+        setIsPassword(true);
+      }
     }
-  }, [email, password, router])
+  }, []);
+
+  const onSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      if (isEmail && isPassword) {
+        const isSignUp = await axios.post(`${API_ENDPOINT}user/emailvalid`, {
+          user: { email: email },
+        });
+        if (isSignUp.data.message === "사용 가능한 이메일 입니다.") {
+          setSignUp({ email: email, password: password });
+        } else {
+          alert(isSignUp.data.message);
+        }
+      }
+    },
+    [email, password, router]
+  );
 
   return (
     <Container>
@@ -74,7 +71,7 @@ export const SignUpPage = (props: propTypes) => {
       <Form onSubmit={onSubmit}>
         <Label>
           <SubText>이메일</SubText>
-           <Input
+          <Input
             name="email"
             type="email"
             id="email"
@@ -82,8 +79,12 @@ export const SignUpPage = (props: propTypes) => {
             value={email}
             onChange={onChange}
           ></Input>
-        {email.length > 0 && <Error className={`${isEmail ? 'success': 'error'}`}>*{emailMessage}</Error>}
-        {signUpError && <Error className="error">*{signUpError}</Error>}
+          {email.length > 0 && (
+            <Error className={`${isEmail ? "success" : "error"}`}>
+              *{emailMessage}
+            </Error>
+          )}
+          {/* {signUpError && <Error className="error">*{signUpError}</Error>} */}
         </Label>
         <Label>
           <SubText>비밀번호</SubText>
@@ -95,11 +96,13 @@ export const SignUpPage = (props: propTypes) => {
             value={password}
             onChange={onChange}
           ></Input>
-          {password.length > 0 && <Error className={`${isPassword ? 'success': 'error'}`}>*{passwordMessage}</Error>}
+          {password.length > 0 && (
+            <Error className={`${isPassword ? "success" : "error"}`}>
+              *{passwordMessage}
+            </Error>
+          )}
         </Label>
-        <Button
-          disabled={!(isEmail && isPassword)}
-        >다음</Button>
+        <Button disabled={!(isEmail && isPassword)}>다음</Button>
       </Form>
     </Container>
   );
@@ -161,7 +164,7 @@ const Button = styled.button`
   }
 `;
 
-const Error = styled.span`  
+const Error = styled.span`
   &.success {
     display: none;
   }
