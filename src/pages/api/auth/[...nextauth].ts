@@ -11,12 +11,11 @@ export default NextAuth({
       id: "email-password-credential",
       name: "Credentials",
       credentials: {
-        email: { label: "Username", type: "text", placeholder: "이메일 입력" },
-        password: { label: "Password", type: "password" },
+        // email: { label: "Username", type: "text", placeholder: "이메일 입력" },
+        // password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any, req: any) {
-        const email = credentials.email;
-        const password = credentials.password;
+        const { email, password } = credentials;
         const loginDate = {
           user: {
             email: email,

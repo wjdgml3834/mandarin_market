@@ -5,8 +5,8 @@ import { SignUpPage } from "../components/SignUp";
 import { SignUpProfile } from "../components/SignUpProfile";
 
 const SingUp: NextPage = () => {
-  const [signUp, setSignUp] = useState(true)
-  
+  const [signUp, setSignUp] = useState(true);
+
   return (
     <section>
       <Head>
@@ -15,7 +15,11 @@ const SingUp: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">회원가입</h1>
-      {signUp ? <SignUpPage signUp={signUp} setSignUp={setSignUp}/> : <SignUpProfile />}
+      {signUp ? (
+        <SignUpPage signUp={signUp} setSignUp={setSignUp} />
+      ) : (
+        <SignUpProfile />
+      )}
     </section>
   );
 };

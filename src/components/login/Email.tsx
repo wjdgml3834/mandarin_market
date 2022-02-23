@@ -38,12 +38,8 @@ export const LoginPage = () => {
     }
   }, []);
 
-  const login = async (e: any) => {
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
     const res: any = await signIn("email-password-credential", {
       email,
       password,
