@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { API_ENDPOINT, COLOR } from "../constants";
 
 interface BtnLabel {
@@ -76,6 +76,7 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
       alert("알맞은 정보를 입력해주세요.");
     }
   };
+
   return (
     <Form onSubmit={onSubmit}>
       <ImgLabel>
