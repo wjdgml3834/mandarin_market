@@ -13,6 +13,8 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
   const [name, setName] = useState("");
   const [myId, setMyId] = useState("");
   const [intro, setIntro] = useState("");
+  const [img, setImg] = useState<File[]>([]);
+  const [formData, setFormData] = useState<FormData>();
 
   const [isName, setIsName] = useState(false);
   const [isMyId, setIsMyId] = useState(false);
@@ -50,11 +52,37 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
     }
   };
 
+  const handleImgInput = ({
+    currentTarget: { files },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    if (files && files.length) {
+      const formData = new FormData();
+      formData.append("image", files[0]);
+      setFormData(formData);
+      setImg((existing) => existing.concat(Array.from(files)));
+    }
+  };
+
+  const imgUpload = async () => {
+    try {
+      const res = await axios(`${API_ENDPOINT}image/uploadfile`, {
+        method: "POST",
+        data: formData,
+      });
+      return `${API_ENDPOINT}${res.data.filename}`;
+    } catch (err) {
+      alert("잘못된 접근입니다.");
+    }
+  };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    let imgUrl = await imgUpload();
+    if (imgUrl === `${API_ENDPOINT}undefined`) {
+      imgUrl = `${API_ENDPOINT}Ellipse.png`;
+    }
     try {
-      await axios(`${API_ENDPOINT}user`, {
+      const res = await axios(`${API_ENDPOINT}user`, {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -66,7 +94,7 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
             password: signUp.password,
             accountname: myId,
             intro: intro,
-            image: `${API_ENDPOINT}Ellipse.png`,
+            image: imgUrl,
           },
         }),
       });
@@ -80,7 +108,12 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
   return (
     <Form onSubmit={onSubmit}>
       <ImgLabel>
-        <ImgInput type="file" id="img" accept="image/*"></ImgInput>
+        <ImgInput
+          type="file"
+          id="upload"
+          accept="image/*"
+          onChange={handleImgInput}
+        ></ImgInput>
       </ImgLabel>
       <Label>
         <SubText>사용자 이름</SubText>
