@@ -13,8 +13,9 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
   const [name, setName] = useState("");
   const [myId, setMyId] = useState("");
   const [intro, setIntro] = useState("");
-  const [img, setImg] = useState<File[]>([]);
+
   const [formData, setFormData] = useState<FormData>();
+  const [pre, setPre] = useState(`${API_ENDPOINT}Ellipse.png`);
 
   const [isName, setIsName] = useState(false);
   const [isMyId, setIsMyId] = useState(false);
@@ -59,7 +60,7 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
       const formData = new FormData();
       formData.append("image", files[0]);
       setFormData(formData);
-      setImg((existing) => existing.concat(Array.from(files)));
+      preview(files[0]);
     }
   };
 
@@ -75,12 +76,19 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
     }
   };
 
+  const preview = (file: Blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => setPre(`${reader.result}`);
+  };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let imgUrl = await imgUpload();
     if (imgUrl === `${API_ENDPOINT}undefined`) {
       imgUrl = `${API_ENDPOINT}Ellipse.png`;
     }
+
     try {
       const res = await axios(`${API_ENDPOINT}user`, {
         method: "POST",
@@ -107,14 +115,15 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
 
   return (
     <Form onSubmit={onSubmit}>
-      <ImgLabel>
+      <ImgContainer>
+        <ProfileImg src={pre} alt="프로필 이미지 미리보기" />
         <ImgInput
           type="file"
           id="upload"
           accept="image/*"
           onChange={handleImgInput}
         ></ImgInput>
-      </ImgLabel>
+      </ImgContainer>
       <Label>
         <SubText>사용자 이름</SubText>
         <Input
@@ -168,26 +177,28 @@ const Form = styled.form`
   padding: 0 24px;
 `;
 
-const ImgLabel = styled.label`
-  margin: 0 auto 30px;
+const ImgContainer = styled.label`
   position: relative;
-  width: 110px;
-  height: 110px;
-  background: url("/images/ellipse-profile.svg");
-  display: block;
-  border-radius: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   cursor: pointer;
   &::after {
     content: "";
     width: 36px;
     height: 36px;
-    display: inline-block;
     background: ${COLOR.orange} url("/images/upload-file.svg") no-repeat center;
     border-radius: 25px;
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 110px;
   }
+`;
+
+const ProfileImg = styled.img`
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
 `;
 
 const ImgInput = styled.input`
