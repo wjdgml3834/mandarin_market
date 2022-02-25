@@ -52,13 +52,18 @@ export const SignUpPage = ({ setSignUp }: propTypes) => {
     async (e) => {
       e.preventDefault();
       if (isEmail && isPassword) {
-        const isSignUp = await axios.post(`${API_ENDPOINT}user/emailvalid`, {
-          user: { email: email },
-        });
-        if (isSignUp.data.message === "사용 가능한 이메일 입니다.") {
-          setSignUp({ email: email, password: password });
-        } else {
-          alert(isSignUp.data.message);
+        try {
+          const isSignUp = await axios.post(`${API_ENDPOINT}user/emailvalid`, {
+            user: { email: email },
+          });
+
+          if (isSignUp.data.message === "사용 가능한 이메일 입니다.") {
+            setSignUp({ email: email, password: password });
+          } else {
+            alert(isSignUp.data.message);
+          }
+        } catch (err) {
+          alert("잘못된 접근입니다.");
         }
       }
     },

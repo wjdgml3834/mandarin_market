@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import axios from "axios";
-import React, { useCallback, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import { API_ENDPOINT, COLOR } from "../constants";
 
 interface BtnLabel {
@@ -19,6 +20,8 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
 
   const [nameMessage, setNameMessage] = useState("");
   const [myIdMessage, setMyIdMessage] = useState("");
+
+  const router = useRouter();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -49,25 +52,31 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(signUp.email, signUp.password, name, myId, intro);
 
-    const a = await axios.post(`${API_ENDPOINT}user`, {
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        user: {
-          username: name,
-          email: signUp.email,
-          password: signUp.password,
-          accountname: myId,
-          intro: intro,
-          image: `${API_ENDPOINT}Ellipse.png`,
+    try {
+      await axios(`${API_ENDPOINT}user`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
         },
-      }),
-    });
-    console.log(a);
+        data: JSON.stringify({
+          user: {
+            username: name,
+            email: signUp.email,
+            password: signUp.password,
+            accountname: myId,
+            intro: intro,
+            image: `${API_ENDPOINT}Ellipse.png`,
+          },
+        }),
+      });
+      alert("회원가입에 성공했습니다.");
+      router.push("/");
+    } catch (err) {
+      alert("알맞은 정보를 입력해주세요.");
+    }
   };
+
   return (
     <Form onSubmit={onSubmit}>
       <ImgLabel>
