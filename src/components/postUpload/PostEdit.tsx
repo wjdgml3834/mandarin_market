@@ -87,7 +87,6 @@ export const PostEdit = ({id}: id) => {
     getPost()
   }, []);
 
-
   const deleteImg = (image: string) => {
     const currentIndex: number = images.indexOf(image)
     let newImgList = [...images]
@@ -100,27 +99,30 @@ export const PostEdit = ({id}: id) => {
   }
 
   const editPost = async () => {
-    const postData = {
-      post: {
-        content: text,
-        image: images + '',
-      },
-    };
-    await axios.put(`${API_ENDPOINT}post/${id}`, postData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-type': 'application/json',
-      },
-    });
-    Router.push('/myprofile');
+    try {
+      const postData = {
+        post: {
+          content: text,
+          image: images + '',
+        },
+      };
+      await axios.put(`${API_ENDPOINT}post/${id}`, postData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+      });
+      Router.push('/myprofile');
+    } catch(err) {
+      console.log(err);
+    }
+    
   };
 
-
-
-  const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: any) => {
     e.preventDefault()
     editPost()
-  }, [])
+  }
 
   return (
     <Container>
