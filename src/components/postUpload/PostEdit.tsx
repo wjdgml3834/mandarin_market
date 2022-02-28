@@ -7,8 +7,12 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { API_ENDPOINT, COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
-export const PostUpload = () => {
+interface id {
+  id: string
+}
 
+export const PostEdit = ({id}: id) => {
+  
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const resizeHeight = useCallback(() => {
@@ -52,6 +56,8 @@ export const PostUpload = () => {
     getProfile()
   }, []);
 
+
+  // const [imgUrl, setImgUrl] = useState('')
   const [images, setImages] = useState([] as string[])
   const [isImage, setIsImage] = useState(false)
 
@@ -63,29 +69,24 @@ export const PostUpload = () => {
     setIsImage(img)
   }
 
-
-  
-  const uploadPost = async () => {
-    try{
-      const postData = {
-        post: {
-          content: text,
-          image: images + '',
-        },
-      };
-      await axios.post(`${API_ENDPOINT}post`, postData, {
-        method : 'post', 
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-type': 'application/json',
-        },
-      });
-      console.log('완료.');
-    // Router.push('/myprofile');
-    } catch (err) {
-      console.log(err);
+  const getPost = async () => {
+    const res = await axios.get(`${API_ENDPOINT}post/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    setText(res.data.post.content);
+    if(res.data.post.image !== '') {
+      setImages(res.data.post.image.split(','))
     }
   };
+
+  useEffect(() => {
+    getProfile()
+    getPost()
+  }, []);
+
 
   const deleteImg = (image: string) => {
     const currentIndex: number = images.indexOf(image)
@@ -98,11 +99,27 @@ export const PostUpload = () => {
     }
   }
 
-  
+  const editPost = async () => {
+    const postData = {
+      post: {
+        content: text,
+        image: images + '',
+      },
+    };
+    await axios.put(`${API_ENDPOINT}post/${id}`, postData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    Router.push('/myprofile');
+  };
+
+
 
   const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    uploadPost()
+    editPost()
   }, [])
 
   return (
