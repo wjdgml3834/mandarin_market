@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { PostDetailContainer } from "../../components/postDetail/Container";
-import { Post } from "../../types/Post";
 
 const PostDetail: NextPage = () => {
   return (

@@ -2,26 +2,66 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { CardContainer } from "./CardContainer";
 import { NonFeed } from "../home/Nonfeed";
-import { getSession } from "next-auth/react";
-import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { API_ENDPOINT } from "../../constants";
 
 export const Main = () => {
-  const [showing, setShowing] = useState(false);
+  const [postData, setPostData] = useState([
+    {
+      author: {
+        accountname: "",
+        // follower: [],
+        // followerCount: "",
+        // following: "",
+        // followingCount: 0,
+        image: "",
+        // intro: "",
+        // isfollow: false,
+        username: "",
+        _id: "",
+      },
+      commentCount: 0,
+      comments: [],
+      content: "",
+      createdAt: "",
+      heartCount: 0,
+      hearted: false,
+      id: "",
+      image: "",
+      updatedAt: "",
+    },
+  ]);
 
-  const [user, setUser] = useState<Session | null>();
-  const session = async () => {
-    const data = await getSession();
-    return data;
+  const { data: session } = useSession();
+
+  const token = session?.user?.name;
+
+  const userData = async () => {
+    try {
+      const res: any = await axios.get(API_ENDPOINT + "post/feed/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+      });
+      setPostData(res.data.posts);
+    } catch (e) {
+      console.log(e);
+    }
   };
-
   useEffect(() => {
-    session().then((data: Session | null) => setUser(data));
+    userData();
   }, []);
 
   return (
     <MainContainer>
       <h2 className="sr-only">감귤마켓 피드</h2>
-      {showing ? <NonFeed /> : <CardContainer />}
+      {postData.length === 0 ? (
+        <NonFeed />
+      ) : (
+        <CardContainer postData={postData} />
+      )}
     </MainContainer>
   );
 };
