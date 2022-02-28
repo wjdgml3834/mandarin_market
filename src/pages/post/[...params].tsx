@@ -10,8 +10,8 @@ import { API_ENDPOINT } from "../../constants";
 
 const Edit: NextPage = () => {
   const router = useRouter()
-  const id = router.asPath.split('/')[2]
-  // const id = router.query.params[0]
+  // const id = router.asPath.split('/')[2]
+  const id = router.query.params![0]
 
   return (
     <section>

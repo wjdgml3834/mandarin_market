@@ -32,7 +32,7 @@ export const FileUpload = ({images, getImage, getIsImage, token}: getImage) => {
     
     const imgUrl= `${API_ENDPOINT}${imgName}`
 
-    const imgUrlList: Array<string> = [...images]
+    const imgUrlList: string[] = [...images]
     
     if(imgUrlList.length < 3) {
       for (let i = 0; i < files.length; i++) {

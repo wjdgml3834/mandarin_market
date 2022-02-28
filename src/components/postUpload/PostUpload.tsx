@@ -63,8 +63,6 @@ export const PostUpload = () => {
     setIsImage(img)
   }
 
-
-  
   const uploadPost = async () => {
     try{
       const postData = {
@@ -81,7 +79,7 @@ export const PostUpload = () => {
         },
       });
       console.log('완료.');
-    // Router.push('/myprofile');
+      Router.push('/myprofile');
     } catch (err) {
       console.log(err);
     }
@@ -98,12 +96,10 @@ export const PostUpload = () => {
     }
   }
 
-  
-
-  const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: any) => {
     e.preventDefault()
     uploadPost()
-  }, [])
+  }
 
   return (
     <Container>
