@@ -26,7 +26,7 @@ export default NextAuth({
         if (res.data.user) {
           const user = {
             name: res.data.user.token,
-            email: res.data.user.email,
+            email: res.data.user.accountname,
             image: res.data.user.image,
           };
           return user;
