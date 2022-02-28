@@ -6,6 +6,7 @@ import { CardContainer } from "../home/CardContainer";
 import { useState } from "react";
 import { Select } from "@mui/material";
 import { ProfileAppPost } from "./ProfileAppPost";
+import { MyPostContainer } from "./MyPostContainer";
 
 export const ProfilePost = () => {
   const [select, setSelect] = useState(true);
@@ -26,7 +27,7 @@ export const ProfilePost = () => {
           <AppsIcon className={`${!select}`} />
         </button>
       </IconContainer>
-      {select === true ? <CardContainer /> : <ProfileAppPost />}
+      {select === true ? <MyPostContainer /> : <ProfileAppPost />}
     </div>
   );
 };
