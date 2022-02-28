@@ -9,7 +9,7 @@ import { PostModal } from "./PostModal";
 import { DeleteModal } from "./DeleteModal";
 
 export const Card = ({ postData }: any) => {
-  const { author, image, content, createdAt } = postData;
+  const { author, image, content, createdAt, username } = postData;
 
   const [likeNum, setLikeNum] = useState(0);
   const [checkClick, setCheckClick] = useState(true);
@@ -56,7 +56,7 @@ export const Card = ({ postData }: any) => {
           <h4 className="sr-only">포스트 글쓴이</h4>
           <AuthorImg src={author.image} alt="작성자 이미지" />
           <AuthorInfo>
-            <AuthorNickName>{author.accountname}</AuthorNickName>
+            <AuthorNickName>{author.username}</AuthorNickName>
             <AuthorId>{author.accountname}</AuthorId>
           </AuthorInfo>
         </AuthorCont>
@@ -104,7 +104,11 @@ export const Card = ({ postData }: any) => {
         className={`${postModal}`}
         onClick={closePostModal}
       ></Background>
-      <PostModal postModal={postModal} openDeleteModal={openDeleteModal} />
+      <PostModal
+        postModal={postModal}
+        openDeleteModal={openDeleteModal}
+        id={""}
+      />
       {deleteModal && <DeleteModal closeDeleteModal={closeDeleteModal} />}
     </Cont>
   );
