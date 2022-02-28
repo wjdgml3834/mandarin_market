@@ -1,19 +1,69 @@
 import styled from "@emotion/styled";
-import { COLOR } from "../../constants";
+import { API_ENDPOINT, COLOR } from "../../constants";
 import Link from "next/link";
 
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import axios from "axios";
 
 export const MyProfileInfo = () => {
-  const userData = {
-    src: "https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_960_720.jpg",
-    followers: 1111,
-    followings: 222,
-    nickname: "영등포 빵주먹 이현호",
-    email: "dlgusgh200240@gmail.com",
-    content: "당근 마켓 유사 프로젝트 진행중..",
+  const [userList, setUserList] = useState({
+    accountname: "",
+    follower: [],
+    followerCount: 0,
+    following: [],
+    followingCount: 0,
+    image: "/images/ellipse-profile.svg",
+    intro: "",
+    isfollow: false,
+    username: "",
+  })
+
+  const { accountname, follower, followerCount, following, followingCount, image, intro, isfollow, username } = userList
+  
+  const { data: session } = useSession()
+
+  const token = session?.user?.name
+  const loginUser = session?.user?.email
+
+  const getProfile = async () => {
+    const res = await axios.get(`${API_ENDPOINT}profile/${loginUser}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    setUserList(res.data.profile)
   };
+
+  useEffect(() => {
+    getProfile()
+  }, []);
+
+  const follow = async () => {
+    await axios(`${API_ENDPOINT}profile/${loginUser}/follow`, {
+      method: 'post',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    setUserList({...userList, isfollow: true, followerCount: followerCount + 1})
+  };
+
+  const unFollow = async () => {
+    await axios(`${API_ENDPOINT}profile/${loginUser}/unfollow`, {
+      method: 'delete',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    setUserList({...userList, isfollow: false, followerCount: followerCount - 1})
+  };
+
 
   return (
     <Container>
@@ -23,29 +73,40 @@ export const MyProfileInfo = () => {
           <div>
             <Link href="/follower">
               <a>
-                <Followers>{userData.followers}</Followers>
+                <Followers>{followerCount}</Followers>
                 <Text>followers</Text>
               </a>
             </Link>
           </div>
-          <Img src={userData.src} alt="유저 사진" />
+          <Img src={image} alt="유저 사진" />
           <div>
-            <Followings>{userData.followings}</Followings>
+            <Followings>{followingCount}</Followings>
             <Text>followings</Text>
           </div>
         </ImgContainer>
-        <Nickname>{userData.nickname}</Nickname>
-        <Email>{userData.email}</Email>
-        <Content>{userData.content}</Content>
-        <BtnContainer>
-          <IconContainer>
-            <ChatBubbleOutlineIcon className="icon" />
-          </IconContainer>
-          <FollowBtn>팔로우</FollowBtn>
-          <IconContainer>
-            <ShareIcon className="icon" />
-          </IconContainer>
-        </BtnContainer>
+        <Nickname>{username}</Nickname>
+        <Email>@ {accountname}</Email>
+        <Content>{intro}</Content>
+        {accountname === loginUser ? (
+          <BtnContainer>
+            <Link href={'/account/edit'}>
+              <WhiteBtn>프로필 수정</WhiteBtn>
+            </Link>
+            <Link href={'/product'}>
+              <WhiteBtn>상품 등록</WhiteBtn>
+            </Link>
+          </BtnContainer>
+        ):(
+          <BtnContainer>
+            <IconContainer>
+              <ChatBubbleOutlineIcon className="icon" />
+            </IconContainer>
+            {isfollow ? <UnFollowBtn onClick={unFollow}>언팔로우</UnFollowBtn> : <FollowBtn onClick={follow}>팔로우</FollowBtn>}
+            <IconContainer>
+              <ShareIcon className="icon" />
+            </IconContainer>
+          </BtnContainer>
+        )}
       </ProfileContainer>
     </Container>
   );
@@ -66,8 +127,8 @@ const ImgContainer = styled.div`
   margin-bottom: 16px;
 `;
 const Img = styled.img`
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
 `;
 const Followers = styled.p`
@@ -80,6 +141,7 @@ const Followings = styled.p`
   color: #767676;
 `;
 const Text = styled.p`
+  margin-top: 10px;
   font-size: 10px;
   color: #767676;
 `;
@@ -99,7 +161,7 @@ const Content = styled.p`
 const BtnContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin: 24px 0 26px 0;
+  margin: 24px 0 3px 0;
 `;
 const FollowBtn = styled.button`
   background-color: ${COLOR.orange};
@@ -111,6 +173,34 @@ const FollowBtn = styled.button`
   color: #fff;
   font-size: 14px;
   font-weight: 500;
+  cursor: pointer;
+`;
+const UnFollowBtn = styled.button`
+  background-color: #fff;
+  border: none;
+  width: 120px;
+  height: 34px;
+  border-radius: 30px;
+  margin: 0 10px;
+  border: 1px solid #dbdbdb;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+`;
+const WhiteBtn = styled.button`
+  background-color: #fff;
+  border: none;
+  /* width: 120px; */
+  /* height: 34px; */
+  padding: 7px 23px;
+  border-radius: 30px;
+  margin: 0 10px;
+  border: 1px solid #dbdbdb;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
 `;
 const IconContainer = styled.div`
   width: 34px;
