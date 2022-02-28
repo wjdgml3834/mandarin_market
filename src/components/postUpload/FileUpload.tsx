@@ -1,32 +1,50 @@
 import styled from "@emotion/styled";
-import { COLOR } from "../../constants";
+import axios from "axios";
+import { useState } from "react";
+import { API_ENDPOINT, COLOR } from "../../constants";
 
 interface getImage {
-  images: string[]
-  getImage: (src: string[]) => void
-  getIsImage: (img: boolean) => void
+  images: string[],
+  getImage: (src: string[]) => void,
+  getIsImage: (img: boolean) => void,
+  token: string | null | undefined
 }
 
-export const FileUpload = ({images, getImage, getIsImage}: getImage) => {
-
-  const imagesPreview = (e: React.ChangeEvent) => {
+export const FileUpload = ({images, getImage, getIsImage, token}: getImage) => {
+  // const [imgUrl, setImgUrl] = useState('')
+  const upload = async (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement
     const files = target.files as FileList
 
-    const imgUrlList: Array<string> = [...images]
-
-    for (let i = 0; i < files.length; i += 1) {
-      const imgUrl= URL.createObjectURL(files[i])
-      if(imgUrlList.length < 3) {
-        imgUrlList.push(imgUrl)
-      } else {
-        alert('이미지는 최대 3개까지 업로드할 수 있습니다.')
-      }
+    let formData = new FormData();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+        'Content-type': 'application/json',
+      },
     }
-    getImage(imgUrlList)
-    getIsImage(true)
-  }
     
+    formData.append('image', files[0]);
+    
+    const res = await axios.post(`${API_ENDPOINT}image/uploadfile`, formData, config)
+
+    const imgName = res.data.filename;
+    
+    const imgUrl= `${API_ENDPOINT}${imgName}`
+
+    const imgUrlList: Array<string> = [...images]
+    
+    if(imgUrlList.length < 3) {
+      for (let i = 0; i < files.length; i++) {
+        imgUrlList.push(imgUrl)
+      } 
+    } else {
+      alert('이미지는 최대 3개까지 업로드할 수 있습니다.')
+    }
+    console.log(imgUrlList);
+    getImage(imgUrlList)
+    getIsImage(true) 
+  }
 
   return (
     <ImgLabel>
@@ -34,7 +52,7 @@ export const FileUpload = ({images, getImage, getIsImage}: getImage) => {
         type="file"
         id="img"
         accept="image/*"
-        onChange={imagesPreview}
+        onChange={upload}
       ></ImgInput>
     </ImgLabel>
   );
@@ -43,7 +61,7 @@ export const FileUpload = ({images, getImage, getIsImage}: getImage) => {
 const ImgLabel = styled.label`
   width: 50px;
   height: 50px;
-  display: inline-block;
+  display: inline-block; 
   background: ${COLOR.orange} url("/images/upload-file.svg") no-repeat center/60%;
   border-radius: 25px;
   position: fixed;

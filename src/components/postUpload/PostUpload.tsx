@@ -1,7 +1,10 @@
 import styled from "@emotion/styled";
 import CloseIcon from '@mui/icons-material/Close';
-import React, { useCallback, useRef, useState } from "react";
-import { COLOR } from "../../constants";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import Router from "next/router";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { API_ENDPOINT, COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
 export const PostUpload = () => {
@@ -19,14 +22,35 @@ export const PostUpload = () => {
   const [text, setText] = useState("")
   const [isText, setIsText] = useState(false)
 
-  const onChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value)
     if(e.target.value.length > 0) {
       setIsText(true)
     } else {
       setIsText(false)
     }
-  }, [])
+  }
+
+  const { data: session } = useSession()
+
+  const token = session?.user?.name
+  const loginUser = session?.user?.email
+
+  const [profileImg, setProfileImg] = useState('/images/ellipse-profile.svg');
+
+  const getProfile = async () => {
+    const res = await axios.get(`${API_ENDPOINT}profile/${loginUser}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    setProfileImg(res.data.profile.image);
+  };
+
+  useEffect(() => {
+    getProfile()
+  }, []);
 
   const [images, setImages] = useState([] as string[])
   const [isImage, setIsImage] = useState(false)
@@ -39,24 +63,52 @@ export const PostUpload = () => {
     setIsImage(img)
   }
 
+
+  
+  const uploadPost = async () => {
+    try{
+      const postData = {
+        post: {
+          content: text,
+          image: images + '',
+        },
+      };
+      await axios.post(`${API_ENDPOINT}post`, postData, {
+        method : 'post', 
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+      });
+      console.log('완료.');
+    // Router.push('/myprofile');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const deleteImg = (image: string) => {
     const currentIndex: number = images.indexOf(image)
     let newImgList = [...images]
     newImgList.splice(currentIndex, 1)
     setImages(newImgList)
     if(currentIndex < 1) {
+      setImages([])
       setIsImage(false)
     }
   }
 
+  
+
   const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    uploadPost()
   }, [])
 
   return (
     <Container>
       <h2 className="sr-only">게시글 작성 페이지</h2>
-      <ProfileImg src="/images/ellipse-profile.svg"/>
+      <ProfileImg src={profileImg} alt="프로필사진"/>
       <FillContainer>
         <h3 className="sr-only">게시글 작성</h3>
         <Form onSubmit={onSubmit}>
@@ -70,14 +122,14 @@ export const PostUpload = () => {
               placeholder="게시글 입력하기..."
             ></Textarea>
           </label>
-          <FileUpload images={images} getImage={getImage} getIsImage={getIsImage}/>
+          <FileUpload images={images} getImage={getImage} getIsImage={getIsImage} token={token}/>
           <SaveBtn disabled={!(isText || isImage)}>업로드</SaveBtn>
         </Form>
         <section>
           <h4 className="sr-only">업로드된 사진</h4>
           <ImgListContainer>
             {images.map((image, index) => (
-              <ImgList key={index}>
+              <ImgList key={image + index}>
                 <UploadedImg src={`${image}`} alt={`${index}번째 이미지`}/>
                 <CloseIcon className="close" onClick={() => deleteImg(image)}></CloseIcon>
               </ImgList>
