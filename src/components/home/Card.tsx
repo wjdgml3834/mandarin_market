@@ -4,19 +4,13 @@ import Link from "next/link";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Post } from "../../types/Post";
-
-import { useRouter } from "next/router";
 
 import { PostModal } from "./PostModal";
 import { DeleteModal } from "./DeleteModal";
 
+export const Card = ({ postData }: any) => {
+  const { author, image, content, createdAt } = postData;
 
-interface PostProps {
-  postData: Post;
-}
-
-export const Card = ({ postData }: PostProps) => {
   const [likeNum, setLikeNum] = useState(0);
   const [checkClick, setCheckClick] = useState(true);
   const [heartColor, setHeartColor] = useState("icon");
@@ -60,19 +54,19 @@ export const Card = ({ postData }: PostProps) => {
         <h3 className="sr-only">포스트 아이템</h3>
         <AuthorCont>
           <h4 className="sr-only">포스트 글쓴이</h4>
-          <AuthorImg src={postData.src} alt="작성자 이미지" />
+          <AuthorImg src={author.image} alt="작성자 이미지" />
           <AuthorInfo>
-            <AuthorNickName>{postData.nickname}</AuthorNickName>
-            <AuthorId>{postData.email}</AuthorId>
+            <AuthorNickName>{author.accountname}</AuthorNickName>
+            <AuthorId>{author.accountname}</AuthorId>
           </AuthorInfo>
         </AuthorCont>
         <PostCont>
           <h4 className="sr-only">포스트 내용</h4>
-          <PostTxt>{postData.txt}</PostTxt>
+          <PostTxt>{content}</PostTxt>
           <PostImgCont>
             <PostImgList>
               <PostImgItem>
-                <PostImg src={postData.postimg} alt="post-img" />
+                <PostImg src={image} alt="post-img" />
               </PostImgItem>
             </PostImgList>
           </PostImgCont>
@@ -87,8 +81,8 @@ export const Card = ({ postData }: PostProps) => {
                 pathname: `/postdetail/${postData.id}`,
                 query: {
                   title: postData.txt,
-                  nickname: postData.nickname
-                }
+                  nickname: postData.nickname,
+                },
               }}
               as={`/postdetail/${postData.id}`}
             >
@@ -99,7 +93,7 @@ export const Card = ({ postData }: PostProps) => {
               </Comment>
             </Link>
           </LikeCommentCont>
-          <PostDate>{postData.postdate}</PostDate>
+          <PostDate>{createdAt}</PostDate>
         </PostCont>
         <MoreBtn onClick={openPostModal}>
           <span className="sr-only">더보기 버튼</span>

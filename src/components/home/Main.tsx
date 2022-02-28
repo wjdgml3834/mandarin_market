@@ -2,54 +2,66 @@ import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { CardContainer } from "./CardContainer";
 import { NonFeed } from "../home/Nonfeed";
-import { getSession } from "next-auth/react";
-import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants";
-import { useData } from "../../hooks/useMandarinData";
 
 export const Main = () => {
-  const [showing, setShowing] = useState(false);
-  const [user, setUser] = useState<Session | null>();
-  const session = async () => {
-    const data = await getSession();
-    return data;
-  };
+  const [postData, setPostData] = useState([
+    {
+      author: {
+        accountname: "",
+        // follower: [],
+        // followerCount: "",
+        // following: "",
+        // followingCount: 0,
+        image: "",
+        // intro: "",
+        // isfollow: false,
+        username: "",
+        _id: "",
+      },
+      commentCount: 0,
+      comments: [],
+      content: "",
+      createdAt: "",
+      heartCount: 0,
+      hearted: false,
+      id: "",
+      image: "",
+      updatedAt: "",
+    },
+  ]);
 
-  useEffect(() => {
-    session().then((data: Session | null) => setUser(data));
-  }, []);
+  const { data: session } = useSession();
 
-  // const [user, setUser] = useState<Session | null>();
-  // const session = async () => {
-  //   const data = await getSession();
-  //   console.log(data);
-  //   return data;
-  // };
-
-  // useEffect(() => {
-  //   session().then((data: Session | null) => setUser(data));
-  // }, []);
+  const token = session?.user?.name;
 
   const userData = async () => {
     try {
       const res: any = await axios.get(API_ENDPOINT + "post/feed/", {
         headers: {
-          Authorization: `Bearer ${user?.user?.name}`,
+          Authorization: `Bearer ${token}`,
           "Content-type": "application/json",
         },
       });
-      console.log(res);
+      setPostData(res.data.posts);
     } catch (e) {
       console.log(e);
     }
   };
-  userData();
+  useEffect(() => {
+    userData();
+  }, []);
 
   return (
     <MainContainer>
       <h2 className="sr-only">감귤마켓 피드</h2>
-      {showing ? <NonFeed /> : <CardContainer />}
+      {postData.length === 0 ? (
+        <NonFeed />
+      ) : (
+        <CardContainer postData={postData} />
+      )}
     </MainContainer>
   );
 };
@@ -62,6 +74,3 @@ const MainContainer = styled.main`
   overflow-y: scroll;
   padding: 20px 16px 0;
 `;
-function res(res: any) {
-  throw new Error("Function not implemented.");
-}
