@@ -2,8 +2,13 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { Card } from "./Card";
 
-export const Main = () => {
+interface Props {
+  researchCards: never[];
+}
+
+export const Main = ({ researchCards }: Props) => {
   const [showing, setShowing] = useState(true);
+  console.log(researchCards);
   return <MainCont>{showing ? <Card /> : null}</MainCont>;
 };
 const MainCont = styled.main`
