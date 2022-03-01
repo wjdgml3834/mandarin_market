@@ -2,7 +2,7 @@ import { Card } from "./Card";
 import { Posts } from "../../types/Posts";
 
 interface PostData {
-  postData: Posts;
+  postData: any;
 }
 
 export const CardContainer = ({ postData }: PostData) => {
