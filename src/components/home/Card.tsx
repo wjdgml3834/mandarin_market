@@ -9,7 +9,13 @@ import { PostModal } from "./PostModal";
 import { DeleteModal } from "./DeleteModal";
 
 export const Card = ({ postData }: any) => {
-  const { author, image, content, createdAt, username } = postData;
+  const { author, image, content, createdAt } = postData;
+
+  let date = createdAt.split("-");
+  let year = date[0] + "년 ";
+  let month = date[1].replace(/(^0+)/, "") + "월 ";
+  let day = date[2].slice(0, 2).replace(/(^0+)/, "") + "일 ";
+  const postDate = year + month + day;
 
   const [likeNum, setLikeNum] = useState(0);
   const [checkClick, setCheckClick] = useState(true);
@@ -93,7 +99,7 @@ export const Card = ({ postData }: any) => {
               </Comment>
             </Link>
           </LikeCommentCont>
-          <PostDate>{createdAt}</PostDate>
+          <PostDate>{postDate}</PostDate>
         </PostCont>
         <MoreBtn onClick={openPostModal}>
           <span className="sr-only">더보기 버튼</span>
