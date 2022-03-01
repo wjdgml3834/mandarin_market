@@ -13,7 +13,7 @@ export const Card = ({ arr }: Props) => {
   return (
     <UserList>
       <UserItem>
-        <Link href="/profile">
+        <Link href={`/${arr.accountname}`}>
           <UserProfile>
             <UserImg src={arr.image} alt="user 이미지" />
             <UserInfo>
