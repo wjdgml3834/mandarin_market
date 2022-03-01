@@ -1,14 +1,27 @@
 import styled from "@emotion/styled";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import React, { Dispatch, SetStateAction } from "react";
 import { BackButton } from "../BackButton";
 
-export const Header = () => {
+interface Props {
+  setResearchValue: Dispatch<SetStateAction<string>>;
+}
+
+export const Header = ({ setResearchValue }: Props) => {
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setResearchValue(e.target.value);
+  };
+
   return (
     <HeaderCont>
       <Section>
         <h1 className="sr-only">계정검색 페이지</h1>
         <BackButton />
-        <SearchInp type="text" placeholder="계정검색" />
+        <SearchInp
+          type="text"
+          onChange={onChangeInput}
+          placeholder="계정검색"
+        />
       </Section>
     </HeaderCont>
   );
@@ -54,6 +67,6 @@ const SearchInp = styled.input`
     outline: none;
   }
   &::placeholder {
-    color: #c4c4c4
+    color: #c4c4c4;
   }
 `;

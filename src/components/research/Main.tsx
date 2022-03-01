@@ -2,9 +2,18 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { Card } from "./Card";
 
-export const Main = () => {
-  const [showing, setShowing] = useState(true);
-  return <MainCont>{showing ? <Card /> : null}</MainCont>;
+interface Props {
+  researchCards: never[];
+}
+
+export const Main = ({ researchCards }: Props) => {
+  return (
+    <MainCont>
+      {researchCards.map((arr, i) => {
+        return <Card key={`search-card-${i}`} arr={arr} />;
+      })}
+    </MainCont>
+  );
 };
 const MainCont = styled.main`
   display: flex;
