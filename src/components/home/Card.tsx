@@ -11,11 +11,9 @@ import { DeleteModal } from "./DeleteModal";
 export const Card = ({ postData }: any) => {
   const { author, image, content, createdAt } = postData;
 
-  let date = createdAt.split("-");
-  let year = date[0] + "년 ";
-  let month = date[1].replace(/(^0+)/, "") + "월 ";
-  let day = date[2].slice(0, 2).replace(/(^0+)/, "") + "일 ";
-  const postDate = year + month + day;
+  const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
+    .slice(5, 7)
+    .replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`;
 
   const [likeNum, setLikeNum] = useState(0);
   const [checkClick, setCheckClick] = useState(true);
