@@ -7,9 +7,13 @@ interface Props {
 }
 
 export const Main = ({ researchCards }: Props) => {
-  const [showing, setShowing] = useState(true);
-  console.log(researchCards);
-  return <MainCont>{showing ? <Card /> : null}</MainCont>;
+  return (
+    <MainCont>
+      {researchCards.map((arr, i) => {
+        return <Card key={`search-card-${i}`} arr={arr} />;
+      })}
+    </MainCont>
+  );
 };
 const MainCont = styled.main`
   display: flex;

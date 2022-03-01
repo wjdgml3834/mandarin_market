@@ -1,21 +1,24 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 
-export const Card = () => {
-  const userData = {
-    src: "https://cdn.pixabay.com/photo/2013/07/13/14/06/gingerbread-162141_960_720.png",
-    nickname: "쟈스괴물",
-    email: "hongdong23",
+interface Props {
+  arr: {
+    image: string;
+    username: string;
+    accountname: string;
   };
+}
+
+export const Card = ({ arr }: Props) => {
   return (
     <UserList>
       <UserItem>
         <Link href="/profile">
           <UserProfile>
-            <UserImg src={userData.src} alt="user 이미지" />
+            <UserImg src={arr.image} alt="user 이미지" />
             <UserInfo>
-              <UserName>{userData.nickname}</UserName>
-              <UserId>{userData.email}</UserId>
+              <UserName>{arr.username}</UserName>
+              <UserId>{arr.accountname}</UserId>
             </UserInfo>
           </UserProfile>
         </Link>
