@@ -52,17 +52,6 @@ export const Card = ({ postData }: any) => {
     } else setHeartColor("icon");
   };
 
-  const imageCalc = () => {
-    if (image.split(",").length > 1) {
-      image.split(",").map((item: any) => {
-        console.log(item);
-        return item;
-      });
-    } else {
-      return image;
-    }
-  };
-
   return (
     <Cont>
       <article>
