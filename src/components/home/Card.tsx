@@ -9,7 +9,7 @@ import { PostModal } from "./PostModal";
 import { DeleteModal } from "./DeleteModal";
 
 export const Card = ({ postData }: any) => {
-  const { author, image, content, createdAt } = postData;
+  const { author, image, content, createdAt, id } = postData;
 
   const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
     .slice(5, 7)
@@ -52,6 +52,17 @@ export const Card = ({ postData }: any) => {
     } else setHeartColor("icon");
   };
 
+  const imageCalc = () => {
+    if (image.split(",").length > 1) {
+      image.split(",").map((item: any) => {
+        console.log(item);
+        return item;
+      });
+    } else {
+      return image;
+    }
+  };
+
   return (
     <Cont>
       <article>
@@ -69,9 +80,15 @@ export const Card = ({ postData }: any) => {
           <PostTxt>{content}</PostTxt>
           <PostImgCont>
             <PostImgList>
-              <PostImgItem>
-                <PostImg src={image} alt="post-img" />
-              </PostImgItem>
+              {image
+                ? image.split(",").map((item: any, index: number) => {
+                    return (
+                      <PostImgItem key={index}>
+                        <PostImg src={item} alt="post-img" />
+                      </PostImgItem>
+                    );
+                  })
+                : null}
             </PostImgList>
           </PostImgCont>
           <LikeCommentCont>
