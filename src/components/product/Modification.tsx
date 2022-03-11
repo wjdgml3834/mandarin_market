@@ -1,35 +1,68 @@
 import styled from "@emotion/styled";
-import { useCallback, useState } from "react";
-import { COLOR } from "../../constants";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { API_ENDPOINT, COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
-interface BtnLabel {
-  btnLabel: string;
+interface id {
+  id: string
 }
 
-export const ProductModification = ({ btnLabel }: BtnLabel) => {
-  const productData = {
-    src: "/images/upload-file.svg",
-    product: 'file',
-    price: 1000,
-    url: "https://www.naver.com/",
-  }
- 
+export const ProductModification = ({id}: id) => {
+
+  console.log(id);
+  
+  const router = useRouter()
+
+  const [image, setImage] = useState("")
   const [isImage, setIsImage] = useState(false)
 
-  const getImage = (img: boolean) => {
+  const getImage = (src: string) => {
+    setImage(src)
+  }
+
+  const getIsImage = (img: boolean) => {
     setIsImage(img)
   }
 
-  const [product, setProduct] = useState(`${productData.product}`)
-  const [price, setPrice] = useState(`${productData.price}`)
-  const [url, setUrl] = useState(`${productData.url}`)
+  const [product, setProduct] = useState("")
+  const [price, setPrice] = useState("")
+  const [url, setUrl] = useState("")
 
   const [isProduct, setIsProduct] = useState(false)
   const [isPrice, setIsPrice] = useState(false)
   const [isUrl, setIsUrl] = useState(false)
 
-  const onChange = useCallback((e) => {
+
+  const { data: session } = useSession()
+
+  const token = session?.user?.name
+
+  const getProduct = async () => {
+    try{
+      const res = await axios.get(`${API_ENDPOINT}product/detail/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+      });
+      setProduct(res.data.product.itemName)
+      setPrice(res.data.product.price+"")
+      setUrl(res.data.product.link)
+      setImage(res.data.product.itemImage)
+      console.log(res.data.product.price+"");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    getProduct()
+  }, [])
+
+  const onChange = (e: any) => {
     const {target: {name, value}} = e
     if(name === "product") {
       setProduct(value)
@@ -55,19 +88,44 @@ export const ProductModification = ({ btnLabel }: BtnLabel) => {
         setIsUrl(true)
       }
     }
-  }, [])
-
+  }
   
-  const onSubmit = useCallback((e) => {
+  
+
+  const editProduct = async () => {
+    try {
+      const productData = {
+        product: {
+          itemName: product,
+          price: parseInt(price.replace(/,/g , '')),
+          link: url,
+          itemImage: image
+        },
+      };
+      await axios.put(`${API_ENDPOINT}product/${id}`, productData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+      });
+      router.push('/myprofile');
+    } catch(err) {
+      console.log(err);
+    }
+    
+  };
+  
+  const onSubmit = (e: any) => {
     e.preventDefault()
-  }, [])
+    editProduct()
+  }
 
   return (
     <Container>
       <h2 className="sr-only">상품 정보 입력창</h2>
       <Form onSubmit={onSubmit}>
         <SubText>이미지 등록</SubText>
-        <FileUpload getImage={getImage}/>
+        <FileUpload image={image} getImage={getImage} isImage={isImage} getIsImage={getIsImage} token={token}/>
         <Label>
           <SubText>상품명</SubText>
           <Input
@@ -101,9 +159,7 @@ export const ProductModification = ({ btnLabel }: BtnLabel) => {
             onChange={onChange}
           ></Input>
         </Label>
-        {btnLabel === "저장" && (
-          <SaveBtn disabled={!(isImage && isProduct && isPrice && isUrl)}>저장</SaveBtn>
-          )}
+        <SaveBtn disabled={!(isImage || isProduct || isPrice || isUrl)}>저장</SaveBtn>
       </Form>
     </Container>
   );
