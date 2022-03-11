@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Router from "next/router";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 interface CloseLogoutModal {
   closeLogoutModal: () => void;
