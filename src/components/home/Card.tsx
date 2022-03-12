@@ -4,9 +4,11 @@ import Link from "next/link";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { COLOR } from "../../constants/index";
 
 import { PostModal } from "./PostModal";
 import { DeleteModal } from "./DeleteModal";
+import next from "next";
 
 export const Card = ({ postData }: any) => {
   const { author, image, content, createdAt, id } = postData;
@@ -21,6 +23,8 @@ export const Card = ({ postData }: any) => {
 
   const [postModal, setPostModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+
+  const [nextImg, setNextImg] = useState("");
 
   const openPostModal = () => {
     setPostModal(true);
@@ -52,6 +56,16 @@ export const Card = ({ postData }: any) => {
     } else setHeartColor("icon");
   };
 
+  const slider = (event: any) => {
+    if (event.target.className.includes("second-btn")) {
+      setNextImg("secondChange");
+    } else if (event.target.className.includes("third-btn")) {
+      setNextImg("thirdChange");
+    } else {
+      setNextImg("");
+    }
+  };
+
   return (
     <Cont>
       <article>
@@ -67,7 +81,7 @@ export const Card = ({ postData }: any) => {
         <PostCont>
           <h4 className="sr-only">포스트 내용</h4>
           <PostTxt>{content}</PostTxt>
-          <PostImgCont>
+          <PostImgCont className={nextImg}>
             <PostImgList>
               {image
                 ? image.split(",").map((item: any, index: number) => {
@@ -79,6 +93,22 @@ export const Card = ({ postData }: any) => {
                   })
                 : null}
             </PostImgList>
+            <PostImgBtnList
+              className={image.split(",").length < 2 ? "btnHidden" : ""}
+            >
+              <li>
+                <PostImgBtn className="first-btn" onClick={slider}></PostImgBtn>
+              </li>
+              <li>
+                <PostImgBtn
+                  className="second-btn"
+                  onClick={slider}
+                ></PostImgBtn>
+              </li>
+              <li>
+                <PostImgBtn className="third-btn" onClick={slider}></PostImgBtn>
+              </li>
+            </PostImgBtnList>
           </PostImgCont>
           <LikeCommentCont>
             <Like aria-label="좋아요 버튼" onClick={onClick}>
@@ -188,6 +218,15 @@ const PostImgCont = styled.div`
   max-height: 228px;
   border-radius: 10px;
   overflow: hidden;
+
+  &.secondChange {
+    transform: translate(-304px);
+    transition: all 1s ease-in-out;
+  }
+  &.thirdChange {
+    transform: translate(-608px);
+    transition: all 1s ease-in-out;
+  }
 `;
 
 const PostImgList = styled.ul`
@@ -208,6 +247,30 @@ const PostImg = styled.img`
   margin-bottom: 16px;
   height: 100%;
   object-fit: cover;
+`;
+
+const PostImgBtnList = styled.ul`
+  position: absolute;
+  display: flex;
+  gap: 6px;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  list-style: none;
+  &.btnHidden {
+    display: none;
+  }
+`;
+
+const PostImgBtn = styled.button`
+  background-color: ${COLOR.orange};
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 `;
 
 const LikeCommentCont = styled.div`
