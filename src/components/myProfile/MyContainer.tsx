@@ -38,7 +38,6 @@ export const MyContainer = () => {
       <MyProfileInfo />
       <Border />
       <Carousel />
-      <Border />
       <ProfilePost />
       <Background
         className={`${myProfileModal}`}

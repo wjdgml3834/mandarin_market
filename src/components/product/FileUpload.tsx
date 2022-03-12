@@ -1,29 +1,50 @@
 import styled from "@emotion/styled";
+import axios from "axios";
 import { useState } from "react";
+import { API_ENDPOINT } from "../../constants";
 
 interface getImage {
-  getImage: (img: boolean) => void
+  image: string
+  getImage: (src: string) => void
+  isImage: boolean
+  getIsImage: (img: boolean) => void 
+  token: string | null | undefined
 }
 
-export const FileUpload = ({getImage}: getImage) => {
+export const FileUpload = ({image, getImage, isImage, getIsImage, token}: getImage) => {
 
-  const [image, setImage] = useState("")
-  const [isImage, setIsImage] = useState(false)
+  const upload = async (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement
+    const files = target.files as FileList
 
-  const imagePreview = (e: any) => {
-    setImage(URL.createObjectURL(e.target.files[0]))
-    setIsImage(true)
-    getImage(true)
+    let formData = new FormData();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+        'Content-type': 'application/json',
+      },
+    }
+    
+    formData.append('image', files[0]);
+    
+    const res = await axios.post(`${API_ENDPOINT}image/uploadfile`, formData, config)
+
+    const imgName = res.data.filename;
+    
+    const imgUrl= `${API_ENDPOINT}${imgName}`
+
+    getImage(imgUrl)
+    getIsImage(true)
   }
 
   return (
     <ImgLabel>
-      <Img className={`${isImage ? 'upload': ''}`} src={image} alt="" />
+      <Img className={`${image ? 'upload': ''}`} src={image} alt="" />
       <ImgInput
         type="file"
         id="img"
         accept="image/*"
-        onChange={imagePreview}
+        onChange={upload}
       ></ImgInput>
     </ImgLabel>
   );
@@ -56,7 +77,7 @@ const ImgLabel = styled.label`
 const Img = styled.img `
   width: 100%;
   height: 100%;
-  background: url('${props => props.src}');
+  /* background: url('${props => props.src}'); */
   object-fit: cover;
   display: none;
   &.upload {
