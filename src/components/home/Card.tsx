@@ -4,6 +4,18 @@ import Link from "next/link";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { COLOR } from "../../constants/index";
+
+import { PostModal } from "./PostModal";
+import { DeleteModal } from "./DeleteModal";
+import next from "next";
+
+export const Card = ({ postData }: any) => {
+  const { author, image, content, createdAt, id } = postData;
+
+  const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
+    .slice(5, 7)
+    .replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`;
 import { useSession } from "next-auth/react";
 
 import { PostModal } from "./PostModal";
@@ -19,12 +31,15 @@ export const Card = ({ postData }: any) => {
   const { data: session } = useSession();
   const token = session?.user?.name;
 
+
   const { author, image, content, createdAt } = postData;
   const [checkClick, setCheckClick] = useState(true);
   const [postModal, setPostModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [hearted, setHearted] = useState(postData.hearted);
   const [heartCount, setHeartCount] = useState(postData.heartCount);
+
+  const [nextImg, setNextImg] = useState("");
 
   const openPostModal = () => {
     setPostModal(true);
@@ -67,6 +82,16 @@ export const Card = ({ postData }: any) => {
     setHearted(!hearted);
   };
 
+  const slider = (event: any) => {
+    if (event.target.className.includes("second-btn")) {
+      setNextImg("secondChange");
+    } else if (event.target.className.includes("third-btn")) {
+      setNextImg("thirdChange");
+    } else {
+      setNextImg("");
+    }
+  };
+
   return (
     <Cont>
       <article>
@@ -75,19 +100,41 @@ export const Card = ({ postData }: any) => {
           <h4 className="sr-only">포스트 글쓴이</h4>
           <AuthorImg src={author.image} alt="작성자 이미지" />
           <AuthorInfo>
-            <AuthorNickName>{author.accountname}</AuthorNickName>
+            <AuthorNickName>{author.username}</AuthorNickName>
             <AuthorId>{author.accountname}</AuthorId>
           </AuthorInfo>
         </AuthorCont>
         <PostCont>
           <h4 className="sr-only">포스트 내용</h4>
           <PostTxt>{content}</PostTxt>
-          <PostImgCont>
+          <PostImgCont className={nextImg}>
             <PostImgList>
-              <PostImgItem>
-                <PostImg src={image} alt="post-img" />
-              </PostImgItem>
+              {image
+                ? image.split(",").map((item: any, index: number) => {
+                    return (
+                      <PostImgItem key={index}>
+                        <PostImg src={item} alt="post-img" />
+                      </PostImgItem>
+                    );
+                  })
+                : null}
             </PostImgList>
+            <PostImgBtnList
+              className={image.split(",").length < 2 ? "btnHidden" : ""}
+            >
+              <li>
+                <PostImgBtn className="first-btn" onClick={slider}></PostImgBtn>
+              </li>
+              <li>
+                <PostImgBtn
+                  className="second-btn"
+                  onClick={slider}
+                ></PostImgBtn>
+              </li>
+              <li>
+                <PostImgBtn className="third-btn" onClick={slider}></PostImgBtn>
+              </li>
+            </PostImgBtnList>
           </PostImgCont>
           <LikeCommentCont>
             <Like aria-label="좋아요 버튼" onClick={onClick} hearted={hearted}>
@@ -112,7 +159,7 @@ export const Card = ({ postData }: any) => {
               </Comment>
             </Link>
           </LikeCommentCont>
-          <PostDate>{createdAt}</PostDate>
+          <PostDate>{postDate}</PostDate>
         </PostCont>
         <MoreBtn onClick={openPostModal}>
           <span className="sr-only">더보기 버튼</span>
@@ -123,7 +170,15 @@ export const Card = ({ postData }: any) => {
         className={`${postModal}`}
         onClick={closePostModal}
       ></Background>
+
+      <PostModal
+        postModal={postModal}
+        openDeleteModal={openDeleteModal}
+        id={""}
+      />
+
       {/* <PostModal postModal={postModal} openDeleteModal={openDeleteModal} /> */}
+
       {deleteModal && <DeleteModal closeDeleteModal={closeDeleteModal} />}
     </Cont>
   );
@@ -193,6 +248,15 @@ const PostImgCont = styled.div`
   max-height: 228px;
   border-radius: 10px;
   overflow: hidden;
+
+  &.secondChange {
+    transform: translate(-304px);
+    transition: all 1s ease-in-out;
+  }
+  &.thirdChange {
+    transform: translate(-608px);
+    transition: all 1s ease-in-out;
+  }
 `;
 
 const PostImgList = styled.ul`
@@ -213,6 +277,30 @@ const PostImg = styled.img`
   margin-bottom: 16px;
   height: 100%;
   object-fit: cover;
+`;
+
+const PostImgBtnList = styled.ul`
+  position: absolute;
+  display: flex;
+  gap: 6px;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  list-style: none;
+  &.btnHidden {
+    display: none;
+  }
+`;
+
+const PostImgBtn = styled.button`
+  background-color: ${COLOR.orange};
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 `;
 
 const LikeCommentCont = styled.div`
