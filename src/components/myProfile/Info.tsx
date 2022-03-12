@@ -19,51 +19,70 @@ export const MyProfileInfo = () => {
     intro: "",
     isfollow: false,
     username: "",
-  })
+  });
 
-  const { accountname, follower, followerCount, following, followingCount, image, intro, isfollow, username } = userList
-  
-  const { data: session } = useSession()
+  const {
+    accountname,
+    follower,
+    followerCount,
+    following,
+    followingCount,
+    image,
+    intro,
+    isfollow,
+    username,
+  } = userList;
 
-  const token = session?.user?.name
-  const loginUser = session?.user?.email
+  const { data: session } = useSession();
+
+  const token = session?.user?.name;
+  const loginUser = session?.user?.email;
+
+  console.log(session);
 
   const getProfile = async () => {
     const res = await axios.get(`${API_ENDPOINT}profile/${loginUser}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
       },
     });
-    setUserList(res.data.profile)
+    setUserList(res.data.profile);
   };
 
   useEffect(() => {
-    getProfile()
+    getProfile();
   }, []);
 
   const follow = async () => {
     await axios(`${API_ENDPOINT}profile/${loginUser}/follow`, {
-      method: 'post',
+      method: "post",
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-type': 'application/json',
+        "Content-type": "application/json",
       },
     });
-    setUserList({...userList, isfollow: true, followerCount: followerCount + 1})
+    setUserList({
+      ...userList,
+      isfollow: true,
+      followerCount: followerCount + 1,
+    });
   };
 
   const unFollow = async () => {
     await axios(`${API_ENDPOINT}profile/${loginUser}/unfollow`, {
-      method: 'delete',
+      method: "delete",
       headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
       },
     });
-    setUserList({...userList, isfollow: false, followerCount: followerCount - 1})
+    setUserList({
+      ...userList,
+      isfollow: false,
+      followerCount: followerCount - 1,
+    });
   };
-
 
   return (
     <Container>
@@ -89,19 +108,23 @@ export const MyProfileInfo = () => {
         <Content>{intro}</Content>
         {accountname === loginUser ? (
           <BtnContainer>
-            <Link href={'/account/edit'}>
+            <Link href={"/myprofile/edit"}>
               <WhiteBtn>프로필 수정</WhiteBtn>
             </Link>
-            <Link href={'/product'}>
+            <Link href={"/product"}>
               <WhiteBtn>상품 등록</WhiteBtn>
             </Link>
           </BtnContainer>
-        ):(
+        ) : (
           <BtnContainer>
             <IconContainer>
               <ChatBubbleOutlineIcon className="icon" />
             </IconContainer>
-            {isfollow ? <UnFollowBtn onClick={unFollow}>언팔로우</UnFollowBtn> : <FollowBtn onClick={follow}>팔로우</FollowBtn>}
+            {isfollow ? (
+              <UnFollowBtn onClick={unFollow}>언팔로우</UnFollowBtn>
+            ) : (
+              <FollowBtn onClick={follow}>팔로우</FollowBtn>
+            )}
             <IconContainer>
               <ShareIcon className="icon" />
             </IconContainer>

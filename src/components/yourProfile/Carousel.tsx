@@ -1,41 +1,76 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import Link from "next/link";
-
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-
-import { COLOR } from "../../constants";
+import { API_ENDPOINT, COLOR } from "../../constants";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { Border } from "../Border";
+import { ProductModal } from "../product/ProductModal";
+import { CarouselCard } from "./CarouselCard";
+import { ProductDeleteModal } from "../product/ProductDeleteModal";
 
 type IndexTypeProps = {
   index: number;
 };
 
 export const Carousel = () => {
-  const ProData = [
-    {
-      id: 0,
-      src: "https://cdn.pixabay.com/photo/2014/04/07/02/42/clementines-318210_1280.jpg",
-      href: "1",
-      title: "애월읍 노지 감귤",
-      price: "35,000원",
-    },
-    {
-      id: 1,
-      src: "https://cdn.pixabay.com/photo/2015/11/24/06/53/hallabong-1059550_1280.jpg",
-      href: "2",
-      title: "애월읍 한라봉 10kg 당도 최고",
-      price: "45,000원",
-    },
-    {
-      id: 2,
-      src: "https://cdn.pixabay.com/photo/2018/12/06/21/31/mandarins-3860659_1280.jpg",
-      href: "3",
-      title: "감귤 파치",
-      price: "25,000원",
-    },
-  ];
+  const [productList, setProductList] = useState([{
+    author: { accountname: "" },
+    id: "",
+    itemImage: "",
+    itemName: "",
+    link: "",
+    price: 0
+  }])
+
+  const { data: session } = useSession()
+
+  const token = session?.user?.name
+  const loginUser = session?.user?.email
+
+  const [isModal, setIsModal] = useState(false);
+  const [isDelModal, setIsDelModal] = useState(false);
+
+  const openProductModal = () => {
+    setIsModal(true);
+  };
+  const closeProductModal = () => {
+    setIsModal(false);
+  };
+  const openDeleteModal = () => {
+    setIsDelModal(true);
+  };
+  const closeDeleteModal = () => {
+    setIsDelModal(false);
+    setIsModal(false);
+  };
+
+  const getProduct = async () => {
+    const res = await axios.get(`${API_ENDPOINT}product/${loginUser}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    setProductList(res.data.product)
+  };
+
+  useEffect(() => {
+    getProduct()   
+  }, []);
+
+  const [link, setLink] = useState("")
+  const [productId, setProductId] = useState("")
+  
+  const getLink = (link: string) => {
+    setLink(link)
+  }
+
+  const getProductId = (id: string) => {
+    setProductId(id)
+  }
 
   const [caroucelIndex, setCaroucelIndex] = useState(0);
 
@@ -43,42 +78,51 @@ export const Carousel = () => {
     if (caroucelIndex === 0) return;
     setCaroucelIndex(caroucelIndex - 1);
   };
+
   const handleNextBtn = () => {
-    if (caroucelIndex === ProData.length - 1) return;
+    if (caroucelIndex === productList.length - 1) return;
     setCaroucelIndex(caroucelIndex + 1);
   };
 
   return (
     <Div>
-      <Container>
-        <H3>판매 중인 상품</H3>
-        <CarouselContainer>
-          <h4 className="sr-only">판매 중인 상품의 캐러샐</h4>
-          <CarouselItem index={caroucelIndex}>
-            {ProData.map((s) => {
-              return (
-                <div key={`carousel-${s.id}`}>
-                  <Link href={s.href}>
-                    <a>
-                      <Img src={s.src} alt="" />
-                    </a>
-                  </Link>
-                  <CarouselTitle>{s.title}</CarouselTitle>
-                  <CarouselPrice>{s.price}</CarouselPrice>
-                </div>
-              );
-            })}
-          </CarouselItem>
-        </CarouselContainer>
-        <BtnContainer>
-          <Btn type="button" onClick={handlePrevBtn}>
-            <ArrowBackIcon />
-          </Btn>
-          <Btn type="button" onClick={handleNextBtn}>
-            <ArrowForwardIcon />
-          </Btn>
-        </BtnContainer>
-      </Container>
+      {productList.length > 0 ? (
+        <>
+        <Container>
+          <H3>판매 중인 상품</H3>
+          <CarouselContainer >
+            <h4 className="sr-only">판매 중인 상품의 캐러샐</h4>
+              {productList.map((product) => {
+                return (
+                  <>
+                  <CarouselItem index={caroucelIndex} key={`carousel-${product.id}`}>
+                    <CarouselCard
+                      product={product}
+                      loginUser={loginUser}
+                      openModal={openProductModal}
+                      getProductId={getProductId}
+                      getLink={getLink}
+                      />
+                    </CarouselItem>
+                  </>
+                );
+              })}
+          </CarouselContainer>
+          <BtnContainer>
+            <Btn type="button" onClick={handlePrevBtn}>
+              <ArrowBackIcon />
+            </Btn>
+            <Btn type="button" onClick={handleNextBtn}>
+              <ArrowForwardIcon />
+            </Btn>
+          </BtnContainer>
+        </Container>
+        {isDelModal && <ProductDeleteModal closeDeleteModal={closeDeleteModal} token={token} id={productId}  />}
+        {isModal && <ProductModal Modal={isModal} openDeleteModal={openDeleteModal} link={link} id={productId} />}
+        <Background className={`${isModal}`} onClick={closeProductModal} />
+        <Border />
+        </>
+      ) : null}
     </Div>
   );
 };
@@ -95,38 +139,19 @@ const H3 = styled.h3`
   margin: 20px 0 16px 0;
 `;
 const CarouselContainer = styled.article`
+  display: flex;
   width: 330px;
   height: 125px;
+  margin: 0 auto;
   overflow: hidden;
 `;
 const caroucelIndex = (props: IndexTypeProps) => css`
   transform: translateX(-${150 * props.index}px);
-  z-index: -100;
+  /* z-index: -100; */
 `;
 const CarouselItem = styled.div`
-  display: flex;
   ${caroucelIndex}
   transition: all 0.5s ease-in-out;
-`;
-const Img = styled.img`
-  width: 140px;
-  height: 90px;
-  margin-right: 10px;
-  border-radius: 10px;
-`;
-const CarouselTitle = styled.p`
-  font-size: 14px;
-  font-weight: 400;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 140px;
-  height: 20px;
-`;
-const CarouselPrice = styled.p`
-  font-size: 12px;
-  font-weight: 700;
-  color: ${COLOR.orange};
 `;
 const BtnContainer = styled.div`
   display: flex;
@@ -144,5 +169,17 @@ const Btn = styled.button`
     background-color: ${COLOR.orange};
     color: #fff;
     border: 1px solid ${COLOR.orange};
+  }
+`;
+const Background = styled.div`
+  &.true {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #777;
+    opacity: 0.4;
+    z-index: 10;
   }
 `;

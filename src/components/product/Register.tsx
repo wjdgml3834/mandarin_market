@@ -1,12 +1,26 @@
 import styled from "@emotion/styled";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
-import { COLOR } from "../../constants";
+import { API_ENDPOINT, COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
 export const ProductRegister = () => {
+  const router = useRouter()
+
+  const [image, setImage] = useState("")
   const [isImage, setIsImage] = useState(false)
 
-  const getImage = (img: boolean) => {
+  const { data: session } = useSession()
+
+  const token = session?.user?.name
+
+  const getImage = (src: string) => {
+    setImage(src)
+  }
+
+  const getIsImage = (img: boolean) => {
     setIsImage(img)
   }
 
@@ -18,7 +32,17 @@ export const ProductRegister = () => {
   const [isPrice, setIsPrice] = useState(false)
   const [isUrl, setIsUrl] = useState(false)
 
-  const onChange = useCallback((e) => {
+  const addComma = (price: string) => {
+    const comma = (price: string) => {
+      return price.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, "$1,");
+    };
+    const uncomma = (price: string) => {
+      return price.replace(/[^\d]+/g, "");
+    };
+    return comma(uncomma(price));
+  }
+
+  const onChange = (e: any) => {
     const {target: {name, value}} = e
     if(name === "product") {
       setProduct(value)
@@ -28,13 +52,8 @@ export const ProductRegister = () => {
         setIsProduct(true)
       }
     } else if(name ==="price") {
-      const priceRegex = /^[0-9]*$/
-      if(!priceRegex.test(value)) {
-        setIsPrice(false)
-      } else {
-        setPrice(value)
-        setIsPrice(true)
-      }
+      setPrice(addComma(value))
+      setIsPrice(true)
     } else if(name === "url") {
       setUrl(value)
       const urlRegex = /^(((http(s?))\:\/\/)?)([0-9a-zA-Z\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]+)?(\/\S*)?/
@@ -44,19 +63,44 @@ export const ProductRegister = () => {
         setIsUrl(true)
       }
     }
-  }, [])
+  }
 
   
-  const onSubmit = useCallback((e) => {
+
+  const uploadProduct = async () => {
+    try{
+      const productData = {
+        product: {
+          itemName: product,
+          price: parseInt(price.replace(/,/g , '')),
+          link: url,
+          itemImage: image
+        },
+      };
+      await axios.post(`${API_ENDPOINT}product`, productData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+      });
+      console.log('완료.');
+      router.replace('/myprofile');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onSubmit = (e: any) => {
     e.preventDefault()
-  }, [])
+    uploadProduct()
+  }
 
   return (
     <Container>
       <h2 className="sr-only">상품 정보 입력창</h2>
       <Form onSubmit={onSubmit}>
         <SubText>이미지 등록</SubText>
-        <FileUpload getImage={getImage}/>
+        <FileUpload image={image} getImage={getImage} isImage={isImage} getIsImage={getIsImage} token={token}/>
         <Label>
           <SubText>상품명</SubText>
           <Input

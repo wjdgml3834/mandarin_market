@@ -16,13 +16,28 @@ export const Card = ({ postData }: any) => {
   const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
     .slice(5, 7)
     .replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`;
+import { useSession } from "next-auth/react";
 
-  const [likeNum, setLikeNum] = useState(0);
+import { PostModal } from "./PostModal";
+import { DeleteModal } from "./DeleteModal";
+import axios from "axios";
+import { API_ENDPOINT } from "../../constants";
+
+interface Hearted {
+  hearted: boolean;
+}
+
+export const Card = ({ postData }: any) => {
+  const { data: session } = useSession();
+  const token = session?.user?.name;
+
+
+  const { author, image, content, createdAt } = postData;
   const [checkClick, setCheckClick] = useState(true);
-  const [heartColor, setHeartColor] = useState("icon");
-
   const [postModal, setPostModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [hearted, setHearted] = useState(postData.hearted);
+  const [heartCount, setHeartCount] = useState(postData.heartCount);
 
   const [nextImg, setNextImg] = useState("");
 
@@ -40,20 +55,31 @@ export const Card = ({ postData }: any) => {
     setPostModal(false);
   };
 
-  const onClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
-  ) => {
-    if (checkClick) {
-      setLikeNum((current) => current + 1);
-      setCheckClick(!checkClick);
-    } else {
-      setLikeNum((current) => current - 1);
-      setCheckClick(!checkClick);
+  const onClick = async () => {
+    try {
+      if (hearted === false) {
+        await axios(`${API_ENDPOINT}post/${postData.id}/heart`, {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+        });
+        setHeartCount(heartCount + 1);
+      } else {
+        await axios(`${API_ENDPOINT}post/${postData.id}/unheart`, {
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+        });
+        setHeartCount(heartCount - 1);
+      }
+    } catch (err) {
+      console.error(err);
     }
-
-    if (heartColor === "icon") {
-      setHeartColor("Like-icon");
-    } else setHeartColor("icon");
+    setHearted(!hearted);
   };
 
   const slider = (event: any) => {
@@ -111,9 +137,9 @@ export const Card = ({ postData }: any) => {
             </PostImgBtnList>
           </PostImgCont>
           <LikeCommentCont>
-            <Like aria-label="좋아요 버튼" onClick={onClick}>
-              <FavoriteBorderIcon className={heartColor} />
-              <span>{likeNum}</span>
+            <Like aria-label="좋아요 버튼" onClick={onClick} hearted={hearted}>
+              <FavoriteBorderIcon />
+              <span>{heartCount}</span>
             </Like>
             <Link
               key={postData.id}
@@ -127,7 +153,7 @@ export const Card = ({ postData }: any) => {
               as={`/postdetail/${postData.id}`}
             >
               <Comment>
-                <ChatBubbleOutlineIcon className="icon" />
+                <ChatBubbleOutlineIcon />
                 <span className="sr-only">댓글 보기, 남기기</span>
                 <span>0</span>
               </Comment>
@@ -144,11 +170,15 @@ export const Card = ({ postData }: any) => {
         className={`${postModal}`}
         onClick={closePostModal}
       ></Background>
+
       <PostModal
         postModal={postModal}
         openDeleteModal={openDeleteModal}
         id={""}
       />
+
+      {/* <PostModal postModal={postModal} openDeleteModal={openDeleteModal} /> */}
+
       {deleteModal && <DeleteModal closeDeleteModal={closeDeleteModal} />}
     </Cont>
   );
@@ -279,13 +309,13 @@ const LikeCommentCont = styled.div`
   font-size: 12px;
   line-height: 12px;
   margin-bottom: 16px;
-  .icon {
+  svg {
     width: 16px;
     height: 14px;
   }
 `;
 
-const Like = styled.button`
+const Like = styled.button<Hearted>`
   border: none;
   cursor: pointer;
   margin-right: 18px;
@@ -294,10 +324,10 @@ const Like = styled.button`
   display: flex;
   align-items: center;
   color: #767676;
-  .Like-icon {
+  svg {
     width: 16px;
     height: 14px;
-    color: red;
+    color: ${({ hearted }) => (!hearted ? "#767676" : "red")};
   }
 `;
 

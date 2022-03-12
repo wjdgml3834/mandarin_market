@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import { signOut } from "next-auth/react";
 import { API_ENDPOINT, COLOR } from "../constants";
 
 interface BtnLabel {
@@ -10,6 +12,9 @@ interface BtnLabel {
 }
 
 export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
+  const { data: session } = useSession();
+  const token = session?.user?.name;
+
   const [name, setName] = useState("");
   const [myId, setMyId] = useState("");
   const [intro, setIntro] = useState("");
@@ -82,39 +87,65 @@ export const ProfileForm = ({ btnLabel, signUp }: BtnLabel) => {
     reader.onload = () => setPre(`${reader.result}`);
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    btnLabel: string
+  ) => {
     e.preventDefault();
     let imgUrl = await imgUpload();
     if (imgUrl === `${API_ENDPOINT}undefined`) {
       imgUrl = `${API_ENDPOINT}Ellipse.png`;
     }
-
-    try {
-      const res = await axios(`${API_ENDPOINT}user`, {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        data: JSON.stringify({
-          user: {
-            username: name,
-            email: signUp.email,
-            password: signUp.password,
-            accountname: myId,
-            intro: intro,
-            image: imgUrl,
+    if (btnLabel !== "저장") {
+      try {
+        await axios(`${API_ENDPOINT}user`, {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
           },
-        }),
-      });
-      alert("회원가입에 성공했습니다.");
-      router.push("/");
-    } catch (err) {
-      alert("알맞은 정보를 입력해주세요.");
+          data: JSON.stringify({
+            user: {
+              username: name,
+              email: signUp.email,
+              password: signUp.password,
+              accountname: myId,
+              intro: intro,
+              image: imgUrl,
+            },
+          }),
+        });
+        alert("회원가입에 성공했습니다.");
+        router.push("/");
+      } catch (err) {
+        alert("알맞은 정보를 입력해주세요.");
+      }
+    } else {
+      try {
+        await axios(`${API_ENDPOINT}user`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+          data: JSON.stringify({
+            user: {
+              username: name,
+              accountname: myId,
+              intro: intro,
+              image: imgUrl,
+            },
+          }),
+        });
+        await signOut({ callbackUrl: `${window.location.origin}` });
+        alert("프로필 변경에 성공했습니다. 다시 로그인 해주세요.");
+      } catch (err) {
+        alert("알맞은 정보를 입력해주세요.");
+      }
     }
   };
 
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={(e) => onSubmit(e, btnLabel)}>
       <ImgContainer>
         <ProfileImg src={pre} alt="프로필 이미지 미리보기" />
         <ImgInput
@@ -254,6 +285,7 @@ const Error = styled.span`
 `;
 const SaveBtn = styled.button`
   position: absolute;
+  z-index: 200;
   top: 31px;
   right: 16px;
   width: 90px;
