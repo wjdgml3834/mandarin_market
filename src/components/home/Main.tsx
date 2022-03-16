@@ -39,12 +39,15 @@ export const Main = () => {
 
   const userData = async () => {
     try {
-      const res: any = await axios.get(API_ENDPOINT + "post/feed/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-type": "application/json",
-        },
-      });
+      const res: any = await axios.get(
+        API_ENDPOINT + "post/feed/?limit=15&skip=0",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+        }
+      );
       setPostData(res.data.posts);
     } catch (e) {
       console.log(e);

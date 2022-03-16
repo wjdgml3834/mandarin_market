@@ -5,21 +5,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { COLOR } from "../../constants/index";
-
 import { PostModal } from "./PostModal";
 import { DeleteModal } from "./DeleteModal";
 import next from "next";
-
-export const Card = ({ postData }: any) => {
-  const { author, image, content, createdAt, id } = postData;
-
-  const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
-    .slice(5, 7)
-    .replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`;
 import { useSession } from "next-auth/react";
 
-import { PostModal } from "./PostModal";
-import { DeleteModal } from "./DeleteModal";
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants";
 
@@ -30,9 +20,12 @@ interface Hearted {
 export const Card = ({ postData }: any) => {
   const { data: session } = useSession();
   const token = session?.user?.name;
-
-
   const { author, image, content, createdAt } = postData;
+
+  const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
+    .slice(5, 7)
+    .replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`;
+
   const [checkClick, setCheckClick] = useState(true);
   const [postModal, setPostModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -40,6 +33,9 @@ export const Card = ({ postData }: any) => {
   const [heartCount, setHeartCount] = useState(postData.heartCount);
 
   const [nextImg, setNextImg] = useState("");
+  const [changeFirstBtnColor, setChangeFirstBtnColor] = useState(true);
+  const [changeSecondBtnColor, setChangeSecondBtnColor] = useState(false);
+  const [changeThirdBtnColor, setChangeThirdBtnColor] = useState(false);
 
   const openPostModal = () => {
     setPostModal(true);
@@ -84,11 +80,19 @@ export const Card = ({ postData }: any) => {
 
   const slider = (event: any) => {
     if (event.target.className.includes("second-btn")) {
+      setChangeFirstBtnColor(false);
       setNextImg("secondChange");
+      setChangeSecondBtnColor(true);
+      setChangeThirdBtnColor(false);
     } else if (event.target.className.includes("third-btn")) {
+      setChangeSecondBtnColor(false);
       setNextImg("thirdChange");
+      setChangeThirdBtnColor(true);
     } else {
       setNextImg("");
+      setChangeFirstBtnColor(true);
+      setChangeSecondBtnColor(false);
+      setChangeThirdBtnColor(false);
     }
   };
 
@@ -119,23 +123,68 @@ export const Card = ({ postData }: any) => {
                   })
                 : null}
             </PostImgList>
-            <PostImgBtnList
-              className={image.split(",").length < 2 ? "btnHidden" : ""}
-            >
-              <li>
-                <PostImgBtn className="first-btn" onClick={slider}></PostImgBtn>
-              </li>
-              <li>
-                <PostImgBtn
-                  className="second-btn"
-                  onClick={slider}
-                ></PostImgBtn>
-              </li>
-              <li>
-                <PostImgBtn className="third-btn" onClick={slider}></PostImgBtn>
-              </li>
-            </PostImgBtnList>
           </PostImgCont>
+          <PostImgBtnList
+            className={image.split(",").length < 2 ? "btnHidden" : ""}
+          >
+            {image.split(",").length === 2 ? (
+              <>
+                <li>
+                  <PostImgBtn
+                    className={`${
+                      changeFirstBtnColor
+                        ? "first-btn first-change"
+                        : "first-btn"
+                    }`}
+                    onClick={slider}
+                  ></PostImgBtn>
+                </li>
+                <li>
+                  <PostImgBtn
+                    className={`${
+                      changeSecondBtnColor
+                        ? "second second-change"
+                        : "second-btn"
+                    }`}
+                    onClick={slider}
+                  ></PostImgBtn>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <PostImgBtn
+                    className={`${
+                      changeFirstBtnColor
+                        ? "first-btn first-change"
+                        : "first-btn"
+                    }`}
+                    onClick={slider}
+                  ></PostImgBtn>
+                </li>
+                <li>
+                  <PostImgBtn
+                    className={`${
+                      changeSecondBtnColor
+                        ? "second-btn second-change"
+                        : "second-btn"
+                    }`}
+                    onClick={slider}
+                  ></PostImgBtn>
+                </li>
+                <li>
+                  <PostImgBtn
+                    className={`${
+                      changeThirdBtnColor
+                        ? "third-btn third-change"
+                        : "third-btn"
+                    }`}
+                    onClick={slider}
+                  ></PostImgBtn>
+                </li>
+              </>
+            )}
+          </PostImgBtnList>
           <LikeCommentCont>
             <Like aria-label="좋아요 버튼" onClick={onClick} hearted={hearted}>
               <FavoriteBorderIcon />
@@ -232,7 +281,8 @@ const AuthorId = styled.strong`
 `;
 
 const PostCont = styled.section`
-  padding-left: 54px;
+  margin-left: 54px;
+  overflow: hidden;
 `;
 
 const PostTxt = styled.p`
@@ -243,11 +293,9 @@ const PostTxt = styled.p`
 `;
 
 const PostImgCont = styled.div`
-  position: relative;
   margin-bottom: 16px;
   max-height: 228px;
   border-radius: 10px;
-  overflow: hidden;
 
   &.secondChange {
     transform: translate(-304px);
@@ -265,10 +313,11 @@ const PostImgList = styled.ul`
 
 const PostImgItem = styled.li`
   min-width: 304px;
-  width: 100%;
   max-height: 228px;
   min-height: 228px;
   border-radius: 10px;
+  position: relative;
+  box-sizing: border-box;
   overflow: hidden;
 `;
 
@@ -276,6 +325,7 @@ const PostImg = styled.img`
   border-radius: 10px;
   margin-bottom: 16px;
   height: 100%;
+  width: 304px;
   object-fit: cover;
 `;
 
@@ -283,24 +333,34 @@ const PostImgBtnList = styled.ul`
   position: absolute;
   display: flex;
   gap: 6px;
-  left: 50%;
-  bottom: 16px;
+  left: 60%;
+  bottom: 80px;
   transform: translateX(-50%);
   box-sizing: border-box;
   list-style: none;
+
   &.btnHidden {
     display: none;
   }
 `;
 
 const PostImgBtn = styled.button`
-  background-color: ${COLOR.orange};
+  background-color: white;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
   padding: 0;
+  &.first-change {
+    background-color: ${COLOR.orange};
+  }
+  &.second-change {
+    background-color: ${COLOR.orange};
+  }
+  &.third-change {
+    background-color: ${COLOR.orange};
+  }
 `;
 
 const LikeCommentCont = styled.div`
