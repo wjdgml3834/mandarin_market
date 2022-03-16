@@ -15,7 +15,11 @@ type IndexTypeProps = {
   index: number;
 };
 
-export const Carousel = () => {
+interface Account {
+  account: string | undefined
+}
+
+export const Carousel = ({account}: Account) => {
   const [productList, setProductList] = useState([{
     author: { accountname: "" },
     id: "",
@@ -48,7 +52,7 @@ export const Carousel = () => {
   };
 
   const getProduct = async () => {
-    const res = await axios.get(`${API_ENDPOINT}product/${loginUser}`, {
+    const res = await axios.get(`${API_ENDPOINT}product/${account}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-type': 'application/json',

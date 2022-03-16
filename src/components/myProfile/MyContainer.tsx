@@ -9,7 +9,11 @@ import { LogOutModal } from "./LogOutModal";
 import { MyProfileModal } from "./MyProfileModal";
 import { ProfilePost } from "./ProfilePost";
 
-export const MyContainer = () => {
+interface Account {
+  account: string | undefined
+}
+
+export const MyContainer = ({account}: Account) => {
   const [myProfileModal, setMyProfileModal] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
 
@@ -35,10 +39,10 @@ export const MyContainer = () => {
           <MoreVertIcon className="more" />
         </button>
       </Nav>
-      <MyProfileInfo />
+      <MyProfileInfo account={account}/>
       <Border />
-      <Carousel />
-      <ProfilePost />
+      <Carousel account={account}/>
+      <ProfilePost account={account}/>
       <Background
         className={`${myProfileModal}`}
         onClick={closeMyProfileModal}
