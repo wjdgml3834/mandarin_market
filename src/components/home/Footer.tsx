@@ -5,8 +5,13 @@ import HomeIcon from "@mui/icons-material/Home";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
+import { useSession } from "next-auth/react";
 
 export const Footer = () => {
+  const { data: session } = useSession();
+
+  const loginUser = session?.user?.email;
+
   return (
     <FooterContainer>
       <nav>
@@ -36,7 +41,7 @@ export const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link href="/myprofile">
+            <Link href={`/myprofile/${loginUser}`}>
               <MenuLink>
                 <PermIdentityIcon className="icon" />
                 <Text>프로필</Text>
