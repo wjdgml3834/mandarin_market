@@ -1,14 +1,17 @@
 import styled from "@emotion/styled";
 import { API_ENDPOINT, COLOR } from "../../constants";
 import Link from "next/link";
-
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import ShareIcon from "@mui/icons-material/Share";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
-export const MyProfileInfo = () => {
+interface Account {
+  account: string | undefined
+}
+
+export const MyProfileInfo = ({account}: Account) => {
   const [userList, setUserList] = useState({
     accountname: "",
     follower: [],
@@ -37,11 +40,9 @@ export const MyProfileInfo = () => {
 
   const token = session?.user?.name;
   const loginUser = session?.user?.email;
-
-  console.log(session);
-
+  
   const getProfile = async () => {
-    const res = await axios.get(`${API_ENDPOINT}profile/${loginUser}`, {
+    const res = await axios.get(`${API_ENDPOINT}profile/${account}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-type": "application/json",
@@ -55,7 +56,7 @@ export const MyProfileInfo = () => {
   }, []);
 
   const follow = async () => {
-    await axios(`${API_ENDPOINT}profile/${loginUser}/follow`, {
+    await axios(`${API_ENDPOINT}profile/${account}/follow`, {
       method: "post",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -70,7 +71,7 @@ export const MyProfileInfo = () => {
   };
 
   const unFollow = async () => {
-    await axios(`${API_ENDPOINT}profile/${loginUser}/unfollow`, {
+    await axios(`${API_ENDPOINT}profile/${account}/unfollow`, {
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -117,17 +118,13 @@ export const MyProfileInfo = () => {
           </BtnContainer>
         ) : (
           <BtnContainer>
-            <IconContainer>
+            {/* <IconContainer>
               <ChatBubbleOutlineIcon className="icon" />
-            </IconContainer>
-            {isfollow ? (
-              <UnFollowBtn onClick={unFollow}>언팔로우</UnFollowBtn>
-            ) : (
-              <FollowBtn onClick={follow}>팔로우</FollowBtn>
-            )}
-            <IconContainer>
+            </IconContainer> */}
+            {isfollow ? <UnFollowBtn onClick={unFollow}>언팔로우</UnFollowBtn> : <FollowBtn onClick={follow}>팔로우</FollowBtn>}
+            {/* <IconContainer>
               <ShareIcon className="icon" />
-            </IconContainer>
+            </IconContainer> */}
           </BtnContainer>
         )}
       </ProfileContainer>
