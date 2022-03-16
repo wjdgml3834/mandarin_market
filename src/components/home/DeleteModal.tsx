@@ -1,11 +1,38 @@
 import styled from "@emotion/styled";
-import { COLOR } from "../../constants/index";
+import { NavigateBefore } from "@material-ui/icons";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { API_ENDPOINT, COLOR } from "../../constants/index";
 
 interface CloseDeleteModal {
+  id: string
+  token: string | null | undefined
   closeDeleteModal: () => void;
 }
 
-export const DeleteModal = ({ closeDeleteModal }: CloseDeleteModal) => {
+export const DeleteModal = ({ closeDeleteModal, id, token }: CloseDeleteModal) => {
+
+  const [url, setUrl] = useState("")
+
+  const router = useRouter()
+  const currentUrl = router.asPath
+
+  console.log(currentUrl);
+  
+  const deleteModal = async () => {
+    await axios.delete(`${API_ENDPOINT}post/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    })
+
+    router.replace('/myprofile');
+    closeDeleteModal()
+    // window.location.href = '/myprofile'
+  }
+
   return (
     <Container>
       <DeleteModalContainer>
@@ -14,7 +41,7 @@ export const DeleteModal = ({ closeDeleteModal }: CloseDeleteModal) => {
           <div onClick={closeDeleteModal}>
             <DeleteCancel>취소</DeleteCancel>
           </div>
-          <div>
+          <div onClick={deleteModal}>
             <Delete>삭제</Delete>
           </div>
         </DeleteBtnContainer>
@@ -39,37 +66,36 @@ const DeleteModalContainer = styled.div`
 `;
 const DeleteText = styled.p`
   text-align: center;
-  width: 200px;
-  height: 40px;
+  width: 220px;
   background-color: #fff;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  font-size: 12px;
-  padding: 15px 0;
+  font-size: 14px;
+  padding: 23px 0;
 `;
 const DeleteBtnContainer = styled.div`
   border-top: 0.5px solid #dbdbdb;
-  width: 200px;
+  width: 220px;
   display: flex;
 `;
 const DeleteCancel = styled.p`
   text-align: center;
-  padding-top: 13px;
-  width: 100px;
-  height: 40px;
-  font-size: 10px;
+  padding: 15px 0;
+  width: 110px;
+  font-size: 13px;
   border-bottom-left-radius: 10px;
   border-right: 0.5px solid #dbdbdb;
   background-color: #fff;
+  cursor: pointer;
 `;
 
 const Delete = styled.p`
   text-align: center;
-  padding-top: 13px;
-  width: 100px;
-  height: 40px;
-  font-size: 10px;
+  padding: 15px 0;
+  width: 110px;
+  font-size: 13px;
   border-bottom-right-radius: 10px;
   background-color: #fff;
   color: ${COLOR.orange};
+  cursor: pointer;
 `;
