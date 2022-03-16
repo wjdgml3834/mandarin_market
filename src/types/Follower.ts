@@ -1,6 +1,6 @@
 export interface Follower {
-  id: number;
-  src: string;
-  name: string;
+  _id: string;
+  image: string;
+  username: string;
   intro: string;
 }
