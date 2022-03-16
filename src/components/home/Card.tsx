@@ -80,14 +80,15 @@ export const Card = ({ postData }: any) => {
 
   const slider = (event: any) => {
     if (event.target.className.includes("second-btn")) {
-      setChangeFirstBtnColor(false);
       setNextImg("secondChange");
+      setChangeFirstBtnColor(false);
       setChangeSecondBtnColor(true);
       setChangeThirdBtnColor(false);
     } else if (event.target.className.includes("third-btn")) {
-      setChangeSecondBtnColor(false);
       setNextImg("thirdChange");
+      setChangeSecondBtnColor(false);
       setChangeThirdBtnColor(true);
+      setChangeFirstBtnColor(false);
     } else {
       setNextImg("");
       setChangeFirstBtnColor(true);
