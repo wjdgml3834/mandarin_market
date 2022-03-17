@@ -40,7 +40,7 @@ export const MyProfileInfo = ({account}: Account) => {
 
   const token = session?.user?.name;
   const loginUser = session?.user?.email;
-  
+
   const getProfile = async () => {
     const res = await axios.get(`${API_ENDPOINT}profile/${account}`, {
       headers: {

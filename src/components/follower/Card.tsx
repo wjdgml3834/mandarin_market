@@ -9,6 +9,8 @@ interface FollowerProps {
 }
 
 export const Card = ({ followerData }: FollowerProps) => {
+  const { image, intro, username } = followerData;
+
   const [followBtn, setFollowBtn] = useState(false);
   const handleBtn = () => {
     setFollowBtn((current) => !current);
@@ -18,10 +20,10 @@ export const Card = ({ followerData }: FollowerProps) => {
       <UserItem>
         <Link href="/profile">
           <UserProfile>
-            <UserImg src={followerData.src} alt="user 이미지" />
+            <UserImg src={image} alt="user 이미지" />
             <UserInfo>
-              <UserName>{followerData.name}</UserName>
-              <UserId>{followerData.intro}</UserId>
+              <UserName>{username}</UserName>
+              <UserId>{intro}</UserId>
             </UserInfo>
           </UserProfile>
         </Link>
