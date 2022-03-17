@@ -72,7 +72,6 @@ export const PostUpload = () => {
         },
       };
       await axios.post(`${API_ENDPOINT}post`, postData, {
-        method : 'post', 
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-type': 'application/json',
@@ -118,7 +117,12 @@ export const PostUpload = () => {
               placeholder="게시글 입력하기..."
             ></Textarea>
           </label>
-          <FileUpload images={images} getImage={getImage} getIsImage={getIsImage} token={token}/>
+          <FileUpload
+            images={images}
+            getImage={getImage}
+            getIsImage={getIsImage}
+            token={token}
+          />
           <SaveBtn disabled={!(isText || isImage)}>업로드</SaveBtn>
         </Form>
         <section>

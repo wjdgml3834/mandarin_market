@@ -5,13 +5,11 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { COLOR } from "../../constants/index";
-import { PostModal } from "./PostModal";
-import { DeleteModal } from "./DeleteModal";
-import next from "next";
 import { useSession } from "next-auth/react";
-
 import axios from "axios";
 import { API_ENDPOINT } from "../../constants";
+import { CancelModal } from "./ReportCancelModal";
+import { ReportModal } from "./ReportModal";
 
 interface Hearted {
   hearted: boolean;
@@ -20,15 +18,16 @@ interface Hearted {
 export const Card = ({ postData }: any) => {
   const { data: session } = useSession();
   const token = session?.user?.name;
-  const { author, image, content, createdAt } = postData;
+
+  const { author, image, content, createdAt, id } = postData;
 
   const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
     .slice(5, 7)
     .replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`;
 
   const [checkClick, setCheckClick] = useState(true);
-  const [postModal, setPostModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const [reportModal, setReportModal] = useState(false);
+  const [cancelModal, setCancelModal] = useState(false);
   const [hearted, setHearted] = useState(postData.hearted);
   const [heartCount, setHeartCount] = useState(postData.heartCount);
 
@@ -37,18 +36,18 @@ export const Card = ({ postData }: any) => {
   const [changeSecondBtnColor, setChangeSecondBtnColor] = useState(false);
   const [changeThirdBtnColor, setChangeThirdBtnColor] = useState(false);
 
-  const openPostModal = () => {
-    setPostModal(true);
+  const openReportModal = () => {
+    setReportModal(true);
   };
-  const closePostModal = () => {
-    setPostModal(false);
+  const closeReportModal = () => {
+    setReportModal(false);
   };
-  const openDeleteModal = () => {
-    setDeleteModal(true);
+  const openCancelModal = () => {
+    setCancelModal(true);
   };
-  const closeDeleteModal = () => {
-    setDeleteModal(false);
-    setPostModal(false);
+  const closeCancelModal = () => {
+    setCancelModal(false);
+    setReportModal(false);
   };
 
   const onClick = async () => {
@@ -101,14 +100,18 @@ export const Card = ({ postData }: any) => {
     <Cont>
       <article>
         <h3 className="sr-only">포스트 아이템</h3>
-        <AuthorCont>
-          <h4 className="sr-only">포스트 글쓴이</h4>
-          <AuthorImg src={author.image} alt="작성자 이미지" />
-          <AuthorInfo>
-            <AuthorNickName>{author.username}</AuthorNickName>
-            <AuthorId>{author.accountname}</AuthorId>
-          </AuthorInfo>
-        </AuthorCont>
+            <AuthorCont>
+              <h4 className="sr-only">포스트 글쓴이</h4>
+              <Link href={`/myprofile/${author.accountname}`}>
+                <a>
+                  <AuthorImg src={author.image} alt="작성자 이미지" />
+                </a>
+              </Link>
+              <AuthorInfo>
+                <AuthorNickName>{author.username}</AuthorNickName>
+                <AuthorId>{author.accountname}</AuthorId>
+              </AuthorInfo>
+            </AuthorCont>
         <PostCont>
           <h4 className="sr-only">포스트 내용</h4>
           <PostTxt>{content}</PostTxt>
@@ -211,25 +214,17 @@ export const Card = ({ postData }: any) => {
           </LikeCommentCont>
           <PostDate>{postDate}</PostDate>
         </PostCont>
-        <MoreBtn onClick={openPostModal}>
+        <MoreBtn onClick={openReportModal}>
           <span className="sr-only">더보기 버튼</span>
           <MoreVertIcon className="More-btn-icon" />
         </MoreBtn>
       </article>
       <Background
-        className={`${postModal}`}
-        onClick={closePostModal}
+        className={`${reportModal}`}
+        onClick={closeReportModal}
       ></Background>
-
-      <PostModal
-        postModal={postModal}
-        openDeleteModal={openDeleteModal}
-        id={""}
-      />
-
-      {/* <PostModal postModal={postModal} openDeleteModal={openDeleteModal} /> */}
-
-      {deleteModal && <DeleteModal closeDeleteModal={closeDeleteModal} />}
+      <ReportModal postModal={reportModal} openCancelModal={openCancelModal} />
+      {cancelModal  && <CancelModal id={id} token={token} closeCancelModal={closeCancelModal} />}
     </Cont>
   );
 };

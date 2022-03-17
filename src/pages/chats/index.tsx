@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { ChatList } from "../../components/chats/ChatList";
-import { Footer } from "../../components/chats/Footer";
+import { Footer } from "../../components/we/Footer";
 
 const HomePage: NextPage = () => {
   return (
@@ -12,7 +11,6 @@ const HomePage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">채팅</h1>
-      <ChatList />
       <Footer />
     </div>
   );

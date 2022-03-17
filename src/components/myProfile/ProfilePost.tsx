@@ -1,14 +1,19 @@
 import styled from "@emotion/styled";
-
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import AppsIcon from "@mui/icons-material/Apps";
-import { CardContainer } from "../home/CardContainer";
-import { useState } from "react";
-import { Select } from "@mui/material";
+import { useEffect, useState } from "react";
 import { ProfileAppPost } from "./ProfileAppPost";
 import { MyPostContainer } from "./MyPostContainer";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { API_ENDPOINT } from "../../constants";
+import { MyPost } from "../../types/MyPost";
 
-export const ProfilePost = () => {
+interface Account {
+  account: string | undefined
+}
+
+export const ProfilePost = ({account}: Account) => {
   const [select, setSelect] = useState(true);
   const tableClick = () => {
     if (select === false) setSelect(!select);
@@ -16,6 +21,49 @@ export const ProfilePost = () => {
   const appClick = () => {
     if (select === true) setSelect(!select);
   };
+
+  const [postData, setPostData] = useState([{
+    author: {
+      accountname: "",
+      follower: [],
+      followerCount: 0,
+      following: [],
+      followingCount: 0,
+      image: "/images/ellipse-profile.svg",
+      intro: "",
+      isfollow: false,
+      username: "",
+      _id: "",
+    },
+    commentCount: 0,
+    comments: [],
+    content: "",
+    createdAt: "",
+    heartCount: 0,
+    hearted: false,
+    id: "",
+    image: "",
+    updatedAt: "",
+  }])
+
+  const { data: session } = useSession()
+
+  const token = session?.user?.name
+  // const loginUser = session?.user?.email
+
+  const getPost = async () => {
+    const res = await axios.get(`${API_ENDPOINT}post/${account}/userpost`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-type': 'application/json',
+      },
+    });
+    setPostData(res.data.post)
+  };
+
+  useEffect(() => {
+    getPost()
+  }, []);
 
   return (
     <div>
@@ -27,7 +75,14 @@ export const ProfilePost = () => {
           <AppsIcon className={`${!select}`} />
         </button>
       </IconContainer>
-      {select === true ? <MyPostContainer /> : <ProfileAppPost />}
+      {select === true
+        ? <MyPostContainer
+            postList={postData}
+            token={token}
+          />
+        : <ProfileAppPost
+            postList={postData}
+        />}
     </div>
   );
 };
