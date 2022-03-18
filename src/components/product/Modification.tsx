@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { API_ENDPOINT, COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
@@ -108,7 +108,7 @@ export const ProductModification = ({id}: id) => {
           'Content-type': 'application/json',
         },
       });
-      router.push('/myprofile');
+      router.push('/profile');
     } catch(err) {
       console.log(err);
     }

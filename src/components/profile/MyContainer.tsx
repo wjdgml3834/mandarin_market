@@ -3,7 +3,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { BackButton } from "../BackButton";
 import { Border } from "../Border";
-import { Carousel } from "../yourProfile/Carousel";
+import { Carousel } from "./Carousel";
 import { MyProfileInfo } from "./Info";
 import { LogOutModal } from "./LogOutModal";
 import { MyProfileModal } from "./MyProfileModal";
@@ -39,10 +39,12 @@ export const MyContainer = ({account}: Account) => {
           <MoreVertIcon className="more" />
         </button>
       </Nav>
-      <MyProfileInfo account={account}/>
-      <Border />
-      <Carousel account={account}/>
-      <ProfilePost account={account}/>
+      <Container>
+        <MyProfileInfo account={account}/>
+        <Border />
+        <Carousel account={account}/>
+        <ProfilePost account={account}/>
+      </Container>
       <Background
         className={`${myProfileModal}`}
         onClick={closeMyProfileModal}
@@ -56,7 +58,6 @@ export const MyContainer = ({account}: Account) => {
   );
 };
 const Nav = styled.nav`
-  position: fixed;
   width: 100%;
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
@@ -74,10 +75,15 @@ const Nav = styled.nav`
   }
 `;
 
+const Container = styled.div`
+  overflow-y: scroll;
+  height: calc(100vh - 120px);
+`
+
 const Background = styled.div`
   &.true {
     position: fixed;
-    top: 72px;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
@@ -85,3 +91,5 @@ const Background = styled.div`
     opacity: 0.4;
   }
 `;
+
+

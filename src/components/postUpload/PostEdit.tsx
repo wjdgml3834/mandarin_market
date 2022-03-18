@@ -112,7 +112,7 @@ export const PostEdit = ({id}: id) => {
           'Content-type': 'application/json',
         },
       });
-      Router.push('/myprofile');
+      Router.push('/profile');
     } catch(err) {
       console.log(err);
     }

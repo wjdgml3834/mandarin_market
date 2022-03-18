@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { API_ENDPOINT, COLOR } from "../../constants";
 import { FileUpload } from "./FileUpload";
 
@@ -84,7 +84,7 @@ export const ProductRegister = () => {
         },
       });
       console.log('완료.');
-      router.replace('/myprofile');
+      router.replace('/profile');
     } catch (err) {
       console.log(err);
     }

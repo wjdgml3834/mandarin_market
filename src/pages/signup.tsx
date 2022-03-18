@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import { SignUpPage } from "../components/SignUp";
-import { SignUpProfile } from "../components/SignUpProfile";
+import { SignUpPage } from "../components/signup/signUp";
+import { SignUpProfile } from "../components/signup/SignUpProfile";
 
 const SingUp: NextPage = () => {
   const [signUp, setSignUp] = useState({ email: "", password: "" });

@@ -9,7 +9,7 @@ export const NonFeed = () => {
     <NonFeedCont>
       <Image src={logo} width="100px" height="100px" />
       <Text>유저를 검색해 팔로우 해보세요!</Text>
-      <Link href="/search">
+      <Link href="/research">
         <SearchBtn>검색하기</SearchBtn>
       </Link>
     </NonFeedCont>
@@ -32,7 +32,7 @@ const SearchBtn = styled.a`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
+  min-width: 120px;
   height: 44px;
   font-size: 14px;
   font-weight: 500;

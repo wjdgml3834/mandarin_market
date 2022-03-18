@@ -41,7 +41,7 @@ export const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link href={`/myprofile/${loginUser}`}>
+            <Link href="/profile">
               <MenuLink>
                 <PermIdentityIcon className="icon" />
                 <Text>프로필</Text>
@@ -96,6 +96,7 @@ const MenuLink = styled.a`
 `;
 
 const Text = styled.p`
-  font-size: 10px;
-  margin-top: 6px;
+  font-size: 11px;
+  margin-top: 5px;
+  margin-bottom: 1px;
 `;

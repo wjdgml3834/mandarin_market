@@ -102,7 +102,7 @@ export const Card = ({ postData }: any) => {
         <h3 className="sr-only">포스트 아이템</h3>
             <AuthorCont>
               <h4 className="sr-only">포스트 글쓴이</h4>
-              <Link href={`/myprofile/${author.accountname}`}>
+              <Link href={`/profile/${author.accountname}`}>
                 <a>
                   <AuthorImg src={author.image} alt="작성자 이미지" />
                 </a>
@@ -223,8 +223,8 @@ export const Card = ({ postData }: any) => {
         className={`${reportModal}`}
         onClick={closeReportModal}
       ></Background>
-      <ReportModal postModal={reportModal} openCancelModal={openCancelModal} />
-      {cancelModal  && <CancelModal id={id} token={token} closeCancelModal={closeCancelModal} />}
+      <ReportModal reportModal={reportModal} openCancelModal={openCancelModal} />
+      {cancelModal && <CancelModal id={id} token={token} closeCancelModal={closeCancelModal} />}
     </Cont>
   );
 };

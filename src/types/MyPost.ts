@@ -1,5 +1,4 @@
 export interface MyPost {
-  map(arg0: (postData: MyPost) => JSX.Element): import("react").ReactNode;
   author: {
     accountname: string,
     follower: string[],

@@ -35,12 +35,12 @@ export const PostCommentList = ({userData}: userData) => {
   return (
     <CommentList>
       <CommentInfo>
-        <Link href="/myprofile">
+        <Link href="/profile">
           <a>
             <AuthorImg src={userData.src} alt="누구님의 프로필사진" />
           </a>
         </Link>
-        <Link href="/myprofile">
+        <Link href="/profile">
           <a>
             <AuthorNickName>{userData.nickname}</AuthorNickName>
           </a>

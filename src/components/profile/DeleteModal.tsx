@@ -1,8 +1,7 @@
 import styled from "@emotion/styled";
-import { NavigateBefore } from "@material-ui/icons";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { API_ENDPOINT, COLOR } from "../../constants/index";
 
 interface CloseDeleteModal {
@@ -13,12 +12,8 @@ interface CloseDeleteModal {
 
 export const DeleteModal = ({ closeDeleteModal, id, token }: CloseDeleteModal) => {
 
-  const [url, setUrl] = useState("")
-
   const router = useRouter()
   const currentUrl = router.asPath
-
-  console.log(currentUrl);
   
   const deleteModal = async () => {
     await axios.delete(`${API_ENDPOINT}post/${id}`, {
@@ -28,9 +23,9 @@ export const DeleteModal = ({ closeDeleteModal, id, token }: CloseDeleteModal) =
       },
     })
 
-    router.replace('/myprofile');
+    router.replace('/profile');
     closeDeleteModal()
-    // window.location.href = '/myprofile'
+    // window.location.reload()
   }
 
   return (
