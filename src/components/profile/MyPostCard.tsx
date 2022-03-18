@@ -1,21 +1,24 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { MyPost } from "../../types/MyPost";
-import { PostModal } from "../home/PostModal";
-import { DeleteModal } from "../home/DeleteModal";
+import { PostModal } from "./PostModal";
+import { DeleteModal } from "./DeleteModal";
 import { COLOR } from "../../constants";
+import { ReportModal } from "../home/ReportModal";
+import { CancelModal } from "../home/ReportCancelModal";
 
 
 interface PostProps {
   postData: MyPost
   token: string | null | undefined
+  loginUser: string | null | undefined
 }
 
-export const MyPostCard = ({ postData, token }: PostProps) => {
+export const MyPostCard = ({ postData, token, loginUser }: PostProps) => {
 
   const { author, content, createdAt, image, id } = postData
 
@@ -30,6 +33,9 @@ export const MyPostCard = ({ postData, token }: PostProps) => {
   const [postModal, setPostModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const [reportModal, setReportModal] = useState(false);
+  const [cancelModal, setCancelModal] = useState(false);
+
   const openPostModal = () => {
     setPostModal(true);
   };
@@ -42,6 +48,20 @@ export const MyPostCard = ({ postData, token }: PostProps) => {
   const closeDeleteModal = () => {
     setDeleteModal(false);
     setPostModal(false);
+  };
+
+   const openReportModal = () => {
+    setReportModal(true);
+  };
+  const closeReportModal = () => {
+    setReportModal(false);
+  };
+  const openCancelModal = () => {
+    setCancelModal(true);
+  };
+  const closeCancelModal = () => {
+    setCancelModal(false);
+    setReportModal(false);
   };
 
   const onClick = (
@@ -203,17 +223,34 @@ export const MyPostCard = ({ postData, token }: PostProps) => {
           </LikeCommentCont>
           <PostDate>{updatedDate}</PostDate>
         </PostCont>
-        <MoreBtn onClick={openPostModal}>
+        
+        <MoreBtn onClick={author.accountname === loginUser ? openPostModal : openReportModal}>
           <span className="sr-only">더보기 버튼</span>
           <MoreVertIcon className="More-btn-icon" />
         </MoreBtn>
       </article>
-      <Background
-        className={`${postModal}`}
-        onClick={closePostModal}
-      ></Background>
-      <PostModal id={id} postModal={postModal} openDeleteModal={openDeleteModal} />
-      {deleteModal && <DeleteModal id={id} token={token} closeDeleteModal={closeDeleteModal} />}
+      {author.accountname === loginUser
+        ? (
+          <>
+            <Background
+              className={`${postModal}`}
+              onClick={closePostModal}
+            ></Background>
+            <PostModal id={id} postModal={postModal} openDeleteModal={openDeleteModal} />
+            {deleteModal && <DeleteModal id={id} token={token} closeDeleteModal={closeDeleteModal} />}
+          </>
+        )
+        : (
+          <>
+            <Background   
+              className={`${reportModal}`}
+              onClick={closeCancelModal}
+            ></Background>
+            <ReportModal reportModal={reportModal} openCancelModal={openCancelModal} />
+            {cancelModal  && <CancelModal id={id} token={token} closeCancelModal={closeCancelModal} />}
+          </>
+          
+        )}
     </Cont>
   );
 };

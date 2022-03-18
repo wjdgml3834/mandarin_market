@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { MyContainer } from "../../components/myProfile/MyContainer";
-import { Footer } from "../../components/myProfile/Footer";
+import { MyContainer } from "../../components/profile/MyContainer";
+import { Footer } from "../../components/profile/Footer";
 import { useRouter } from "next/router";
 
 const Profile: NextPage = () => {

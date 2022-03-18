@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -52,7 +52,7 @@ export const Carousel = ({account}: Account) => {
   };
 
   const getProduct = async () => {
-    const res = await axios.get(`${API_ENDPOINT}product/${account}`, {
+    const res = await axios.get(`${API_ENDPOINT}product/${account ? account : loginUser}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-type': 'application/json',
@@ -98,17 +98,15 @@ export const Carousel = ({account}: Account) => {
             <h4 className="sr-only">판매 중인 상품의 캐러샐</h4>
               {productList.map((product) => {
                 return (
-                  <>
-                  <CarouselItem index={caroucelIndex} key={`carousel-${product.id}`}>
+                  <CarouselItem index={caroucelIndex} key={product.id}>
                     <CarouselCard
                       product={product}
                       loginUser={loginUser}
                       openModal={openProductModal}
                       getProductId={getProductId}
                       getLink={getLink}
-                      />
-                    </CarouselItem>
-                  </>
+                    />
+                  </CarouselItem>
                 );
               })}
           </CarouselContainer>

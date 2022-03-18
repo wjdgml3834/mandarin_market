@@ -22,7 +22,7 @@ export const ProfilePost = ({account}: Account) => {
     if (select === true) setSelect(!select);
   };
 
-  const [postData, setPostData] = useState([{
+  const [postData, setPostData] = useState<MyPost[]>([{
     author: {
       accountname: "",
       follower: [],
@@ -49,10 +49,10 @@ export const ProfilePost = ({account}: Account) => {
   const { data: session } = useSession()
 
   const token = session?.user?.name
-  // const loginUser = session?.user?.email
+  const loginUser = session?.user?.email
 
   const getPost = async () => {
-    const res = await axios.get(`${API_ENDPOINT}post/${account}/userpost`, {
+    const res = await axios.get(`${API_ENDPOINT}post/${account ? account : loginUser}/userpost`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-type': 'application/json',
@@ -79,6 +79,7 @@ export const ProfilePost = ({account}: Account) => {
         ? <MyPostContainer
             postList={postData}
             token={token}
+            loginUser={loginUser}
           />
         : <ProfileAppPost
             postList={postData}

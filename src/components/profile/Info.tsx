@@ -42,7 +42,7 @@ export const MyProfileInfo = ({account}: Account) => {
   const loginUser = session?.user?.email;
 
   const getProfile = async () => {
-    const res = await axios.get(`${API_ENDPOINT}profile/${account}`, {
+    const res = await axios.get(`${API_ENDPOINT}profile/${account ? account : loginUser}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-type": "application/json",
@@ -56,7 +56,7 @@ export const MyProfileInfo = ({account}: Account) => {
   }, []);
 
   const follow = async () => {
-    await axios(`${API_ENDPOINT}profile/${account}/follow`, {
+    await axios(`${API_ENDPOINT}profile/${account ? account : loginUser}/follow`, {
       method: "post",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ export const MyProfileInfo = ({account}: Account) => {
   };
 
   const unFollow = async () => {
-    await axios(`${API_ENDPOINT}profile/${account}/unfollow`, {
+    await axios(`${API_ENDPOINT}profile/${account ? account : loginUser}/unfollow`, {
       method: "delete",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -109,7 +109,7 @@ export const MyProfileInfo = ({account}: Account) => {
         <Content>{intro}</Content>
         {accountname === loginUser ? (
           <BtnContainer>
-            <Link href={"/myprofile/edit"}>
+            <Link href={"/profile/edit"}>
               <WhiteBtn>프로필 수정</WhiteBtn>
             </Link>
             <Link href={"/product"}>
@@ -134,7 +134,6 @@ export const MyProfileInfo = ({account}: Account) => {
 
 const Container = styled.div`
   border: 0.5px solid #dbdbdb;
-  padding-top: 50px;
 `;
 const ProfileContainer = styled.article`
   text-align: center;

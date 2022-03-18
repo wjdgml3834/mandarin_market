@@ -4,7 +4,7 @@ import { MyPost } from "../../types/MyPost";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 interface PostProps {
-  postList: MyPost
+  postList: MyPost[]
 }
 
 export const ProfileAppPost = ({postList}: PostProps) => {
@@ -12,7 +12,7 @@ export const ProfileAppPost = ({postList}: PostProps) => {
   return (
     <ImgContainer>
       <h3 className="sr-only">이미지 한눈에 보기</h3>
-      {postList.map((postData: any) => {
+      {postList.map((postData) => {
         return (
           <>
           {postData.image !== ''
