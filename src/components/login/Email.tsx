@@ -3,7 +3,6 @@ import { COLOR } from "../../constants";
 import { useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-
 import { getSession, signIn } from "next-auth/react";
 
 export const LoginPage = () => {

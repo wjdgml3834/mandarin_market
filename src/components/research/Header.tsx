@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React, { Dispatch, SetStateAction } from "react";
 import { BackButton } from "../BackButton";
 

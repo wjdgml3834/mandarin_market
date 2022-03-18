@@ -21,7 +21,7 @@ export const ProductDeleteModal = ({ closeDeleteModal, id, token }: CloseDeleteM
     },
   })
   closeDeleteModal()
-  router.push('/myprofile')
+  router.push('/profile')
   // window.location.href = '/myprofile'
   }
 

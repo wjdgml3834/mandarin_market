@@ -3,14 +3,14 @@ import Link from "next/link";
 import { COLOR } from "../../constants";
 
 interface ModalData {
-  postModal: boolean;
+  reportModal: boolean;
   openCancelModal: () => void;
 }
 
-export const ReportModal = ({ postModal, openCancelModal }: ModalData) => {
+export const ReportModal = ({ reportModal, openCancelModal }: ModalData) => {
   return (
     <div>
-      {postModal && (
+      {reportModal && (
         <Container>
           <button onClick={openCancelModal}>신고</button>
         </Container>

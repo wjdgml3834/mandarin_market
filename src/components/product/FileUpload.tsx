@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import axios from "axios";
-import { useState } from "react";
 import { API_ENDPOINT } from "../../constants";
 
 interface getImage {

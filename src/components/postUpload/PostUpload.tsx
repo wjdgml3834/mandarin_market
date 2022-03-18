@@ -77,8 +77,7 @@ export const PostUpload = () => {
           'Content-type': 'application/json',
         },
       });
-      console.log('완료.');
-      Router.push('/myprofile');
+      Router.push('/profile');
     } catch (err) {
       console.log(err);
     }

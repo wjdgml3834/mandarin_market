@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { PostModal } from "../../components/home/PostModal";
+import { PostModal } from "../../components/profile/PostModal";
 import { UploadContainer } from "../../components/postUpload/Container";
 import { EditContainer } from "../../components/postUpload/EditContainer";
 import { API_ENDPOINT } from "../../constants";

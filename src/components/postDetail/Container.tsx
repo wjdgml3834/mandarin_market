@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { BackButton } from "../BackButton";
-import { LogOutModal } from "../myProfile/LogOutModal";
-import { MyProfileModal } from "../myProfile/MyProfileModal";
+import { LogOutModal } from "../profile/LogOutModal";
+import { MyProfileModal } from "../profile/MyProfileModal";
 import { PostComment } from "./Comment";
 import { PostDetailCard } from "./DetailCard";
 
@@ -76,7 +76,7 @@ const MainCountainer = styled.div`
 const Background = styled.div`
   &.true {
     position: fixed;
-    top: 72px;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
