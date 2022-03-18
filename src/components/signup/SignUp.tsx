@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useCallback, useState } from "react";
-import { API_ENDPOINT, COLOR } from "../constants";
+import { API_ENDPOINT, COLOR } from "../../constants";
 
 interface propTypes {
   setSignUp: (signUp: { email: string; password: string }) => void;

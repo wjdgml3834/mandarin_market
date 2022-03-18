@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ProfileForm } from "./ProfileForm";
+import { ProfileForm } from "../ProfileForm";
 
 interface Props {
   signUp: {
