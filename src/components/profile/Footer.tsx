@@ -20,10 +20,10 @@ export const Footer = () => {
             </Link>
           </li>
           <li>
-            <Link href="/chats">
+            <Link href="/developer">
               <MenuLink>
                 <ChatBubbleOutlineIcon className="icon chat-icon" />
-                <Text>채팅</Text>
+                <Text>개발자</Text>
               </MenuLink>
             </Link>
           </li>
