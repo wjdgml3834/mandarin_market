@@ -52,7 +52,7 @@ export const Card = ({ followerData }: FollowerProps) => {
   return (
     <UserList>
       <UserItem>
-        <Link href="/profile">
+        <Link href={`/profile/${accountname}`}>
           <UserProfile>
             <UserImg src={image} alt="user 이미지" />
             <UserInfo>
