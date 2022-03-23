@@ -1,47 +1,45 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { API_ENDPOINT, COLOR } from "../../constants";
+import { API_ENDPOINT, COLOR } from "../../constants/index";
 
-interface closeDelModal {
-  closeDelModal: () => void;
+interface CloseDeleteModal {
   id: string
   token: string | null | undefined
+  closeCancelModal: () => void;
   postId: string | string[] | undefined
 }
 
-export const CommentDelModal = ({ postId, id, token, closeDelModal }: closeDelModal) => {
+export const CancelModal = ({ closeCancelModal, id, token, postId }: CloseDeleteModal) => {
 
   const router = useRouter()
-  
-  const deleteComment = async () => {
-    try{
-      await axios.delete(`${API_ENDPOINT}post/${postId}/comments/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-type': 'application/json',
-      },
-    })
-      console.log('성공');
-    } catch(err){
+
+  const reportModal = async () => {
+    try {
+      await axios(`${API_ENDPOINT}post/${postId}/comments/${id}/report`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+      })
+      console.log('댓글신고');
+    } catch(err) {
       console.log(err);
     }
-
-    router.push(`/postdetail/${postId}`);
-    closeDelModal()
-    // window.location.reload()
+    closeCancelModal()
   }
 
   return (
     <Container>
       <DeleteModalContainer>
-        <DeleteText>댓글을 삭제하시겠어요?</DeleteText>
+        <DeleteText>게시글을 신고할까요?</DeleteText>
         <DeleteBtnContainer>
-          <div onClick={closeDelModal}>
+          <div onClick={closeCancelModal}>
             <DeleteCancel>취소</DeleteCancel>
           </div>
-          <div onClick={deleteComment}>
-            <Delete>삭제</Delete>
+          <div onClick={reportModal}>
+            <Delete>신고</Delete>
           </div>
         </DeleteBtnContainer>
       </DeleteModalContainer>
