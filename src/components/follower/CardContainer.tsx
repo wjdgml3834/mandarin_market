@@ -11,6 +11,8 @@ export const CardContainer = () => {
       intro: "",
       image: "",
       _id: "",
+      isfollow: false,
+      accountname: "",
     },
   ]);
 
