@@ -19,8 +19,8 @@ export const Card = ({ postData }: any) => {
   const { data: session } = useSession();
   const token = session?.user?.name;
 
-  const { author, image, content, createdAt, id } = postData;
-
+  const { author, image, content, commentCount, createdAt, id } = postData;
+  
   const postDate = `${createdAt.slice(0, 4)}년 ${createdAt
     .slice(5, 7)
     .replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`;
@@ -208,7 +208,7 @@ export const Card = ({ postData }: any) => {
               <Comment>
                 <ChatBubbleOutlineIcon />
                 <span className="sr-only">댓글 보기, 남기기</span>
-                <span>0</span>
+                <span>{commentCount}</span>
               </Comment>
             </Link>
           </LikeCommentCont>

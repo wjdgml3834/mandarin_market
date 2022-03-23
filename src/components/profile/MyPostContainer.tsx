@@ -21,5 +21,5 @@ export const MyPostContainer = ({postList, token, loginUser}: PostProps) => {
 const PostContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 16px 16px 70px;
+  padding: 16px 16px 10px;
 `

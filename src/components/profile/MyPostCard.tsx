@@ -7,9 +7,10 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { MyPost } from "../../types/MyPost";
 import { PostModal } from "./PostModal";
 import { DeleteModal } from "./DeleteModal";
-import { COLOR } from "../../constants";
+import { API_ENDPOINT, COLOR } from "../../constants";
 import { ReportModal } from "../home/ReportModal";
 import { CancelModal } from "../home/ReportCancelModal";
+import axios from "axios";
 
 
 interface PostProps {
@@ -20,7 +21,7 @@ interface PostProps {
 
 export const MyPostCard = ({ postData, token, loginUser }: PostProps) => {
 
-  const { author, content, createdAt, image, id } = postData
+  const { author, commentCount, content, createdAt, image, id } = postData
 
   // const { author, commentCount, comments, content, createdAt, heartCount, hearted, image, id } = postData
 
@@ -64,20 +65,36 @@ export const MyPostCard = ({ postData, token, loginUser }: PostProps) => {
     setReportModal(false);
   };
 
-  const onClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
-  ) => {
-    if (checkClick) {
-      setLikeNum((current) => current + 1);
-      setCheckClick(!checkClick);
-    } else {
-      setLikeNum((current) => current - 1);
-      setCheckClick(!checkClick);
-    }
+  const [hearted, setHearted] = useState(postData.hearted);
+  const [heartCount, setHeartCount] = useState(postData.heartCount);
+ 
+  // console.log(heartCount);
 
-    if (heartColor === "icon") {
-      setHeartColor("Like-icon");
-    } else setHeartColor("icon");
+  const onClick = async () => {
+    try {
+      if (hearted === false) {
+        await axios(`${API_ENDPOINT}post/${id}/heart`, {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+        });
+        setHeartCount(heartCount + 1);
+      } else {
+        await axios(`${API_ENDPOINT}post/${id}/unheart`, {
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+        });
+        setHeartCount(heartCount - 1);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    setHearted(!hearted);
   };
 
   const updatedDate = `${createdAt.slice(0, 4)}년 ${createdAt.slice(5, 7,).replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`
@@ -199,9 +216,9 @@ export const MyPostCard = ({ postData, token, loginUser }: PostProps) => {
             )}
           </PostImgBtnList>
           <LikeCommentCont>
-            <Like aria-label="좋아요 버튼" onClick={onClick}>
+            <Like aria-label="좋아요 버튼" onClick={onClick} hearted={hearted}>
               <FavoriteBorderIcon className={heartColor} />
-              <span>{likeNum}</span>
+              <span>{heartCount}</span>
             </Like>
             <Link
               key={author._id}
@@ -217,7 +234,7 @@ export const MyPostCard = ({ postData, token, loginUser }: PostProps) => {
               <Comment>
                 <ChatBubbleOutlineIcon className="icon" />
                 <span className="sr-only">댓글 보기, 남기기</span>
-                <span>0</span>
+                <span>{commentCount}</span>
               </Comment>
             </Link>
           </LikeCommentCont>
@@ -399,7 +416,7 @@ const LikeCommentCont = styled.div`
   }
 `;
 
-const Like = styled.button`
+const Like = styled.button<{hearted: boolean}>`
   border: none;
   cursor: pointer;
   margin-right: 18px;
@@ -408,10 +425,10 @@ const Like = styled.button`
   display: flex;
   align-items: center;
   color: #767676;
-  .Like-icon {
+  svg {
     width: 16px;
     height: 14px;
-    color: red;
+    color: ${({ hearted }) => (!hearted ? "#767676" : "red")};
   }
 `;
 
