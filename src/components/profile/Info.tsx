@@ -109,8 +109,12 @@ export const MyProfileInfo = ({ account }: Account) => {
           </div>
           <Img src={image} alt="유저 사진" />
           <div>
-            <Followings>{followingCount}</Followings>
-            <Text>followings</Text>
+            <Link href={`/follow/${loginUser}/following`}>
+              <a>
+                <Followings>{followingCount}</Followings>
+                <Text>followings</Text>
+              </a>
+            </Link>
           </div>
         </ImgContainer>
         <Nickname>{username}</Nickname>
