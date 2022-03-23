@@ -3,4 +3,6 @@ export interface Follower {
   image: string;
   username: string;
   intro: string;
+  isfollow: Boolean;
+  accountname: string;
 }

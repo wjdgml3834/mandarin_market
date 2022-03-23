@@ -8,10 +8,10 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 
 interface Account {
-  account: string | undefined
+  account: string | undefined;
 }
 
-export const MyProfileInfo = ({account}: Account) => {
+export const MyProfileInfo = ({ account }: Account) => {
   const [userList, setUserList] = useState({
     accountname: "",
     follower: [],
@@ -42,12 +42,15 @@ export const MyProfileInfo = ({account}: Account) => {
   const loginUser = session?.user?.email;
 
   const getProfile = async () => {
-    const res = await axios.get(`${API_ENDPOINT}profile/${account ? account : loginUser}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-type": "application/json",
-      },
-    });
+    const res = await axios.get(
+      `${API_ENDPOINT}profile/${account ? account : loginUser}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+      }
+    );
     setUserList(res.data.profile);
   };
 
@@ -56,13 +59,16 @@ export const MyProfileInfo = ({account}: Account) => {
   }, []);
 
   const follow = async () => {
-    await axios(`${API_ENDPOINT}profile/${account ? account : loginUser}/follow`, {
-      method: "post",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-type": "application/json",
-      },
-    });
+    await axios(
+      `${API_ENDPOINT}profile/${account ? account : loginUser}/follow`,
+      {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+      }
+    );
     setUserList({
       ...userList,
       isfollow: true,
@@ -71,13 +77,16 @@ export const MyProfileInfo = ({account}: Account) => {
   };
 
   const unFollow = async () => {
-    await axios(`${API_ENDPOINT}profile/${account ? account : loginUser}/unfollow`, {
-      method: "delete",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-type": "application/json",
-      },
-    });
+    await axios(
+      `${API_ENDPOINT}profile/${account ? account : loginUser}/unfollow`,
+      {
+        method: "delete",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+      }
+    );
     setUserList({
       ...userList,
       isfollow: false,
@@ -91,7 +100,7 @@ export const MyProfileInfo = ({account}: Account) => {
         <h3 className="sr-only">마이 프로필</h3>
         <ImgContainer>
           <div>
-            <Link href="/follower">
+            <Link href={`/follow/${loginUser}/follower`}>
               <a>
                 <Followers>{followerCount}</Followers>
                 <Text>followers</Text>
@@ -121,7 +130,11 @@ export const MyProfileInfo = ({account}: Account) => {
             {/* <IconContainer>
               <ChatBubbleOutlineIcon className="icon" />
             </IconContainer> */}
-            {isfollow ? <UnFollowBtn onClick={unFollow}>언팔로우</UnFollowBtn> : <FollowBtn onClick={follow}>팔로우</FollowBtn>}
+            {isfollow ? (
+              <UnFollowBtn onClick={unFollow}>언팔로우</UnFollowBtn>
+            ) : (
+              <FollowBtn onClick={follow}>팔로우</FollowBtn>
+            )}
             {/* <IconContainer>
               <ShareIcon className="icon" />
             </IconContainer> */}

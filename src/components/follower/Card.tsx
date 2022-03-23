@@ -1,6 +1,9 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import { API_ENDPOINT } from "../../constants";
 import { Follower } from "../../types/Follower";
 import { COLOR } from "../../constants/index";
 
@@ -9,16 +12,47 @@ interface FollowerProps {
 }
 
 export const Card = ({ followerData }: FollowerProps) => {
-  const { image, intro, username } = followerData;
+  const { data: session } = useSession();
+  const token = session?.user?.name;
 
-  const [followBtn, setFollowBtn] = useState(false);
-  const handleBtn = () => {
-    setFollowBtn((current) => !current);
+  const { image, intro, username, isfollow, accountname } = followerData;
+
+  const [userList, setUserList] = useState(isfollow);
+
+  const follow = async () => {
+    try {
+      await axios(`${API_ENDPOINT}profile/${accountname}/follow`, {
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+      });
+      setUserList(!isfollow);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  const unfollow = async () => {
+    try {
+      await axios(`${API_ENDPOINT}profile/${accountname}/unfollow`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+      });
+      setUserList(!isfollow);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <UserList>
       <UserItem>
-        <Link href="/profile">
+        <Link href={`/profile/${accountname}`}>
           <UserProfile>
             <UserImg src={image} alt="user 이미지" />
             <UserInfo>
@@ -27,10 +61,10 @@ export const Card = ({ followerData }: FollowerProps) => {
             </UserInfo>
           </UserProfile>
         </Link>
-        {followBtn ? (
-          <UnfollowBtn onClick={handleBtn}>취소</UnfollowBtn>
+        {userList ? (
+          <UnfollowBtn onClick={() => unfollow()}>취소</UnfollowBtn>
         ) : (
-          <FollowBtn onClick={handleBtn}>팔로우</FollowBtn>
+          <FollowBtn onClick={() => follow()}>팔로우</FollowBtn>
         )}
       </UserItem>
     </UserList>

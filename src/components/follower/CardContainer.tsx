@@ -11,18 +11,20 @@ export const CardContainer = () => {
       intro: "",
       image: "",
       _id: "",
+      isfollow: false,
+      accountname: "",
     },
   ]);
 
   const { data: session } = useSession();
 
-  const accountname = session?.user?.email;
+  const loginUser = session?.user?.email;
   const token = session?.user?.name;
 
   const usersData = async () => {
     try {
       const res = await axios.get(
-        `${API_ENDPOINT}profile/${accountname}/follower`,
+        `${API_ENDPOINT}profile/${loginUser}/follower`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
