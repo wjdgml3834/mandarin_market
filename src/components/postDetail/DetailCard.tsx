@@ -3,37 +3,90 @@ import React, { useState } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import axios from "axios";
+import { API_ENDPOINT } from "../../constants";
+import { MyPost } from "../../types/MyPost";
+import { ReportModal } from "../home/ReportModal";
+import { CancelModal } from "../home/ReportCancelModal";
+import { DeleteModal } from "../profile/DeleteModal";
+import { PostModal } from "../profile/PostModal";
 
-export const PostDetailCard = () => {
-  const postData = {
-      id: 1,
-      src: "https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/cnoC/image/bA15rm1zOffsle8EVMPD_ZHtxYU.JPG",
-      nickname: "리액트 과몰입러",
-      email: "dlgusgh200240",
-      txt: "아름다운 베니스의 일상",
-      postimg:
-        "https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/cnoC/image/bA15rm1zOffsle8EVMPD_ZHtxYU.JPG",
-      postdate: "2022년 1월 17일",
+interface Post {
+  postData: MyPost
+  token: string | null | undefined
+  loginUser: string | null | undefined
+}
+
+export const PostDetailCard = ({postData, token, loginUser}: Post) => {
+
+  const { author, commentCount, content, createdAt, id, image } = postData;
+
+  const updatedDate = `${createdAt.slice(0, 4)}년 ${createdAt.slice(5, 7,).replace(/(^0+)/, "")}월 ${createdAt.slice(8, 10).replace(/(^0+)/, "")}일`
+  
+  const [postModal, setPostModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const [reportModal, setReportModal] = useState(false);
+  const [cancelModal, setCancelModal] = useState(false);
+
+  const openPostModal = () => {
+    setPostModal(true);
+  };
+  const closePostModal = () => {
+    setPostModal(false);
+  };
+  const openDeleteModal = () => {
+    setDeleteModal(true);
+  };
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+    setPostModal(false);
+  };
+
+  const openReportModal = () => {
+    setReportModal(true);
+  };
+  const closeReportModal = () => {
+    setReportModal(false);
+  };
+  const openCancelModal = () => {
+    setCancelModal(true);
+  };
+  const closeCancelModal = () => {
+    setCancelModal(false);
+    setReportModal(false);
+  };
+
+  const [hearted, setHearted] = useState(postData.hearted);
+  const [heartCount, setHeartCount] = useState(postData.heartCount);
+ 
+  // console.log(heartCount);
+
+  const onClick = async () => {
+    try {
+      if (hearted === false) {
+        await axios(`${API_ENDPOINT}post/${id}/heart`, {
+          method: "post",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+        });
+        setHeartCount(heartCount + 1);
+      } else {
+        await axios(`${API_ENDPOINT}post/${id}/unheart`, {
+          method: "delete",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-type": "application/json",
+          },
+        });
+        setHeartCount(heartCount - 1);
+      }
+    } catch (err) {
+      console.error(err);
     }
-
-  const [likeNum, setLikeNum] = useState(0);
-  const [checkClick, setCheckClick] = useState(true);
-  const [heartColor, setHeartColor] = useState("icon");
-
-  const onClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
-  ) => {
-    if (checkClick) {
-      setLikeNum((current) => current + 1);
-      setCheckClick(!checkClick);
-    } else {
-      setLikeNum((current) => current - 1);
-      setCheckClick(!checkClick);
-    }
-
-    if (heartColor === "icon") {
-      setHeartColor("Like-icon");
-    } else setHeartColor("icon");
+    setHearted(!hearted);
   };
 
   return (
@@ -42,40 +95,61 @@ export const PostDetailCard = () => {
         <h3 className="sr-only">포스트 아이템</h3>
         <AuthorCont>
           <h4 className="sr-only">포스트 글쓴이</h4>
-          <AuthorImg src={postData.src} alt="작성자 이미지" />
+          <AuthorImg src={author.image} alt="작성자 이미지" />
           <AuthorInfo>
-            <AuthorNickName>{postData.nickname}</AuthorNickName>
-            <AuthorId>{postData.email}</AuthorId>
+            <AuthorNickName>{author.username}</AuthorNickName>
+            <AuthorId>{author.accountname}</AuthorId>
           </AuthorInfo>
         </AuthorCont>
         <PostCont>
           <h4 className="sr-only">포스트 내용</h4>
-          <PostTxt>{postData.txt}</PostTxt>
+          <PostTxt>{content}</PostTxt>
           <PostImgCont>
             <PostImgList>
               <PostImgItem>
-                <PostImg src={postData.postimg} alt="post-img" />
+                <PostImg src={image} alt="post-img" />
               </PostImgItem>
             </PostImgList>
           </PostImgCont>
           <LikeCommentCont>
-            <Like aria-label="좋아요 버튼" onClick={onClick}>
-              <FavoriteBorderIcon className={heartColor} />
-              <span>{likeNum}</span>
+            <Like aria-label="좋아요 버튼" onClick={onClick} hearted={hearted}>
+              <FavoriteBorderIcon />
+              <span>{heartCount}</span>
             </Like>
             <Comment>
               <ChatBubbleOutlineIcon className="icon" />
               <span className="sr-only">댓글 보기, 남기기</span>
-              <span>0</span>
+              <span>{commentCount}</span>
             </Comment>
           </LikeCommentCont>
-          <PostDate>{postData.postdate}</PostDate>
+          <PostDate>{updatedDate}</PostDate>
         </PostCont>
-        <MoreBtn>
+        <MoreBtn onClick={author.accountname === loginUser ? openPostModal : openReportModal}>
           <span className="sr-only">더보기 버튼</span>
           <MoreVertIcon className="More-btn-icon" />
         </MoreBtn>
       </article>
+      {author.accountname === loginUser
+        ? (
+          <>
+            <Background
+              className={`${postModal}`}
+              onClick={closePostModal}
+            ></Background>
+            <PostModal id={id} postModal={postModal} openDeleteModal={openDeleteModal} />
+            {deleteModal && <DeleteModal id={id} token={token} closeDeleteModal={closeDeleteModal} />}
+          </>
+        )
+        : (
+          <>
+            <Background   
+              className={`${reportModal}`}
+              onClick={closeReportModal}
+            ></Background>
+            <ReportModal reportModal={reportModal} openCancelModal={openCancelModal} />
+            {cancelModal  && <CancelModal id={id} token={token} closeCancelModal={closeCancelModal} />}
+          </>
+        )}
     </Cont>
   );
 };
@@ -179,7 +253,7 @@ const LikeCommentCont = styled.div`
   }
 `;
 
-const Like = styled.button`
+const Like = styled.button<{hearted: boolean}>`
   border: none;
   cursor: pointer;
   margin-right: 18px;
@@ -188,18 +262,17 @@ const Like = styled.button`
   display: flex;
   align-items: center;
   color: #767676;
-  .Like-icon {
+  svg {
     width: 16px;
     height: 14px;
-    color: red;
+    color: ${({ hearted }) => (!hearted ? "#767676" : "red")};
   }
 `;
 
-const Comment = styled.a`
+const Comment = styled.div`
   display: flex;
   align-items: center;
   color: #767676;
-  cursor: pointer;
 `;
 
 const PostDate = styled.strong`
@@ -224,5 +297,17 @@ const MoreBtn = styled.button`
   .More-btn-icon {
     width: 20px;
     height: 20px;
+  }
+`;
+
+const Background = styled.div`
+  &.true {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #777;
+    opacity: 0.4;
   }
 `;

@@ -1,13 +1,93 @@
 import styled from "@emotion/styled";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { useState } from "react";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { API_ENDPOINT } from "../../constants";
 import { BackButton } from "../BackButton";
 import { LogOutModal } from "../profile/LogOutModal";
 import { MyProfileModal } from "../profile/MyProfileModal";
 import { PostComment } from "./Comment";
 import { PostDetailCard } from "./DetailCard";
 
-export const PostDetailContainer = () => {
+interface PostId {
+  postId: string | string[] | undefined
+}
+
+export const PostDetailContainer = ({postId}: PostId) => {
+
+  const [postData, setPostData] = useState({
+      author: {
+        accountname: "",
+        follower: [],
+        followerCount: 0,
+        following: [],
+        followingCount: 0,
+        image: "/images/ellipse-profile.svg",
+        intro: "",
+        isfollow: false,
+        username: "",
+        _id: ""
+      },
+      commentCount: 0,
+      comments: [],
+      content: "",
+      createdAt: "",
+      heartCount: 0,
+      hearted: false,
+      id: "",
+      image: "",
+      updatedAt: ""
+    })
+  
+  const [commentData, setCommentData] = useState([{
+    author: {
+      accountname: "",
+      follower: [],
+      followerCount: 0,
+      following: [],
+      followingCount: 0,
+      image: "/images/ellipse-profile.svg",
+      intro: "",
+      isfollow: false,
+      username: "",
+      _id: ""
+    },
+    content: "",
+    createdAt: "",
+    id: ""
+  }])
+
+  const { data: session } = useSession();
+
+  const token = session?.user?.name;
+  const loginUser = session?.user?.email;
+
+  const getPostData = async () => {
+    const res = await axios.get(`${API_ENDPOINT}post/${postId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
+      },
+    });
+    setPostData(res.data.post)
+  }
+
+  const getCommentData = async () => {
+    const res = await axios.get(`${API_ENDPOINT}post/${postId}/comments`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
+      },
+    });
+    setCommentData(res.data.comments);
+  }
+   
+  useEffect(() => {
+    getPostData();
+    getCommentData();
+  }, []);
+  
   const [myProfileModal, setMyProfileModal] = useState(false);
   const [logoutModal, setLogoutModal] = useState(false);
 
@@ -35,8 +115,8 @@ export const PostDetailContainer = () => {
         </button>
       </Nav>
       <MainCountainer>
-        <PostDetailCard />
-        <PostComment />
+        <PostDetailCard postData={postData} token={token} loginUser={loginUser}/>
+        <PostComment commentData={commentData} token={token} loginUser={loginUser} postId={postId}/>
       </MainCountainer>
       <Background
         className={`${myProfileModal}`}
@@ -51,7 +131,6 @@ export const PostDetailContainer = () => {
   );
 };
 const Nav = styled.nav`
-  position: sticky;
   width: 100%;
   height: 48px;
   border-bottom: 0.5px solid #dbdbdb;
@@ -69,7 +148,7 @@ const Nav = styled.nav`
 `;
 
 const MainCountainer = styled.div`
-  height: calc(100vh - 108px);
+  height: calc(100vh - 132px);
   overflow-y: scroll;
 `
 
@@ -82,5 +161,6 @@ const Background = styled.div`
     right: 0;
     background-color: #777;
     opacity: 0.4;
+    z-index: 10;
   }
 `;

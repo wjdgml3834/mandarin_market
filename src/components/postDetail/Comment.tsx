@@ -1,51 +1,97 @@
 import styled from "@emotion/styled";
-import { useCallback, useState } from "react";
-import { COLOR } from "../../constants";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { API_ENDPOINT, COLOR } from "../../constants";
+import { Comments } from "../../types/Comments";
 import { PostCommentList } from "./CommentList";
 
-export const PostComment = () => {
-  const userData = [
-    {
-      src: "https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_960_720.jpg",
-      nickname: "영등포 빵주먹 이현호",
-      postdate: "12분 전",
-      comment : "리액트는 좀 하시나요?"
-    },
-    {
-    src: "http://webimage.10x10.co.kr/image/basic600/262/B002626948.jpg",
-    nickname: "여신 성이",
-    postdate: "방금",
-    comment : "사진 너무 귀엽네요~"
-   },
-  ]
+interface Comment {
+  commentData: Comments[]
+  token: string | null | undefined
+  loginUser: string | null | undefined
+  postId: string | string[] | undefined
+}
+
+export const PostComment = ({commentData, token, loginUser, postId}: Comment) => {
+
+  const router = useRouter()
+  
+  const commentList = [...commentData].reverse()
 
   const [comment, setComment] = useState("")
   const [isComment, setIsComment] = useState(false)
 
-  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value)
     if(e.target.value.length > 0) {
       setIsComment(true)
     } else {
       setIsComment(false)
     }
-  }, [])
+  }
 
-  const onSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-  }, [])
+  const [user, setUser] = useState({
+    accountname: "",
+    follower: [],
+    followerCount: 0,
+    following: [],
+    followingCount: 0,
+    image: "/images/ellipse-profile.svg",
+    intro: "",
+    isfollow: false,
+    username: "",
+  });
+
+  const getProfile = async () => {
+    const res = await axios.get(`${API_ENDPOINT}profile/${loginUser}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-type": "application/json",
+      },
+    });
+    setUser(res.data.profile);
+  };
+  
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const uploadComment = async () => {
+    try {
+      const commentData = {
+        comment:{
+          content: comment
+        }
+      }
+      await axios.post(`${API_ENDPOINT}post/${postId}/comments`, commentData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-type": "application/json",
+        },
+      });
+      // router.push(`/postdetail/${postId}`)
+      setComment('')
+    } catch(err) {
+      console.log(err);
+    }
+  };
+
+  const onSubmit = () => {
+    uploadComment()
+  }
 
   return (
     <Container>
       <h2 className="sr-only">댓글 목록</h2>
       <Comment>
-        {userData.map((userData, index) => (
-          <PostCommentList key={index} userData={userData}/>)
+        {commentList.map((comment) => (
+          <PostCommentList key={comment.id} comment={comment} token={token} loginUser={loginUser} postId={postId}/>)
         )}
       </Comment>
       <CommentWrite>
         <Form onSubmit={onSubmit}>
-          <Img src="https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/cnoC/image/bA15rm1zOffsle8EVMPD_ZHtxYU.JPG" />
+          <Img src={user.image} />
           <Label>
             <Input
               name="text"
