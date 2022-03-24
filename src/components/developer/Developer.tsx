@@ -6,7 +6,12 @@ export const Developer = () => {
     {
       nickname: "wjdgml3834",
       name: "김정희",
-      desc: [""],
+      desc: [
+        "홈 화면 게시글",
+        "팔로우, 팔로우 취소",
+        "게시글 복수 이미지 캐러셀",
+        "팔로워, 팔로잉 페이지",
+      ],
     },
     {
       nickname: "choisung2",
