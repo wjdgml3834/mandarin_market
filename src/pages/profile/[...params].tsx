@@ -3,10 +3,19 @@ import Head from "next/head";
 import { MyContainer } from "../../components/profile/MyContainer";
 import { Footer } from "../../components/profile/Footer";
 import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 const Profile: NextPage = () => {
   const router = useRouter();
-  const account = router?.query?.params![0];
+  const [account, setAccount] = useState("");
+
+  useEffect(() => {
+    try {
+      setAccount(router.query.params![0]);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <section>

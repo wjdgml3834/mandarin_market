@@ -1,12 +1,20 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { EditContainer } from "../../components/product/EditContainer";
 import { ProductModification } from "../../components/product/Modification";
 
 const ProdcutEdit: NextPage = () => {
   const router = useRouter();
-  const id = router?.query?.params![0];
+  const [id, setId] = useState("0");
+  useEffect(() => {
+    try {
+      setId(router.query.params![0]);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <section>
