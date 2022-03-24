@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import styled from "@emotion/styled";
-import { Developer } from "../../components/developer/developer";
+import { Developer } from "../../components/developer/Developer";
 import { Footer } from "../../components/developer/Footer";
 
 const DeveloperPage: NextPage = () => {

@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import { SignUpPage } from "../components/signup/signUp";
+import { SignUpPage } from "../components/signup/SignUp";
 import { SignUpProfile } from "../components/signup/SignUpProfile";
 
 const SingUp: NextPage = () => {
