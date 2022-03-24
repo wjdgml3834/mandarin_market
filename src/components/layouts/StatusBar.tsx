@@ -1,15 +1,31 @@
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import WifiIcon from "@mui/icons-material/Wifi";
 import Battery80Icon from "@mui/icons-material/Battery80";
 import SignalCellularAltIcon from "@mui/icons-material/SignalCellularAlt";
 
 export const StatusBar = () => {
+  const [timer, setTimer] = useState("00:00");
+  const currentTimer = () => {
+    const today = new Date();
+    const hours = ("0" + today.getHours()).slice(-2);
+    const minutes = ("0" + today.getMinutes()).slice(-2);
+    setTimer(`${hours}:${minutes} ${parseInt(hours) >= 12 ? "PM" : "AM"}`);
+  };
+
+  const startTimer = () => {
+    setInterval(currentTimer, 1000);
+  };
+  useEffect(() => {
+    startTimer();
+  }, [timer]);
+
   return (
     <Header>
       <Container>
         <h2 className="sr-only">상태바</h2>
         <StatusContainer>
-          <Time>18:35 PM</Time>
+          <Time>{timer}</Time>
           <IconContainer>
             <li>
               <SignalCellularAltIcon className="icon" />
