@@ -10,7 +10,13 @@ export const ProfileUpate = () => {
         <BackButton />
       </Nav>
       <ProfileFormContainer>
-        <ProfileForm btnLabel="저장" />
+        <ProfileForm
+          btnLabel="저장"
+          signUp={{
+            email: "",
+            password: "",
+          }}
+        />
       </ProfileFormContainer>
     </Container>
   );
