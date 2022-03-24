@@ -5,8 +5,8 @@ import { Footer } from "../../components/profile/Footer";
 import { useRouter } from "next/router";
 
 const Profile: NextPage = () => {
-  const router = useRouter()
-  const account = router.query.params![0]
+  const router = useRouter();
+  const account = router?.query?.params![0];
 
   return (
     <section>
@@ -16,7 +16,7 @@ const Profile: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">유저 프로필과 대시보드</h1>
-      <MyContainer account={account}/>
+      <MyContainer account={account} />
       <Footer />
     </section>
   );

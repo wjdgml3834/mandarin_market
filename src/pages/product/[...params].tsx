@@ -5,8 +5,8 @@ import { EditContainer } from "../../components/product/EditContainer";
 import { ProductModification } from "../../components/product/Modification";
 
 const ProdcutEdit: NextPage = () => {
-  const router = useRouter()
-  const id = router.query.params![0]
+  const router = useRouter();
+  const id = router?.query?.params![0];
 
   return (
     <section>
@@ -16,7 +16,7 @@ const ProdcutEdit: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">상품 정보 수정</h1>
-      <EditContainer id={id}/>
+      <EditContainer id={id} />
     </section>
   );
 };

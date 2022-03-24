@@ -9,9 +9,9 @@ import { EditContainer } from "../../components/postUpload/EditContainer";
 import { API_ENDPOINT } from "../../constants";
 
 const Edit: NextPage = () => {
-  const router = useRouter()
+  const router = useRouter();
   // const id = router.asPath.split('/')[2]
-  const id = router.query.params![0]
+  const id = router?.query?.params![0];
 
   return (
     <section>
@@ -21,7 +21,7 @@ const Edit: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className="sr-only">게시글 수정</h1>
-      <EditContainer id={id}/>
+      <EditContainer id={id} />
     </section>
   );
 };
