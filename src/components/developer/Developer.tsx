@@ -16,7 +16,13 @@ export const Developer = () => {
     {
       nickname: "choisung2",
       name: "최성이",
-      desc: [""],
+      desc: [
+        "게시글 등록, 수정, 삭제",
+        "상품 등록, 수정, 삭제",
+        "게시글 상세 페이지",
+        "유저 프로필",
+        "댓글 기능",
+      ],
     },
     {
       nickname: "LEEHYUNHO2001",
