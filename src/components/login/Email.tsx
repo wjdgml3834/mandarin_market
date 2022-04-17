@@ -43,9 +43,8 @@ export const LoginPage = () => {
       email,
       password,
       redirect: false,
-      callbackUrl: "http://mandarin-market-lyart.vercel.app/home",
+      callbackUrl: "https://mandarin-market-lyart.vercel.app/home",
     });
-    console.log(res);
 
     const data = await getSession();
     if (data) await router.push(res.url);
