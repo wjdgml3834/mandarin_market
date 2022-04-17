@@ -43,7 +43,7 @@ export const LoginPage = () => {
       email,
       password,
       redirect: false,
-      callbackUrl: "https://mandarin-market-two.vercel.app/home",
+      callbackUrl: "http://146.56.183.55:5050/home",
     });
 
     const data = await getSession();
